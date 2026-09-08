@@ -1,0 +1,18 @@
+{
+  "name": "research-discovery-hub",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Smart Research Discovery & Reading Workspace — Decentralized, Fast, and Portable",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "research",
+    "paper-management",
+    "reading-queue",
+    "smart-discovery",
+    "scholar"
+  ],
+  "author": "Sean",
+  "license": "MIT"
+}

@@ -1,0 +1,261 @@
+[
+  {
+    "id": "seed-leang-2024",
+    "title": "Development of Low CO2 Aggregate Made with High Biochar Content for Producing Lightweight Concrete",
+    "authors": [
+      "Navin Leang",
+      "Kasidis Mangkhan",
+      "Weerachart Tangchirapat",
+      "Chai Jaturapitakkul"
+    ],
+    "year": 2024,
+    "journal": "Annual Concrete Conference 20 (ACC20), KMUTT",
+    "doi": "",
+    "citationCount": 4,
+    "openAccessUrl": "",
+    "abstract": "This study investigates the production of artificial lightweight coarse aggregates using coal bottom ash as a core and a shell of biochar-fly ash-cement. Cold bonding pelletization was used. At 100% replacement of natural coarse aggregate, concrete density reached 1630 kg/m3 with 28-day compressive strength of 19.0 MPa, satisfying ACI 213R requirements.",
+    "priority": "must",
+    "status": "done",
+    "isKey": true,
+    "pillars": [
+      "biochar"
+    ],
+    "notes": "เปเปอร์ต้นแบบการปั้นเม็ดหินแกนเถ้าก้นเตา-เปลือกไบโอชาร์ (Core-shell BBA) ของ มจธ. ใช้เป็นสูตรผลิตเม็ดหินจริงในแล็บ",
+    "empirical": {
+      "strength": 19,
+      "density": 1630,
+      "slump": 0,
+      "shrinkage": 0,
+      "fireTemp": 0,
+      "co2": 45
+    },
+    "gaps": "ใช้ปูนซีเมนต์ไฮดรอลิกในสูตรผสม ยังไม่ได้ทดสอบในระบบจีโอโพลิเมอร์ 100% และยังไม่ได้ทดสอบคุณสมบัติไหลเทตัวเอง (SCC) หรือการทนไฟสูง"
+  },
+  {
+    "id": "seed-karakas-2023-scgc",
+    "title": "Engineering properties, sustainability performance and life cycle assessment of high strength self-compacting geopolymer concrete composites",
+    "authors": [
+      "Alperen Karakaş",
+      "Cahit Bilim",
+      "Ömer Can",
+      "Cengiz Duran Atiş"
+    ],
+    "year": 2023,
+    "journal": "Case Studies in Construction Materials",
+    "doi": "10.1016/j.cscm.2023.e02341",
+    "citationCount": 38,
+    "openAccessUrl": "https://doi.org/10.1016/j.cscm.2023.e02341",
+    "abstract": "Comprehensive investigation on high strength self-compacting geopolymer concrete (SCGC) using fly ash, GGBS, and metakaolin under ambient curing. Fly ash geopolymer concrete exhibited excellent fresh properties passing EFNARC criteria with slump flow reaching 735 mm and V-funnel time 9.9 s, with compressive strength exceeding 50 MPa.",
+    "priority": "must",
+    "status": "done",
+    "isKey": true,
+    "pillars": [
+      "scc",
+      "lca"
+    ],
+    "notes": "หลักฐานยืนยันว่า SCGC เถ้าลอย 100% สามารถผ่านเกณฑ์ EFNARC 2005 ครบทุกข้อโดยไม่ต้องพึ่ง GGBS ในปริมาณสูง",
+    "empirical": {
+      "strength": 58.4,
+      "density": 2350,
+      "slump": 735,
+      "shrinkage": 0,
+      "fireTemp": 0,
+      "co2": 62
+    },
+    "gaps": "ใช้มวลรวมปกติ (NCA) ความหนาแน่นยังสูงกว่า 2,300 kg/m3 ไม่ได้ใช้มวลรวมมวลเบาไบโอชาร์ (BBA) จึงมีน้ำหนักบรรทุกคงที่สูง"
+  },
+  {
+    "id": "seed-wang-2025",
+    "title": "Promoting internal curing in concrete by replacing sand with sustainable biochar",
+    "authors": [
+      "Lei Wang",
+      "Jian Yang",
+      "Viktor Mechtcherine",
+      "Daniel C.W. Tsang"
+    ],
+    "year": 2025,
+    "journal": "Construction and Building Materials",
+    "doi": "10.1016/j.conbuildmat.2024.139000",
+    "citationCount": 22,
+    "openAccessUrl": "",
+    "abstract": "Prewetted biochar particles with high mesopore volume were utilized as internal curing agents to substitute natural sand. Results demonstrated that pre-soaked biochar sustained internal relative humidity and reduced autogenous and total shrinkage by up to 65% with minimal compromise in compressive strength (91.1 MPa vs 98.4 MPa).",
+    "priority": "must",
+    "status": "done",
+    "isKey": true,
+    "pillars": [
+      "biochar"
+    ],
+    "notes": "พิสูจน์ทฤษฎี Internal Curing ของไบโอชาร์แช่น้ำล่วงหน้า 24 ชม. ปลดปล่อยน้ำหล่อเลี้ยงปฏิกิริยา ลดการหดตัวรวมลงได้ถึง 65%",
+    "empirical": {
+      "strength": 91.1,
+      "density": 2250,
+      "slump": 0,
+      "shrinkage": 65,
+      "fireTemp": 0,
+      "co2": 35
+    },
+    "gaps": "ใช้เป็นมวลรวมละเอียด (แทนที่ทราย) ในคอนกรีตปูนซีเมนต์ OPC กำลังสูง ยังไม่มีการศึกษาในมวลรวมหยาบ (Coarse aggregate) ในจีโอโพลิเมอร์"
+  },
+  {
+    "id": "seed-karakas-2023-thermal",
+    "title": "Properties of fly ash-based lightweight-geopolymer mortars containing perlite aggregates: Mechanical, microstructure, and thermal conductivity coefficient",
+    "authors": [
+      "Alperen Karakaş",
+      "Cahit Bilim",
+      "Cengiz Duran Atiş"
+    ],
+    "year": 2023,
+    "journal": "Journal of Building Engineering",
+    "doi": "10.1016/j.jobe.2023.106677",
+    "citationCount": 29,
+    "openAccessUrl": "https://doi.org/10.1016/j.jobe.2023.106677",
+    "abstract": "Thermal performance and fire endurance of fly ash lightweight geopolymer mortar incorporating expanded perlite up to 900 °C. While natural sand geopolymer lost 30% strength at 900 °C, the lightweight aggregate geopolymer experienced a strength surge of +118% due to thermal sintering and phase recrystallization.",
+    "priority": "must",
+    "status": "done",
+    "isKey": true,
+    "pillars": [
+      "fire",
+      "micro"
+    ],
+    "notes": "ค้นพบปรากฏการณ์ Sintering ที่อุณหภูมิสูง 500-900 °C ในจีโอโพลิเมอร์มวลเบา ทำให้กำลังอัดพุ่งสูงขึ้นแทนที่จะพังทลายเหมือนคอนกรีต OPC",
+    "empirical": {
+      "strength": 32.5,
+      "density": 1480,
+      "slump": 0,
+      "shrinkage": 0,
+      "fireTemp": 900,
+      "co2": 50
+    },
+    "gaps": "ทดสอบในระดับมอร์ตาร์เพอร์ไลต์ ยังไม่ได้ทดสอบในคอนกรีตไหลเทตัวเองผสมเม็ดหินไบโอชาร์ BBA ร่วมกับ CaCO3"
+  },
+  {
+    "id": "seed-rashad-2023",
+    "title": "Valorization of limestone powder as an additive for fly ash geopolymer cement under the effect of simulated tidal zone and seawater attack",
+    "authors": [
+      "Alaa M. Rashad",
+      "Mohamed Ezzat",
+      "Abdeen M. ElNagar",
+      "M.H. El-Nashar"
+    ],
+    "year": 2023,
+    "journal": "Construction and Building Materials",
+    "doi": "10.1016/j.conbuildmat.2023.132890",
+    "citationCount": 45,
+    "openAccessUrl": "",
+    "abstract": "The role of limestone powder (CaCO3) substitution in fly ash geopolymer up to 20%. Replacement at 5-10% accelerated early-age geopolymerization by heterogeneous nucleation, densifying pore structure and increasing 7-day strength by 31.7% and 28-day strength by 16.1%. Over 15-20% replacement caused dilution effect.",
+    "priority": "must",
+    "status": "done",
+    "isKey": true,
+    "pillars": [
+      "caco3",
+      "micro"
+    ],
+    "notes": "ยืนยันช่วงการใส่ CaCO3 ที่ 5% ถึง 10% ว่าช่วยเร่งการก่อผลึก (Heterogeneous nucleation) และทำให้โครงข่ายเจล N-A-S-H / C-A-S-H แน่นทึบ",
+    "empirical": {
+      "strength": 42.8,
+      "density": 2180,
+      "slump": 0,
+      "shrinkage": 0,
+      "fireTemp": 0,
+      "co2": 60
+    },
+    "gaps": "ไม่ได้ทำการศึกษาการควบคุมความหนืดเพื่อพยุงมวลรวมมวลเบาไม่ให้ลอยตัว (Anti-floating) ในคอนกรีตไหลเทตัวเอง"
+  },
+  {
+    "id": "seed-kanagaraj-2022",
+    "title": "Physical characteristics and mechanical properties of a sustainable lightweight geopolymer based self-compacting concrete with expanded clay aggregates",
+    "authors": [
+      "Balamurali Kanagaraj",
+      "N. Anand",
+      "B. Praveen"
+    ],
+    "year": 2022,
+    "journal": "Developments in the Built Environment",
+    "doi": "10.1016/j.dibe.2022.100085",
+    "citationCount": 31,
+    "openAccessUrl": "https://doi.org/10.1016/j.dibe.2022.100085",
+    "abstract": "Investigation of lightweight self-compacting geopolymer concrete using expanded clay aggregates (ECA) and ambient curing. The mix achieved a slump flow of 735 mm, V-funnel time of 8.8 s, and compressive strength of 32.8 MPa, proving sufficient plastic viscosity to eliminate lightweight aggregate floating.",
+    "priority": "should",
+    "status": "done",
+    "isKey": false,
+    "pillars": [
+      "scc",
+      "biochar"
+    ],
+    "notes": "ยืนยันว่าการควบคุมความหนืดพลาสติกของ Geopolymer paste สามารถป้องกันการลอยตัวของเม็ดหินมวลเบาได้อย่างสมบูรณ์",
+    "empirical": {
+      "strength": 32.8,
+      "density": 1720,
+      "slump": 735,
+      "shrinkage": 0,
+      "fireTemp": 0,
+      "co2": 55
+    },
+    "gaps": "ใช้เม็ดดินเผาขยายตัว (ECA) ซึ่งผ่านการเผาที่ 1200 °C ปล่อยคาร์บอนสูงกว่า ไม่ได้คุณประโยชน์ด้านการกักเก็บคาร์บอนชีวภาพเหมือนไบโอชาร์"
+  },
+  {
+    "id": "seed-chindasiriphan-2026",
+    "title": "อิทธิพลของคาร์บอนพรุนจากกะลามะพร้าวต่อสมบัติของมอร์ตาร์กระตุ้นด้วยด่างชนิดส่วนผสมเดียว",
+    "authors": [
+      "ภัทรพล จินดาศิริพันธ์",
+      "พิชชา จองวิวัฒสกุล",
+      "ธัญวรัตน์ รสนู"
+    ],
+    "year": 2026,
+    "journal": "การประชุมวิชาการวิศวกรรมโยธาแห่งชาติ ครั้งที่ 31 (NCCE31), MAT-14",
+    "doi": "",
+    "citationCount": 2,
+    "openAccessUrl": "",
+    "abstract": "การเติมคาร์บอนพรุนจากกะลามะพร้าว (Coconut Porous Carbon: CPC) 3% โดยน้ำหนักในมอร์ตาร์จีโอโพลิเมอร์เถ้าลอยผสมเถ้าชานอ้อย ช่วยเพิ่มกำลังอัด 28 วันแตะ 52.8 MPa (+33.7%) ลดความพรุนเหลือ 15% และลดการปล่อยคาร์บอนลง 65.8%",
+    "priority": "must",
+    "status": "done",
+    "isKey": true,
+    "pillars": [
+      "biochar",
+      "lca"
+    ],
+    "notes": "งานวิจัยในประเทศล่าสุดของจุฬาฯ-มหิดล ยืนยันว่าไบโอชาร์คาร์บอนพรุนจากกะลามะพร้าวช่วยเร่งปฏิกิริยาและกักเก็บคาร์บอนได้อย่างมีประสิทธิภาพ",
+    "empirical": {
+      "strength": 52.8,
+      "density": 2150,
+      "slump": 0,
+      "shrinkage": 38,
+      "fireTemp": 0,
+      "co2": 65.8
+    },
+    "gaps": "ทดสอบเฉพาะในสเกลมอร์ตาร์ ยังไม่ได้ขยายผลสู่คอนกรีตมวลเบาหยาบไหลเทตัวเอง (LWSCC)"
+  },
+  {
+    "id": "seed-praneeth-2021",
+    "title": "Biochar admixtured lightweight, porous and tougher cement mortars: Mechanical, durability and micro computed tomography analysis",
+    "authors": [
+      "S. Praneeth",
+      "K.S.L. Saikumar",
+      "Prasad R.D.B.V.",
+      "B.C.S. Rao"
+    ],
+    "year": 2021,
+    "journal": "Journal of Cleaner Production",
+    "doi": "10.1016/j.jclepro.2021.127059",
+    "citationCount": 52,
+    "openAccessUrl": "",
+    "abstract": "Investigation of raw biochar fine particles as sand replacement in mortars. While toughness increased, direct addition of fine biochar weakened the Interfacial Transition Zone (ITZ) due to excess water absorption from the surrounding paste, showing that pelletization or pre-treatment is essential.",
+    "priority": "should",
+    "status": "done",
+    "isKey": false,
+    "pillars": [
+      "biochar",
+      "micro"
+    ],
+    "notes": "ชี้ให้เห็นจุดอ่อนของการใส่ผงไบโอชาร์โดยตรงว่าทำให้ ITZ อ่อนแอลง จึงต้องแก้ปัญหาด้วยการปั้นเป็นเม็ดหินสังเคราะห์ Core-shell BBA",
+    "empirical": {
+      "strength": 26.4,
+      "density": 1680,
+      "slump": 0,
+      "shrinkage": 0,
+      "fireTemp": 0,
+      "co2": 40
+    },
+    "gaps": "การใส่ผงดิบทำให้ดูดน้ำในเพสต์จนแห้ง ต้องนำข้อค้นพบนี้มาสนับสนุนการเลือกใช้เม็ดหิน BBA แบบ Core-Shell แช่น้ำอิ่มตัว"
+  }
+]
