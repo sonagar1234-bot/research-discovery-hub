@@ -703,6 +703,246 @@
             opacity: 0.55;
         }
 
+        /* =============================== */
+        /* TRUST SCORE SYSTEM              */
+        /* =============================== */
+        .trust-score-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .trust-score-inline:hover {
+            transform: translateY(-1px);
+        }
+        .trust-badge {
+            font-size: 11.5px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            letter-spacing: 0.02em;
+            font-family: var(--font-mono);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .trust-badge.trust-high {
+            background: #ecfdf5;
+            color: #059669;
+            border: 1.5px solid #10b981;
+        }
+        [data-theme="dark"] .trust-badge.trust-high {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border-color: #10b981;
+        }
+        .trust-badge.trust-med {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1.5px solid #f59e0b;
+        }
+        [data-theme="dark"] .trust-badge.trust-med {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: #f59e0b;
+        }
+        .trust-badge.trust-low {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1.5px solid #ef4444;
+        }
+        [data-theme="dark"] .trust-badge.trust-low {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border-color: #ef4444;
+        }
+        .trust-score-label {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        /* Trust Score Breakdown Popup */
+        .trust-breakdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInOverlay 0.2s ease forwards;
+        }
+        @keyframes fadeInOverlay {
+            to { opacity: 1; }
+        }
+        .trust-breakdown-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px 32px;
+            max-width: 520px;
+            width: 92vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: scaleUp 0.2s ease;
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .trust-breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .trust-breakdown-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .trust-breakdown-close {
+            background: var(--bg-muted);
+            border: 1px solid var(--border);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: all 0.15s ease;
+        }
+        .trust-breakdown-close:hover {
+            background: var(--surface-hover);
+            color: var(--text-main);
+        }
+        .trust-dim-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .trust-dim-row:last-child {
+            border-bottom: none;
+        }
+        .trust-dim-icon {
+            font-size: 16px;
+            width: 28px;
+            text-align: center;
+        }
+        .trust-dim-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .trust-dim-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .trust-dim-detail {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            line-height: 1.35;
+        }
+        .trust-dim-bar-wrap {
+            width: 90px;
+            height: 8px;
+            background: var(--bg-muted);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .trust-dim-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .trust-dim-score {
+            font-size: 13px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            min-width: 36px;
+            text-align: right;
+        }
+        .trust-total-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+        .trust-total-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .trust-total-score {
+            font-size: 24px;
+            font-weight: 900;
+            font-family: var(--font-mono);
+        }
+        .trust-verdict {
+            text-align: center;
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .trust-verdict.verdict-high {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #10b981;
+        }
+        [data-theme="dark"] .trust-verdict.verdict-high {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+        }
+        .trust-verdict.verdict-med {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #f59e0b;
+        }
+        [data-theme="dark"] .trust-verdict.verdict-med {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+        }
+        .trust-verdict.verdict-low {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #ef4444;
+        }
+        [data-theme="dark"] .trust-verdict.verdict-low {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+        /* Queue table Trust column */
+        .queue-trust-cell {
+            text-align: center;
+            cursor: pointer;
+        }
+        .queue-trust-cell:hover .trust-badge {
+            transform: scale(1.05);
+        }
+
         /* 3-Pass Stepper in Drawer */
         .pass-stepper-container {
             margin-bottom: 18px;
@@ -2033,6 +2273,7 @@
                         <th style="width: 120px;">สถานะการอ่าน</th>
                         <th>ชื่องานวิจัย / ผู้แต่ง / วารสาร</th>
                         <th style="width: 70px; text-align: center;">ปี</th>
+                        <th style="width: 100px; text-align: center;">🛡️ Trust</th>
                         <th style="width: 140px;">เสาหลักวิทยานิพนธ์</th>
                         <th style="width: 140px; text-align: right;">การจัดการ</th>
                     </tr>
@@ -2694,6 +2935,392 @@ function detectThesisDimensions(title = '', abstract = '', concepts = []) {
         }
     }
     return matched;
+}
+
+// =============================================================
+// TRUST SCORE ENGINE — 6-Dimensional Research Credibility Scoring
+// =============================================================
+const TRUST_ENGINE = {
+    // ── Dimension 1: DOI Validity (10 pts) ──
+    DOI_MAX: 10,
+    
+    // ── Dimension 2: Journal/Publisher Rank (25 pts) ──
+    JOURNAL_MAX: 25,
+    TRUSTED_PUBLISHERS: [
+        'elsevier', 'springer', 'wiley', 'taylor & francis', 'taylor and francis',
+        'mdpi', 'nature', 'science', 'acs', 'american chemical society',
+        'ieee', 'iop', 'royal society of chemistry', 'rsc',
+        'asce', 'astm', 'aci', 'rilem', 'cement and concrete',
+        'construction and building materials', 'composites part',
+        'journal of materials', 'materials and structures',
+        'journal of cleaner production', 'resources conservation',
+        'case studies in construction', 'advances in civil engineering',
+        'frontiers in', 'sustainability', 'buildings',
+        'applied sciences', 'polymers', 'materials',
+        'oxford university press', 'cambridge university press',
+        'sage', 'emerald', 'academic press', 'pergamon',
+        'plos one', 'scientific reports'
+    ],
+    TIER1_JOURNALS: [
+        'cement and concrete research', 'cement and concrete composites',
+        'construction and building materials', 'journal of cleaner production',
+        'composites part b', 'composites part a',
+        'journal of materials in civil engineering',
+        'materials and structures', 'aci materials journal',
+        'aci structural journal', 'magazine of concrete research',
+        'structural concrete', 'engineering structures',
+        'nature', 'science', 'nature materials',
+        'resources conservation and recycling',
+        'waste management', 'journal of hazardous materials'
+    ],
+    
+    // ── Dimension 3: Citation Credibility (20 pts) ──
+    CITATION_MAX: 20,
+    
+    // ── Dimension 4: Red Flag / Predatory Detection (20 pts) ──
+    RED_FLAG_MAX: 20,
+    PREDATORY_PATTERNS: [
+        'world journal of', 'international journal of advanced',
+        'global journal of', 'universal journal of',
+        'american journal of .* research', 'european journal of .* research',
+        'asian journal of', 'african journal of',
+        'journal of .* and allied', 'international research journal of',
+        'archives of .* research', 'annals of .* sciences',
+        'ijesrt', 'ijert', 'ijsr', 'irjet', 'ijream',
+        'jetir', 'ijcrt', 'ijisrt', 'wjert', 'ijprt',
+        'science publishing group', 'sciencepg',
+        'david publishing', 'lap lambert',
+        'omics', 'scifed', 'crimson publishers',
+        'medwin publishers', 'iris publishers',
+        'lupine publishers', 'juniper publishers',
+        'scholarly open access'
+    ],
+    HIJACKED_PATTERNS: [
+        'sciencedomain', 'waset\\.org', 'iiste\\.org',
+        'academicjournals\\.org', 'bioinfo\\.',
+        'benthamopen'
+    ],
+    
+    // ── Dimension 5: Mix Design Keywords (15 pts) ──
+    MIX_DESIGN_MAX: 15,
+    MIX_DESIGN_KEYWORDS: {
+        ratios: /\b(w\/b|w\/c|water.?binder|water.?cement|liquid.?solid|l\/s|l\/a|na2sio3.?naoh|ss.?sh)\b/i,
+        activators: /\b(naoh|na2sio3|sodium silicate|sodium hydroxide|koh|potassium|activator.?\d|molarity|\d+\s*m\s+(naoh|koh)|alkaline solution)\b/i,
+        curing: /\b(curing|ambient cur|oven.?cur|steam.?cur|\d+\s*°?\s*c|\d+\s*hours?\s*cur|autoclave|heat.?treat)\b/i,
+        numericalData: /\b(\d+\.?\d*\s*(mpa|kpa|gpa|n\/mm|kg\/m|g\/cm|mm\/s|coulombs?|ohm|%|kn))\b/i,
+        standards: /\b(astm|bs\s*en|iso\s*\d|din\s*\d|jis\s*\d|efnarc|aci\s*\d|aashto)\b/i,
+        materials: /\b(fly\s*ash|slag|silica\s*fume|metakaolin|ggbfs|rice\s*husk|palm\s*oil|bagasse|bottom\s*ash|biochar|limestone|calcium\s*carbonate|caco3|micro.?filler|nano.?silica)\b/i,
+    },
+    
+    // ── Dimension 6: Recency Bonus (10 pts) ──
+    RECENCY_MAX: 10,
+    
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    //  MAIN: computeTrustScore(paper) → { total, level, dims[] }
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    compute(paper) {
+        const dims = [];
+        
+        // ── 1. DOI Validity ──
+        const doi = (paper.doi || '').replace('https://doi.org/', '').trim();
+        const hasDoi = doi.length > 4 && doi.includes('/');
+        const doiScore = hasDoi ? this.DOI_MAX : 0;
+        dims.push({
+            id: 'doi', icon: '🔗', name: 'DOI Validity',
+            nameTH: 'ความถูกต้องของ DOI',
+            score: doiScore, max: this.DOI_MAX,
+            detail: hasDoi 
+                ? `DOI: ${doi.substring(0, 40)}${doi.length > 40 ? '...' : ''} ✓`
+                : 'ไม่พบ DOI — งานวิจัยอาจไม่ผ่านระบบ peer-review ปกติ',
+            color: hasDoi ? '#10b981' : '#ef4444'
+        });
+        
+        // ── 2. Journal/Publisher Rank ──
+        const journalLower = (paper.journal || '').toLowerCase().trim();
+        let journalScore = 5; // default baseline for unknown
+        let journalDetail = 'ไม่ทราบสำนักพิมพ์ — ยังไม่มีข้อมูลเพียงพอ';
+        
+        if (journalLower) {
+            const isTier1 = this.TIER1_JOURNALS.some(t => journalLower.includes(t));
+            const isTrusted = this.TRUSTED_PUBLISHERS.some(t => journalLower.includes(t));
+            
+            if (isTier1) {
+                journalScore = this.JOURNAL_MAX;
+                journalDetail = `📌 Tier-1 Journal — "${paper.journal}" เป็นวารสารชั้นนำที่เชื่อถือได้สูงมาก`;
+            } else if (isTrusted) {
+                journalScore = Math.round(this.JOURNAL_MAX * 0.8);
+                journalDetail = `✓ Publisher เชื่อถือได้ — "${paper.journal}" อยู่ในรายชื่อสำนักพิมพ์ที่ได้รับการยอมรับ`;
+            } else {
+                // Check for conference proceedings or thesis
+                if (/conference|proceeding|symposium|workshop|congress/i.test(journalLower)) {
+                    journalScore = 12;
+                    journalDetail = `📋 Conference Proceeding — ผ่าน peer review แบบย่อ อาจไม่เข้มข้นเท่า Journal`;
+                } else if (/thesis|dissertation|วิทยานิพนธ์/i.test(journalLower)) {
+                    journalScore = 8;
+                    journalDetail = `🎓 วิทยานิพนธ์/ดุษฎีนิพนธ์ — ข้อมูลปฐมภูมิ แต่ไม่ผ่าน Journal peer review`;
+                } else {
+                    journalScore = 10;
+                    journalDetail = `📰 "${paper.journal}" — ไม่อยู่ในรายชื่อที่ตรวจพบ ควรตรวจสอบเพิ่มเติม`;
+                }
+            }
+        }
+        dims.push({
+            id: 'journal', icon: '🏛️', name: 'Journal Rank',
+            nameTH: 'คุณภาพวารสาร/สำนักพิมพ์',
+            score: journalScore, max: this.JOURNAL_MAX,
+            detail: journalDetail,
+            color: journalScore >= 20 ? '#10b981' : journalScore >= 12 ? '#f59e0b' : '#ef4444'
+        });
+        
+        // ── 3. Citation Credibility ──
+        const currentYear = new Date().getFullYear();
+        const paperYear = parseInt(paper.year) || currentYear;
+        const age = Math.max(1, currentYear - paperYear + 1);
+        const citations = parseInt(paper.citationCount) || 0;
+        const citPerYear = citations / age;
+        let citScore = 0;
+        let citDetail = '';
+        
+        if (age <= 1 && citations === 0) {
+            // Brand new paper — not suspicious
+            citScore = Math.round(this.CITATION_MAX * 0.5);
+            citDetail = `งานวิจัยใหม่ (${paperYear}) — ยังไม่มีการอ้างอิง ถือเป็นปกติ`;
+        } else if (age <= 1 && citations > 200) {
+            // Suspiciously high for new paper
+            citScore = Math.round(this.CITATION_MAX * 0.2);
+            citDetail = `⚠️ น่าสงสัย: ${citations} citations ภายใน ~1 ปี อาจเป็นการ Cite farm`;
+        } else if (citPerYear > 100 && age <= 3) {
+            citScore = Math.round(this.CITATION_MAX * 0.3);
+            citDetail = `⚠️ Citation-per-Year สูงผิดปกติ: ${citPerYear.toFixed(1)}/ปี (อายุ ${age} ปี)`;
+        } else if (citations >= 50) {
+            citScore = this.CITATION_MAX;
+            citDetail = `✓ อ้างอิงสูงมาก: ${citations} citations (${citPerYear.toFixed(1)}/ปี × ${age} ปี)`;
+        } else if (citations >= 10) {
+            citScore = Math.round(this.CITATION_MAX * 0.75);
+            citDetail = `✓ อ้างอิงดี: ${citations} citations (${citPerYear.toFixed(1)}/ปี × ${age} ปี)`;
+        } else if (citations >= 3) {
+            citScore = Math.round(this.CITATION_MAX * 0.5);
+            citDetail = `อ้างอิงปานกลาง: ${citations} citations (${citPerYear.toFixed(1)}/ปี)`;
+        } else {
+            citScore = Math.round(this.CITATION_MAX * 0.25);
+            citDetail = `อ้างอิงต่ำ: ${citations} citations — อาจเป็นงานใหม่หรือเฉพาะทาง`;
+        }
+        dims.push({
+            id: 'citation', icon: '⭐', name: 'Citation Credibility',
+            nameTH: 'ความน่าเชื่อถือจากการอ้างอิง',
+            score: citScore, max: this.CITATION_MAX,
+            detail: citDetail,
+            color: citScore >= 15 ? '#10b981' : citScore >= 10 ? '#f59e0b' : '#ef4444'
+        });
+        
+        // ── 4. Red Flag Detection ──
+        let redFlagScore = this.RED_FLAG_MAX;
+        let redFlags = [];
+        
+        if (journalLower) {
+            // Check predatory patterns
+            for (const pat of this.PREDATORY_PATTERNS) {
+                if (new RegExp(pat, 'i').test(journalLower)) {
+                    redFlags.push(`🚩 "${paper.journal}" ตรงรูปแบบ Predatory Journal`);
+                    redFlagScore = Math.max(0, redFlagScore - 15);
+                    break;
+                }
+            }
+            // Check hijacked journal patterns
+            for (const pat of this.HIJACKED_PATTERNS) {
+                if (new RegExp(pat, 'i').test(journalLower)) {
+                    redFlags.push(`🚩 "${paper.journal}" ตรงรูปแบบ Hijacked Journal`);
+                    redFlagScore = Math.max(0, redFlagScore - 20);
+                    break;
+                }
+            }
+        }
+        // Check for no journal name
+        if (!journalLower || journalLower.length < 3) {
+            redFlags.push('⚠️ ไม่มีชื่อวารสาร');
+            redFlagScore = Math.max(0, redFlagScore - 5);
+        }
+        // Check for suspicious title patterns
+        const titleLower = (paper.title || '').toLowerCase();
+        if (/\breview\b/i.test(titleLower) && citations < 5 && age > 2) {
+            redFlags.push('⚠️ ระบุเป็น Review แต่ Citation ต่ำผิดปกติ');
+            redFlagScore = Math.max(0, redFlagScore - 5);
+        }
+        
+        dims.push({
+            id: 'redflags', icon: '🚩', name: 'Red Flag Detection',
+            nameTH: 'ตรวจจับ Predatory / Hijacked',
+            score: redFlagScore, max: this.RED_FLAG_MAX,
+            detail: redFlags.length > 0 ? redFlags.join(' | ') : '✓ ไม่พบสัญญาณ Predatory หรือ Hijacked Journal',
+            color: redFlagScore >= 18 ? '#10b981' : redFlagScore >= 10 ? '#f59e0b' : '#ef4444'
+        });
+        
+        // ── 5. Mix Design Keywords ──
+        const abstractText = (paper.abstract || '') + ' ' + (paper.title || '');
+        let mixHits = 0;
+        let mixDetails = [];
+        
+        for (const [catKey, catRegex] of Object.entries(this.MIX_DESIGN_KEYWORDS)) {
+            if (catRegex.test(abstractText)) {
+                mixHits++;
+                const catNames = {
+                    ratios: 'อัตราส่วนผสม', activators: 'สารเคมี/Activator',
+                    curing: 'การบ่ม', numericalData: 'ข้อมูลเชิงตัวเลข',
+                    standards: 'มาตรฐาน ASTM/EN', materials: 'วัสดุเฉพาะทาง'
+                };
+                mixDetails.push(catNames[catKey] || catKey);
+            }
+        }
+        
+        const totalMixCats = Object.keys(this.MIX_DESIGN_KEYWORDS).length;
+        const mixScore = Math.round((mixHits / totalMixCats) * this.MIX_DESIGN_MAX);
+        dims.push({
+            id: 'mixdesign', icon: '🧪', name: 'Mix Design Keywords',
+            nameTH: 'ความโปร่งใสด้านส่วนผสม',
+            score: mixScore, max: this.MIX_DESIGN_MAX,
+            detail: mixHits > 0
+                ? `พบ ${mixHits}/${totalMixCats} หมวด: ${mixDetails.join(', ')}`
+                : 'ไม่พบ Keyword ด้านส่วนผสมหรือตัวเลขทดสอบใน Abstract',
+            color: mixScore >= 10 ? '#10b981' : mixScore >= 5 ? '#f59e0b' : '#ef4444'
+        });
+        
+        // ── 6. Recency Bonus ──
+        let recencyScore = 0;
+        let recencyDetail = '';
+        if (paperYear >= 2024) {
+            recencyScore = this.RECENCY_MAX;
+            recencyDetail = `✓ งานวิจัยล่าสุด (${paperYear}) — ข้อมูลทันสมัยที่สุด`;
+        } else if (paperYear >= 2021) {
+            recencyScore = Math.round(this.RECENCY_MAX * 0.8);
+            recencyDetail = `✓ งานวิจัยค่อนข้างใหม่ (${paperYear}) — ข้อมูลยังทันสมัย`;
+        } else if (paperYear >= 2018) {
+            recencyScore = Math.round(this.RECENCY_MAX * 0.5);
+            recencyDetail = `ค่อนข้างเก่า (${paperYear}) — ตรวจสอบว่ามีงานใหม่กว่าหรือไม่`;
+        } else if (paperYear >= 2015) {
+            recencyScore = Math.round(this.RECENCY_MAX * 0.3);
+            recencyDetail = `ค่อนข้างเก่า (${paperYear}) — อาจมี Methodology ที่ล้าสมัย`;
+        } else {
+            recencyScore = Math.round(this.RECENCY_MAX * 0.1);
+            recencyDetail = `เก่ามาก (${paperYear}) — ใช้เป็น Baseline เท่านั้น อย่าใช้เป็น Benchmark หลัก`;
+        }
+        dims.push({
+            id: 'recency', icon: '📅', name: 'Recency Bonus',
+            nameTH: 'ความทันสมัยของข้อมูล',
+            score: recencyScore, max: this.RECENCY_MAX,
+            detail: recencyDetail,
+            color: recencyScore >= 8 ? '#10b981' : recencyScore >= 5 ? '#f59e0b' : '#ef4444'
+        });
+        
+        // ── TOTAL ──
+        const total = dims.reduce((sum, d) => sum + d.score, 0);
+        const level = total >= 80 ? 'high' : total >= 50 ? 'med' : 'low';
+        
+        return { total, level, dims };
+    },
+    
+    // ── Badge HTML for inline display ──
+    renderBadge(paper, popupMode = 'search') {
+        const result = this.compute(paper);
+        const levelEmoji = result.level === 'high' ? '🟢' : result.level === 'med' ? '🟡' : '🔴';
+        const levelText = result.level === 'high' ? 'Trusted' : result.level === 'med' ? 'Review' : 'Suspicious';
+        
+        // Encode the paper data for popup - use the search index or paper id
+        const dataAttr = popupMode === 'queue' 
+            ? `data-paper-id="${paper.id}"`
+            : `data-search-idx="${paper._searchIdx || 0}"`;
+        
+        return `
+            <span class="trust-score-inline" onclick="showTrustBreakdown(this)" ${dataAttr} data-mode="${popupMode}" title="คลิกดูรายละเอียด Trust Score">
+                <span class="trust-badge trust-${result.level}">
+                    ${levelEmoji} ${result.total}/100 ${levelText}
+                </span>
+            </span>
+        `;
+    }
+};
+
+// ── Show Trust Score Breakdown Popup ──
+function showTrustBreakdown(el) {
+    const mode = el.dataset.mode;
+    let paper;
+    
+    if (mode === 'queue') {
+        const paperId = el.dataset.paperId;
+        paper = myPapers.find(p => p.id === paperId);
+    } else {
+        const idx = parseInt(el.dataset.searchIdx);
+        paper = searchResults[idx];
+    }
+    
+    if (!paper) return;
+    
+    const result = TRUST_ENGINE.compute(paper);
+    const levelEmoji = result.level === 'high' ? '🟢' : result.level === 'med' ? '🟡' : '🔴';
+    const levelText = result.level === 'high' ? 'Trusted' : result.level === 'med' ? 'Review Needed' : 'Suspicious';
+    const verdictClass = `verdict-${result.level}`;
+    const verdictMsg = result.level === 'high' 
+        ? '✅ งานวิจัยนี้ผ่านเกณฑ์ความน่าเชื่อถือ — สามารถใช้อ้างอิงในวิทยานิพนธ์ได้'
+        : result.level === 'med'
+        ? '⚠️ ควรตรวจสอบเพิ่มเติมก่อนใช้อ้างอิง — ดูรายละเอียดด้านล่าง'
+        : '🚫 คะแนนต่ำ — ควรพิจารณาหาแหล่งอ้างอิงทดแทน หรือตรวจสอบอย่างละเอียด';
+    
+    const dimsHtml = result.dims.map(d => {
+        const pct = Math.round((d.score / d.max) * 100);
+        return `
+            <div class="trust-dim-row">
+                <div class="trust-dim-icon">${d.icon}</div>
+                <div class="trust-dim-info">
+                    <div class="trust-dim-name">${d.name} <span style="font-weight:400; color:var(--text-muted);">(${d.nameTH})</span></div>
+                    <div class="trust-dim-detail">${d.detail}</div>
+                </div>
+                <div class="trust-dim-bar-wrap">
+                    <div class="trust-dim-bar" style="width:${pct}%; background:${d.color};"></div>
+                </div>
+                <div class="trust-dim-score" style="color:${d.color};">${d.score}/${d.max}</div>
+            </div>
+        `;
+    }).join('');
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'trust-breakdown-overlay';
+    
+    const closePopup = () => {
+        overlay.remove();
+        document.removeEventListener('keydown', onEsc);
+    };
+    const onEsc = (e) => {
+        if (e.key === 'Escape') closePopup();
+    };
+    document.addEventListener('keydown', onEsc);
+    overlay.onclick = (e) => { if (e.target === overlay) closePopup(); };
+    
+    overlay.innerHTML = `
+        <div class="trust-breakdown-card">
+            <div class="trust-breakdown-header">
+                <div class="trust-breakdown-title">🛡️ Trust Score Breakdown</div>
+                <button class="trust-breakdown-close" id="trustBreakdownCloseBtn" title="ปิด (Esc)">✕</button>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:4px; line-height:1.4;">
+                ${escapeHtml(paper.title)}
+            </div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:16px;">
+                ${escapeHtml(paper.journal || 'Unknown')} • ${paper.year} • ${paper.citationCount || 0} citations
+            </div>
+            ${dimsHtml}
+            <div class="trust-total-row">
+                <div class="trust-total-label">🛡️ Trust Score รวม</div>
+                <div class="trust-total-score" style="color:${result.level === 'high' ? '#059669' : result.level === 'med' ? '#d97706' : '#dc2626'};">
+                    ${levelEmoji} ${result.total}/100
+                </div>
+            </div>
+            <div class="trust-verdict ${verdictClass}">
+                ${verdictMsg}
+            </div>
+        </div>
+    `;
+    const closeBtn = overlay.querySelector('#trustBreakdownCloseBtn');
+    if (closeBtn) closeBtn.onclick = closePopup;
+    document.body.appendChild(overlay);
 }
 
 const SEED_PAPERS = [
@@ -3706,7 +4333,7 @@ window.Dashboard = {
             if (myPapers.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="9" style="padding: 12px 0;">
+                        <td colspan="10" style="padding: 12px 0;">
                             <div class="onboarding-hero">
                                 <div class="onboarding-badge">🚀 Private Decentralized Sandbox</div>
                                 <h2 class="onboarding-title">ยินดีต้อนรับสู่ Research Discovery Hub</h2>
@@ -3761,7 +4388,7 @@ window.Dashboard = {
             if (filtered.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="9" style="text-align: center; padding: 48px 20px;">
+                        <td colspan="10" style="text-align: center; padding: 48px 20px;">
                             <div class="empty-state">
                                 <div class="empty-icon">📭</div>
                                 <div class="empty-title">ไม่พบบทความวิจัยที่ตรงกับตัวกรองที่เลือก</div>
@@ -3862,6 +4489,9 @@ window.Dashboard = {
                         </td>
                         <td style="text-align: center; font-family: var(--font-mono); font-weight: 600;">
                             ${p.year}
+                        </td>
+                        <td class="queue-trust-cell">
+                            ${TRUST_ENGINE.renderBadge(p, 'queue')}
                         </td>
                         <td>
                             ${pillarsHtml || '<span style="color: var(--text-faint); font-size: 12px;">-</span>'}
@@ -5809,6 +6439,9 @@ function renderSearchResults(query = '') {
         const doiHref = p.openAccessUrl || (cleanDoi ? `https://doi.org/${cleanDoi}` : `https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}`);
         const hasAbstract = !isMissingAbstract(p.abstract);
 
+        // Tag paper with search index for Trust Score popup
+        p._searchIdx = idx;
+
         // Auto-detect Thesis Criteria match
         const matchedDims = detectThesisDimensions(p.title, p.abstract, p.concepts);
         const matchCount = matchedDims.length;
@@ -5841,6 +6474,7 @@ function renderSearchResults(query = '') {
                     <span class="meta-pill">⭐ ${p.citationCount} citations</span>
                     ${p.isOA ? `<span class="meta-pill meta-pill-oa">🔓 Open Access</span>` : ''}
                     <span class="meta-pill" style="font-weight: 600; background: var(--bg-muted); color: var(--text-main); border: 1px solid var(--border);">${escapeHtml(p.sourceEngine || 'OpenAlex')}</span>
+                    ${TRUST_ENGINE.renderBadge(p, 'search')}
                 </div>
 
                 <!-- Smart Screening Fit Box -->
@@ -6031,6 +6665,11 @@ function addPaperToQueue(searchIdx, priority = 'should') {
         },
         gaps: ''
     };
+
+    // Compute and store Trust Score
+    const trustResult = TRUST_ENGINE.compute(newPaper);
+    newPaper.trustScore = trustResult.total;
+    newPaper.trustLevel = trustResult.level;
 
     myPapers.unshift(newPaper);
     savePapersToStorage();
