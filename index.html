@@ -703,6 +703,76 @@
             opacity: 0.55;
         }
 
+        
+        /* ======================================================== */
+        /* 1-CLICK INSTITUTIONAL EZPROXY & API RESILIENCE STYLES    */
+        /* ======================================================== */
+        .btn-ezproxy {
+            background: #7c3aed !important;
+            color: #ffffff !important;
+            border: 1px solid #6d28d9 !important;
+            font-weight: 700 !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn-ezproxy:hover {
+            background: #6d28d9 !important;
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(124, 58, 237, 0.35);
+        }
+        [data-theme="dark"] .btn-ezproxy {
+            background: #6d28d9 !important;
+            border-color: #8b5cf6 !important;
+            color: #f5f3ff !important;
+        }
+        [data-theme="dark"] .btn-ezproxy:hover {
+            background: #7c3aed !important;
+        }
+        .btn-ezproxy-paywall {
+            background: linear-gradient(135deg, #7c3aed, #4f46e5) !important;
+            border: 1.5px solid #6d28d9 !important;
+            box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25);
+            animation: pulseProxy 3s infinite ease-in-out;
+        }
+        @keyframes pulseProxy {
+            0%, 100% { box-shadow: 0 2px 6px rgba(124, 58, 237, 0.25); }
+            50% { box-shadow: 0 2px 12px rgba(124, 58, 237, 0.55); }
+        }
+        .btn-ezproxy-badge {
+            background: #f3e8ff !important;
+            color: #7e22ce !important;
+            border: 1px solid #d8b4fe !important;
+            font-weight: 700 !important;
+            padding: 2px 8px !important;
+            border-radius: 4px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            font-size: 11px !important;
+            text-decoration: none !important;
+        }
+        [data-theme="dark"] .btn-ezproxy-badge {
+            background: rgba(126, 34, 206, 0.25) !important;
+            color: #d8b4fe !important;
+            border-color: #9333ea !important;
+        }
+        .proxy-preview-box {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            font-family: var(--font-mono);
+            font-size: 11.5px;
+            word-break: break-all;
+            color: var(--text-main);
+            margin-top: 6px;
+        }
+
         /* =============================== */
         /* TRUST SCORE SYSTEM              */
         /* =============================== */
@@ -1984,7 +2054,10 @@
         </div>
         <div class="header-actions">
             <!-- LocalStorage Quota Monitor -->
-            <div class="quota-indicator" id="storageQuotaIndicator" title="พื้นที่จัดเก็บข้อมูล LocalStorage ปัจจุบัน">
+            <button class="btn btn-xs" id="headerProxyBtn" onclick="Dashboard.proxy.openSettingsModal()" title="ตั้งค่า 1-Click EZproxy สถาบัน (มหิดล / จุฬาฯ / มจธ.) และ API Keys" style="border-color: #8b5cf6; font-weight: 600;">
+                🎓 <span id="headerProxyBadge">EZproxy: มหิดล</span>
+            </button>
+            <div class="quota-indicator" id="storageQuotaIndicator"  title="พื้นที่จัดเก็บข้อมูล LocalStorage ปัจจุบัน">
                 <span>💾 Storage:</span>
                 <div class="quota-meter"><div class="quota-meter-fill" id="quotaMeterFill" style="width: 5%;"></div></div>
                 <span id="quotaText">0 KB</span>
@@ -2394,9 +2467,12 @@
             </div>
 
             <!-- Primary Large Action Button -->
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px;">
                 <a id="drawerPrimaryFullTextBtn" href="#" target="_blank" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 13.5px; padding: 10px 16px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow-sm);">
                     🚀 เปิดอ่านงานวิจัยฉบับเต็ม (Read Full Paper ↗)
+                </a>
+                <a id="drawerEzproxyBtn" href="#" target="_blank" class="btn btn-ezproxy" style="width: 100%; justify-content: center; font-size: 13px; padding: 8px 14px; font-weight: 700; text-decoration: none; display: none;" title="เปิดผ่านสิทธิ์นักศึกษาผ่านระบบ EZproxy มหาวิทยาลัย">
+                    🔓 เปิดอ่านผ่าน EZproxy มหิดล (สิทธิ์มหาลัย) ↗
                 </a>
             </div>
 
@@ -2663,6 +2739,9 @@
 
             <!-- Direct Read Action Links Grid -->
             <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <a id="abstractModalEzproxyLink" href="#" target="_blank" class="btn btn-sm btn-ezproxy" style="display: none; font-weight: 700; text-decoration: none;" title="เปิดผ่านสิทธิ์ EZproxy มหาวิทยาลัย">
+                    🔓 เปิดผ่าน EZproxy มหิดล ↗
+                </a>
                 <a id="abstractModalPdfLink" href="#" target="_blank" class="btn btn-sm btn-primary" style="font-weight: 700; text-decoration: none; display: none;">
                     📄 อ่าน PDF ฟรี ↗
                 </a>
@@ -2690,7 +2769,101 @@
 </div>
 
 <!-- Modal 1: Export Hub & Scope Filter Modal -->
-<div class="dashboard-modal-overlay" id="exportScopeModal" onclick="if(event.target === this) Dashboard.export.closeModal()">
+
+    <!-- Institutional EZproxy & API Resilience Settings Modal -->
+    <div class="dashboard-modal-overlay" id="institutionalSettingsModal" onclick="if(event.target === this) Dashboard.proxy.closeSettingsModal()">
+        <div class="dashboard-modal-card" role="dialog" aria-modal="true" aria-labelledby="proxyModalTitle" style="max-width: 620px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                <h3 id="proxyModalTitle" style="font-size: 17px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <span>🎓</span> ตั้งค่า 1-Click EZproxy & API Resilience
+                </h3>
+                <button type="button" class="btn btn-xs" onclick="Dashboard.proxy.closeSettingsModal()">✕</button>
+            </div>
+
+            <!-- Section 1: University Proxy Selection -->
+            <div style="margin-bottom: 18px;">
+                <label style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 6px;">
+                    1. เลือกสถาบันมหาวิทยาลัย (Institutional EZproxy Gateway):
+                </label>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+                    ระบบจะสร้างลิงก์เปิดอ่านบทความวิจัยฉบับเต็ม (Closed-Access) จาก ScienceDirect, Springer, Wiley ผ่านสิทธิ์ล็อกอินของมหาวิทยาลัยให้อัตโนมัติ
+                </p>
+                <select id="settingProxyPreset" class="form-control" style="width: 100%; margin-bottom: 8px;" onchange="Dashboard.proxy.handlePresetChange(this.value)">
+                    <option value="mahidol">มหาวิทยาลัยมหิดล (Mahidol University EZproxy) - ค่าเริ่มต้น</option>
+                    <option value="chula">จุฬาลงกรณ์มหาวิทยาลัย (Chulalongkorn University EZproxy)</option>
+                    <option value="kmutt">มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี (KMUTT Library EZproxy)</option>
+                    <option value="sut">มหาวิทยาลัยเทคโนโลยีสุรนารี (SUT Library EZproxy)</option>
+                    <option value="ku">มหาวิทยาลัยเกษตรศาสตร์ (KU Library EZproxy)</option>
+                    <option value="cmu">มหาวิทยาลัยเชียงใหม่ (CMU Library EZproxy)</option>
+                    <option value="custom">กำหนดเอง (Custom University Proxy Prefix)...</option>
+                </select>
+
+                <div id="settingCustomProxyWrap" style="display: none; margin-top: 8px;">
+                    <label style="font-size: 11.5px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">
+                        ระบุ Proxy Prefix URL:
+                    </label>
+                    <input type="text" id="settingCustomProxyUrl" class="form-control" placeholder="https://login.ezproxy.youruniv.ac.th/login?url=" style="width: 100%;" oninput="Dashboard.proxy.updateLivePreview()">
+                </div>
+
+                <!-- Live URL Preview -->
+                <div style="margin-top: 10px;">
+                    <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">ตัวอย่าง URL ที่จะเปิดใช้งาน:</span>
+                    <div class="proxy-preview-box" id="proxyLivePreview">
+                        https://login.ezproxy.mahidol.ac.th/login?url=https://doi.org/10.1016/j.cemconres.2023.107388
+                    </div>
+                </div>
+                <div style="margin-top: 8px;">
+                    <button type="button" class="btn btn-xs" onclick="Dashboard.proxy.testConnection()">
+                        🧪 ทดสอบคลิกเปิดลิงก์ตัวอย่างผ่าน Proxy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 2: Semantic Scholar API Key (Optional) -->
+            <div style="margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--border);">
+                <label style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 6px;">
+                    2. Semantic Scholar API Key (ทางเลือกเสริม):
+                </label>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+                    หากคุณมี API Key ของ Semantic Scholar สามารถใส่ที่นี่เพื่อปลดล็อกโควตาดึง Abstract ได้หลายพันฉบับโดยไม่ติดลิมิต HTTP 429 (หากไม่มี ระบบจะใช้ Rate Limiting ป้องกันให้อัตโนมัติ)
+                </p>
+                <div style="display: flex; gap: 8px;">
+                    <input type="password" id="settingSemanticScholarKey" class="form-control" placeholder="ใส่ API Key (ถ้ามี)" style="flex: 1;">
+                    <a href="https://www.semanticscholar.org/product/api" target="_blank" class="btn btn-xs" style="align-self: center;">
+                        ขอ API Key ฟรี ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section 3: Storage Engine Status (IndexedDB) -->
+            <div style="margin-bottom: 18px; padding-top: 14px; border-top: 1px solid var(--border);">
+                <label style="font-size: 12.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 6px;">
+                    3. ระบบจัดเก็บฐานข้อมูล (IndexedDB Engine):
+                </label>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-subtle); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div>
+                        <div style="font-size: 13px; font-weight: 700; color: var(--text-main);" id="settingStorageStatus">
+                            🚀 IndexedDB: เปิดใช้งานปกติ (รองรับความจุไม่จำกัด GB)
+                        </div>
+                        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;" id="settingStorageDetails">
+                            บันทึกในคลังแล้ว 0 ฉบับ (มีระบบสำรอง LocalStorage อัตโนมัติ)
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-xs" onclick="Dashboard.storage.forceSyncToLocalStorage()">
+                        🔄 ซิงค์สำรอง LocalStorage ทันที
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border); padding-top: 14px;">
+                <button type="button" class="btn" onclick="Dashboard.proxy.closeSettingsModal()">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" onclick="Dashboard.proxy.saveSettings()">💾 บันทึกการตั้งค่า</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-modal-overlay" id="exportScopeModal" onclick="if(event.target === this) Dashboard.export.closeModal()">
     <div class="dashboard-modal-card" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
             <h3 id="exportModalTitle" style="font-size: 17px; font-weight: 700; margin: 0;">📤 ศูนย์ส่งออกข้อมูลงานวิจัย (Export Hub)</h3>
@@ -3553,16 +3726,351 @@ window.loadDemoPapers = function() {
     if (typeof showToast === 'function') showToast('✨ โหลดชุดตัวอย่างงานวิจัยสำเร็จ ' + addedCount + ' ฉบับ!');
 };
 
-window.Dashboard = {
+var Dashboard = window.Dashboard = {
     version: '2.0.0',
 
     // ---------------------------------------------------------
     // 1. STORAGE & DATA INTEGRITY MODULE
     // ---------------------------------------------------------
+        // ---------------------------------------------------------
+    // INSTITUTIONAL EZPROXY & API RESILIENCE MODULE
+    // ---------------------------------------------------------
+    proxy: {
+        STORAGE_KEY: 'sean_thesis_proxy_config',
+        PRESETS: {
+            mahidol: {
+                name: 'มหาวิทยาลัยมหิดล (Mahidol University EZproxy)',
+                shortName: 'มหิดล',
+                prefix: 'https://login.ezproxy.mahidol.ac.th/login?url='
+            },
+            chula: {
+                name: 'จุฬาลงกรณ์มหาวิทยาลัย (Chulalongkorn EZproxy)',
+                shortName: 'จุฬาฯ',
+                prefix: 'https://login.ezproxy.car.chula.ac.th/login?url='
+            },
+            kmutt: {
+                name: 'ม.เทคโนโลยีพระจอมเกล้าธนบุรี (KMUTT Library EZproxy)',
+                shortName: 'มจธ.',
+                prefix: 'https://login.ezproxy.lib.kmutt.ac.th/login?url='
+            },
+            sut: {
+                name: 'ม.เทคโนโลยีสุรนารี (SUT Library EZproxy)',
+                shortName: 'มทส.',
+                prefix: 'https://login.ezproxy.sut.ac.th/login?url='
+            },
+            ku: {
+                name: 'มหาวิทยาลัยเกษตรศาสตร์ (KU Library EZproxy)',
+                shortName: 'มก.',
+                prefix: 'https://login.ezproxy.ku.ac.th/login?url='
+            },
+            cmu: {
+                name: 'มหาวิทยาลัยเชียงใหม่ (CMU Library EZproxy)',
+                shortName: 'มช.',
+                prefix: 'https://login.ezproxy.library.cmu.ac.th/login?url='
+            }
+        },
+
+        getConfig() {
+            try {
+                const raw = localStorage.getItem(this.STORAGE_KEY);
+                if (raw) {
+                    const cfg = JSON.parse(raw);
+                    if (cfg && (cfg.preset || cfg.prefix)) return cfg;
+                }
+            } catch (e) {}
+            return {
+                preset: 'mahidol',
+                name: this.PRESETS.mahidol.name,
+                shortName: this.PRESETS.mahidol.shortName,
+                prefix: this.PRESETS.mahidol.prefix,
+                customUrl: '',
+                semanticScholarKey: ''
+            };
+        },
+
+        setConfig(cfg) {
+            try {
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(cfg));
+                this.updateHeaderBadge();
+            } catch (e) {
+                console.error('Failed to save proxy config:', e);
+            }
+        },
+
+        resolveUrl(targetDoiOrUrl) {
+            if (!targetDoiOrUrl) return '';
+            const cfg = this.getConfig();
+            const prefix = (cfg.preset === 'custom' && cfg.customUrl) ? cfg.customUrl.trim() : (cfg.prefix || this.PRESETS.mahidol.prefix);
+            
+            let canonicalUrl = targetDoiOrUrl.trim();
+            if (canonicalUrl.startsWith('10.')) {
+                canonicalUrl = 'https://doi.org/' + canonicalUrl;
+            } else if (!canonicalUrl.startsWith('http://') && !canonicalUrl.startsWith('https://')) {
+                canonicalUrl = 'https://doi.org/' + canonicalUrl;
+            }
+            return prefix + canonicalUrl;
+        },
+
+        open(targetDoiOrUrl, title = '') {
+            const fullUrl = this.resolveUrl(targetDoiOrUrl);
+            if (!fullUrl) {
+                if (typeof showToast === 'function') showToast('⚠️ ไม่พบรหัส DOI หรือลิงก์ที่สามารถเปิดผ่าน EZproxy ได้');
+                return;
+            }
+            const cfg = this.getConfig();
+            const instName = cfg.shortName || 'มหิดล';
+            if (typeof showToast === 'function') {
+                showToast(`🔓 กำลังเปิดผ่าน EZproxy ${instName}... กรุณาเข้าสู่ระบบด้วยบัญชีสถาบัน`);
+            }
+            window.open(fullUrl, '_blank', 'noopener,noreferrer');
+        },
+
+        openSettingsModal() {
+            const modal = document.getElementById('institutionalSettingsModal');
+            if (!modal) return;
+            const cfg = this.getConfig();
+            
+            const presetEl = document.getElementById('settingProxyPreset');
+            const customWrap = document.getElementById('settingCustomProxyWrap');
+            const customInput = document.getElementById('settingCustomProxyUrl');
+            const s2KeyInput = document.getElementById('settingSemanticScholarKey');
+
+            if (presetEl) presetEl.value = cfg.preset || 'mahidol';
+            if (customInput) customInput.value = cfg.customUrl || '';
+            if (customWrap) customWrap.style.display = cfg.preset === 'custom' ? 'block' : 'none';
+            if (s2KeyInput) s2KeyInput.value = cfg.semanticScholarKey || '';
+
+            this.updateLivePreview();
+            this.updateStorageDiagnostics();
+
+            modal.classList.add('active');
+        },
+
+        closeSettingsModal() {
+            const modal = document.getElementById('institutionalSettingsModal');
+            if (modal) modal.classList.remove('active');
+        },
+
+        handlePresetChange(val) {
+            const customWrap = document.getElementById('settingCustomProxyWrap');
+            if (customWrap) {
+                customWrap.style.display = val === 'custom' ? 'block' : 'none';
+            }
+            this.updateLivePreview();
+        },
+
+        updateLivePreview() {
+            const presetEl = document.getElementById('settingProxyPreset');
+            const customInput = document.getElementById('settingCustomProxyUrl');
+            const previewEl = document.getElementById('proxyLivePreview');
+            if (!previewEl) return;
+
+            const val = presetEl ? presetEl.value : 'mahidol';
+            let prefix = this.PRESETS.mahidol.prefix;
+            if (val === 'custom') {
+                prefix = customInput && customInput.value.trim() ? customInput.value.trim() : 'https://login.ezproxy.youruniv.ac.th/login?url=';
+            } else if (this.PRESETS[val]) {
+                prefix = this.PRESETS[val].prefix;
+            }
+            previewEl.textContent = prefix + 'https://doi.org/10.1016/j.cemconres.2023.107388';
+        },
+
+        testConnection() {
+            const previewEl = document.getElementById('proxyLivePreview');
+            const url = previewEl ? previewEl.textContent.trim() : '';
+            if (url) {
+                window.open(url, '_blank', 'noopener,noreferrer');
+                if (typeof showToast === 'function') showToast('🧪 กำลังเปิดหน้าทดสอบ EZproxy ในแท็บใหม่');
+            }
+        },
+
+        saveSettings() {
+            const presetEl = document.getElementById('settingProxyPreset');
+            const customInput = document.getElementById('settingCustomProxyUrl');
+            const s2KeyInput = document.getElementById('settingSemanticScholarKey');
+
+            const preset = presetEl ? presetEl.value : 'mahidol';
+            let prefix = this.PRESETS.mahidol.prefix;
+            let name = this.PRESETS.mahidol.name;
+            let shortName = this.PRESETS.mahidol.shortName;
+
+            if (preset === 'custom') {
+                prefix = customInput ? customInput.value.trim() : '';
+                if (!prefix) {
+                    alert('กรุณากรอก Custom Proxy URL เช่น https://login.ezproxy.youruniv.ac.th/login?url=');
+                    return;
+                }
+                name = 'Custom EZproxy Gateway';
+                shortName = 'Custom';
+            } else if (this.PRESETS[preset]) {
+                prefix = this.PRESETS[preset].prefix;
+                name = this.PRESETS[preset].name;
+                shortName = this.PRESETS[preset].shortName;
+            }
+
+            const semanticScholarKey = s2KeyInput ? s2KeyInput.value.trim() : '';
+
+            this.setConfig({
+                preset,
+                name,
+                shortName,
+                prefix,
+                customUrl: customInput ? customInput.value.trim() : '',
+                semanticScholarKey
+            });
+
+            this.closeSettingsModal();
+            if (typeof showToast === 'function') showToast(`✅ บันทึกการตั้งค่าสถาบัน (${shortName}) เรียบร้อย`);
+            
+            if (typeof renderSearchResults === 'function' && searchResults && searchResults.length > 0) {
+                renderSearchResults();
+            }
+            if (typeof renderQueueView === 'function') {
+                renderQueueView();
+            }
+        },
+
+        updateHeaderBadge() {
+            const badgeEl = document.getElementById('headerProxyBadge');
+            if (badgeEl) {
+                const cfg = this.getConfig();
+                badgeEl.textContent = `EZproxy: ${cfg.shortName || 'มหิดล'}`;
+            }
+        },
+
+        updateStorageDiagnostics() {
+            const statEl = document.getElementById('settingStorageStatus');
+            const detailEl = document.getElementById('settingStorageDetails');
+            if (statEl) {
+                if (Dashboard.storage.isIndexedDBReady) {
+                    statEl.innerHTML = '🚀 IndexedDB: เปิดใช้งานปกติ (ความจุระดับ GB ไม่จำกัด)';
+                    statEl.style.color = '#059669';
+                } else {
+                    statEl.innerHTML = '💾 LocalStorage Fallback: กำลังทำงาน (โควตา 5MB)';
+                    statEl.style.color = '#d97706';
+                }
+            }
+            if (detailEl) {
+                detailEl.textContent = `บันทึกในคลังแล้ว ${myPapers.length} ฉบับ (ระบบบันทึกแบบ Dual-Storage อัตโนมัติ)`;
+            }
+        }
+    },
+
     storage: {
-        SCHEMA_VERSION: 2,
+        SCHEMA_VERSION: 3,
+        DB_NAME: 'SeanThesisResearchDB',
+        STORE_NAME: 'papers',
         SNAPSHOT_KEY: 'sean_thesis_snapshot_',
-        
+        isIndexedDBReady: false,
+        dbInstance: null,
+
+        // Initialize Database (Native IndexedDB with LocalStorage Migration)
+        async initDB() {
+            if (!('indexedDB' in window)) {
+                console.warn('IndexedDB not supported in this browser, falling back to LocalStorage.');
+                this.isIndexedDBReady = false;
+                return false;
+            }
+
+            return new Promise((resolve) => {
+                try {
+                    const request = indexedDB.open(this.DB_NAME, 1);
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(this.STORE_NAME)) {
+                            const store = db.createObjectStore(this.STORE_NAME, { keyPath: 'id' });
+                            store.createIndex('doi', 'doi', { unique: false });
+                            store.createIndex('year', 'year', { unique: false });
+                            store.createIndex('status', 'status', { unique: false });
+                        }
+                    };
+
+                    request.onsuccess = async (event) => {
+                        this.dbInstance = event.target.result;
+                        this.isIndexedDBReady = true;
+
+                        // Check if IndexedDB has papers. If empty, check LocalStorage for auto-migration
+                        const count = await this.countIndexedDB();
+                        if (count === 0) {
+                            const localRaw = localStorage.getItem(STORAGE_KEY);
+                            if (localRaw) {
+                                try {
+                                    const parsed = JSON.parse(localRaw);
+                                    if (Array.isArray(parsed) && parsed.length > 0) {
+                                        console.log(`Auto-migrating ${parsed.length} papers from LocalStorage to IndexedDB...`);
+                                        await this.writeAllToIndexedDB(parsed);
+                                        localStorage.setItem('sean_thesis_idb_migrated', 'true');
+                                    }
+                                } catch (e) {
+                                    console.warn('LocalStorage migration error:', e);
+                                }
+                            }
+                        }
+                        this.updateQuotaIndicator();
+                        resolve(true);
+                    };
+
+                    request.onerror = (err) => {
+                        console.warn('IndexedDB open error (likely private mode):', err);
+                        this.isIndexedDBReady = false;
+                        resolve(false);
+                    };
+                } catch (e) {
+                    console.warn('IndexedDB exception:', e);
+                    this.isIndexedDBReady = false;
+                    resolve(false);
+                }
+            });
+        },
+
+        countIndexedDB() {
+            return new Promise((resolve) => {
+                if (!this.dbInstance) return resolve(0);
+                try {
+                    const tx = this.dbInstance.transaction(this.STORE_NAME, 'readonly');
+                    const store = tx.objectStore(this.STORE_NAME);
+                    const req = store.count();
+                    req.onsuccess = () => resolve(req.result || 0);
+                    req.onerror = () => resolve(0);
+                } catch (e) {
+                    resolve(0);
+                }
+            });
+        },
+
+        readAllFromIndexedDB() {
+            return new Promise((resolve) => {
+                if (!this.dbInstance) return resolve(null);
+                try {
+                    const tx = this.dbInstance.transaction(this.STORE_NAME, 'readonly');
+                    const store = tx.objectStore(this.STORE_NAME);
+                    const req = store.getAll();
+                    req.onsuccess = () => resolve(req.result || []);
+                    req.onerror = () => resolve(null);
+                } catch (e) {
+                    resolve(null);
+                }
+            });
+        },
+
+        writeAllToIndexedDB(papers) {
+            return new Promise((resolve) => {
+                if (!this.dbInstance) return resolve(false);
+                try {
+                    const tx = this.dbInstance.transaction(this.STORE_NAME, 'readwrite');
+                    const store = tx.objectStore(this.STORE_NAME);
+                    store.clear();
+                    (papers || []).forEach(p => {
+                        if (p && p.id) store.put(p);
+                    });
+                    tx.oncomplete = () => resolve(true);
+                    tx.onerror = () => resolve(false);
+                } catch (e) {
+                    resolve(false);
+                }
+            });
+        },
+
         migratePaper(p) {
             if (!p || typeof p !== 'object') return null;
             p.id = p.id || ('paper-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5));
@@ -3580,7 +4088,6 @@ window.Dashboard = {
             p.priority = ['must', 'should', 'could'].includes(p.priority) ? p.priority : 'should';
             p.status = ['queued', 'reading', 'done', 'skipped'].includes(p.status) ? p.status : 'queued';
             
-            // Auto migrate readingPass
             if (!p.readingPass) {
                 if (p.status === 'done' || (p.gaps && p.gaps.trim().length > 0)) {
                     p.readingPass = 3;
@@ -3643,7 +4150,6 @@ window.Dashboard = {
                     myPapers = [];
                 }
             } else {
-                // New user starts completely empty with clean sandbox
                 myPapers = [];
             }
 
@@ -3654,19 +4160,50 @@ window.Dashboard = {
             return myPapers;
         },
 
+        // Async load from IndexedDB with LocalStorage fallback
+        async loadAsync() {
+            await this.initDB();
+            if (this.isIndexedDBReady) {
+                const idbPapers = await this.readAllFromIndexedDB();
+                if (Array.isArray(idbPapers) && idbPapers.length > 0) {
+                    myPapers = idbPapers.map(item => this.migratePaper(item)).filter(Boolean);
+                    this.updateQuotaIndicator();
+                    if (typeof updateKPIs === 'function') updateKPIs();
+                    return myPapers;
+                }
+            }
+            return this.load();
+        },
+
+        // Dual-Storage Save: Always saves to IndexedDB + LocalStorage sync mirror
         save(skipSnapshot = false) {
+            // 1. IndexedDB primary storage
+            if (this.isIndexedDBReady && this.dbInstance) {
+                this.writeAllToIndexedDB(myPapers).catch(err => {
+                    console.warn('IndexedDB write error:', err);
+                });
+            }
+
+            // 2. LocalStorage synchronous mirror
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(myPapers));
-                updateKPIs();
-                this.updateQuotaIndicator();
-                if (!skipSnapshot) {
-                    this.createAutoSnapshot();
-                }
             } catch (err) {
-                console.error('LocalStorage save error:', err);
-                if (err.name === 'QuotaExceededError' || err.code === 22) {
-                    alert('⚠️ พื้นที่จัดเก็บ LocalStorage เต็ม! กรุณา Export สำรองข้อมูลเป็นไฟล์ JSON และลบข้อมูลบางส่วน');
-                }
+                console.warn('LocalStorage quota reached. Safe in IndexedDB:', err);
+            }
+
+            if (typeof updateKPIs === 'function') updateKPIs();
+            this.updateQuotaIndicator();
+            if (!skipSnapshot) {
+                this.createAutoSnapshot();
+            }
+        },
+
+        forceSyncToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(myPapers));
+                if (typeof showToast === 'function') showToast('✅ ซิงค์ข้อมูลสำรองเข้า LocalStorage เรียบร้อย');
+            } catch (e) {
+                if (typeof showToast === 'function') showToast('⚠️ ขนาดข้อมูลเกินโควตา 5MB ของ LocalStorage (ข้อมูลยังคงปลอดภัยใน IndexedDB)');
             }
         },
 
@@ -3689,10 +4226,23 @@ window.Dashboard = {
             const usage = this.getQuotaUsage();
             const textEl = document.getElementById('quotaText');
             const fillEl = document.getElementById('quotaMeterFill');
-            if (textEl) textEl.textContent = `${usage.kb} KB (${usage.percent}%)`;
+            const indicatorEl = document.getElementById('storageQuotaIndicator');
+
+            if (textEl) {
+                if (this.isIndexedDBReady) {
+                    textEl.textContent = `IndexedDB (${myPapers.length} ฉบับ)`;
+                } else {
+                    textEl.textContent = `${usage.kb} KB (${usage.percent}%)`;
+                }
+            }
             if (fillEl) {
-                fillEl.style.width = `${usage.percent}%`;
-                fillEl.className = 'quota-meter-fill' + (usage.isDanger ? ' danger' : usage.isWarn ? ' warn' : '');
+                fillEl.style.width = this.isIndexedDBReady ? '100%' : `${usage.percent}%`;
+                fillEl.className = 'quota-meter-fill' + (this.isIndexedDBReady ? ' ready' : usage.isDanger ? ' danger' : usage.isWarn ? ' warn' : '');
+            }
+            if (indicatorEl) {
+                indicatorEl.title = this.isIndexedDBReady
+                    ? `คลังข้อมูล IndexedDB: บันทึกแล้ว ${myPapers.length} ฉบับ (รองรับความจุระดับ GB ไร้ข้อจำกัด)`
+                    : `LocalStorage ปัจจุบัน: ${usage.kb} KB / 5MB (${usage.percent}%)`;
             }
         },
 
@@ -3720,7 +4270,7 @@ window.Dashboard = {
             a.download = `sean_thesis_research_dataset_backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('สำรองข้อมูล Dataset ทั้งหมดเป็น JSON เรียบร้อย');
+            if (typeof showToast === 'function') showToast('สำรองข้อมูล Dataset ทั้งหมดเป็น JSON เรียบร้อย');
         },
 
         importFullBackupJSON(event) {
@@ -3749,14 +4299,17 @@ window.Dashboard = {
                         () => { myPapers = prevPapers; Dashboard.storage.save(); Dashboard.queue.render(); if(typeof initCharts === 'function') initCharts(); },
                         true
                     );
-
-                    showToast(`นำเข้าข้อมูลสำเร็จ ${nextPapers.length} รายการ (สามารถกด Undo ได้)`);
+                    myPapers = nextPapers;
+                    Dashboard.storage.save();
+                    Dashboard.queue.render();
+                    if (typeof initCharts === 'function') initCharts();
+                    if (typeof showToast === 'function') showToast(`📥 นำเข้า Dataset สำเร็จ ${nextPapers.length} ฉบับ`);
                 } catch (err) {
-                    alert('เกิดข้อผิดพลาดในการอ่านไฟล์ JSON: ' + err.message);
+                    alert('ไฟล์ JSON เสียหายหรือไม่ถูกต้อง: ' + err.message);
                 }
             };
             reader.readAsText(file);
-            event.target.value = '';
+            if (event.target) event.target.value = '';
         }
     },
 
@@ -4415,6 +4968,12 @@ window.Dashboard = {
                 }
                 if (p.doi) {
                     badges.push(`<a href="https://doi.org/${escapeHtml(p.doi)}" target="_blank" class="paper-badge" style="background:#eff6ff; color:#2563eb; text-decoration:none;">🔗 DOI</a>`);
+                    const cleanDoiRow = (p.doi || '').replace('https://doi.org/', '').trim();
+                    if (cleanDoiRow && typeof Dashboard !== 'undefined' && Dashboard.proxy) {
+                        const proxyHref = Dashboard.proxy.resolveUrl(cleanDoiRow);
+                        const instName = Dashboard.proxy.getConfig().shortName || 'มหิดล';
+                        badges.push(`<a href="${escapeHtml(proxyHref)}" target="_blank" class="paper-badge btn-ezproxy-badge" title="เปิดอ่านบทความฉบับเต็มผ่าน EZproxy ${instName} (สิทธิ์มหาลัย)">🔓 EZproxy ${instName}</a>`);
+                    }
                 }
                 const scholarQuery = encodeURIComponent(`${p.title} ${authorsText.split(',')[0] || ''}`);
                 badges.push(`<a href="https://scholar.google.com/scholar?q=${scholarQuery}" target="_blank" class="paper-badge" style="background:var(--bg-subtle); color:var(--text-muted); text-decoration:none;">🎓 Scholar</a>`);
@@ -5330,8 +5889,16 @@ let barChartInstance = null;
 let activeQueueFilter = 'all';
 
 // Initialize
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+    if (Dashboard.proxy) Dashboard.proxy.updateHeaderBadge();
     Dashboard.storage.load();
+    // Background Hydration from IndexedDB
+    if (Dashboard.storage.loadAsync) {
+        Dashboard.storage.loadAsync().then(() => {
+            Dashboard.queue.render();
+            if (typeof initCharts === 'function') initCharts();
+        });
+    }
     Dashboard.undo.initKeyboardShortcuts();
     initTheme();
     updateKPIs();
@@ -5970,9 +6537,21 @@ async function fetchAbstractFallback(doi, title) {
         try {
             const controller = new AbortController();
             const timer = setTimeout(() => controller.abort(), 7000);
+            const s2Key = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().semanticScholarKey || '').trim() : '';
+            const fetchHeaders = {};
+            if (s2Key) fetchHeaders['x-api-key'] = s2Key;
+
             const res = await fetch(`https://api.semanticscholar.org/graph/v1/paper/DOI:${encodeURIComponent(cleanDoi)}?fields=abstract,tldr,title`, {
-                signal: controller.signal
+                signal: controller.signal,
+                headers: fetchHeaders
             });
+
+            if (res.status === 429) {
+                console.warn('Semantic Scholar Rate Limit (HTTP 429). Pausing for 5 seconds...');
+                const batchBtn = document.getElementById('batchAbstractBtn');
+                if (batchBtn) batchBtn.innerHTML = '⏳ ติด Rate Limit เซิร์ฟเวอร์ พัก 5 วินาที...';
+                await new Promise(r => setTimeout(r, 5000));
+            }
             clearTimeout(timer);
             if (res.ok) {
                 const data = await res.json();
@@ -6197,7 +6776,8 @@ async function batchFetchMissingAbstracts() {
         }
 
         // Polite delay (400ms) to prevent rate limits
-        await new Promise(r => setTimeout(r, 400));
+        // 600ms Throttling Queue to prevent HTTP 429 rate limit
+        await new Promise(r => setTimeout(r, 600));
     }
 
     isBatchFetching = false;
@@ -6551,8 +7131,13 @@ function renderSearchResults(query = '') {
 
                 <div class="paper-actions">
                     <div class="paper-action-group">
-                        ${p.doi ? `<a href="${doiHref}" target="_blank" class="btn btn-sm">🔗 เปิด DOI</a>` : ''}
+                        ${cleanDoi ? `
+                            <button type="button" class="btn btn-sm btn-ezproxy ${!p.openAccessUrl ? 'btn-ezproxy-paywall' : ''}" onclick="Dashboard.proxy.open('${cleanDoi}', '${escapeHtml(p.title)}')" title="เปิดอ่านบทความฉบับเต็มผ่านระบบ EZproxy ของมหาวิทยาลัย (สิทธิ์มหาลัย)">
+                                🔓 ${!p.openAccessUrl ? 'EZproxy ' + ((typeof Dashboard !== 'undefined' && Dashboard.proxy) ? Dashboard.proxy.getConfig().shortName : 'มหิดล') + ' (ปลดล็อกเปเปอร์ปิด)' : 'EZproxy ' + ((typeof Dashboard !== 'undefined' && Dashboard.proxy) ? Dashboard.proxy.getConfig().shortName : 'มหิดล')} ↗
+                            </button>
+                        ` : ''}
                         ${p.openAccessUrl ? `<a href="${p.openAccessUrl}" target="_blank" class="btn btn-sm btn-primary">📄 ดาวน์โหลด PDF ฟรี</a>` : ''}
+                        ${p.doi ? `<a href="${doiHref}" target="_blank" class="btn btn-sm">🔗 เปิด DOI</a>` : ''}
                         <button class="btn btn-sm" id="trans-btn-${idx}" onclick="translatePaperCard(${idx})" title="แปลชื่อเรื่องและสรุปบทคัดย่อเป็นภาษาไทยตามคำขอ">
                             ${p.thaiTitle ? '🇹🇭 สลับคำแปลไทย' : '🇹🇭 แปลชื่อ & สรุปไทย'}
                         </button>
@@ -6763,6 +7348,20 @@ function openPaperDrawer(paperId, targetPass = null) {
         } else {
             primaryBtn.href = scholarUrl;
             primaryBtn.innerHTML = '🚀 ค้นหาอ่านฉบับเต็มบน Google Scholar ↗';
+        }
+    }
+
+    // EZproxy Button Resolver
+    const drawerEzBtn = document.getElementById('drawerEzproxyBtn');
+    if (drawerEzBtn) {
+        if (cleanDoi || (p.doi && p.doi.startsWith('http'))) {
+            const target = cleanDoi ? `https://doi.org/${cleanDoi}` : p.doi;
+            const instName = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().shortName || 'มหิดล') : 'มหิดล';
+            drawerEzBtn.href = Dashboard.proxy ? Dashboard.proxy.resolveUrl(target) : `https://login.ezproxy.mahidol.ac.th/login?url=${encodeURIComponent(target)}`;
+            drawerEzBtn.style.display = 'inline-flex';
+            drawerEzBtn.innerHTML = `🔓 เปิดอ่านผ่าน EZproxy ${instName} (สิทธิ์มหาลัย) ↗`;
+        } else {
+            drawerEzBtn.style.display = 'none';
         }
     }
 
@@ -7045,6 +7644,19 @@ function openAbstractModal(paperId) {
     const doiUrl = cleanDoi ? `https://doi.org/${cleanDoi}` : (p.doi && p.doi.startsWith('http') ? p.doi : '');
     const scholarUrl = `https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}`;
     const s2Url = `https://www.semanticscholar.org/search?q=${encodeURIComponent(p.title)}`;
+
+    const ezproxyLink = document.getElementById('abstractModalEzproxyLink');
+    if (ezproxyLink) {
+        if (cleanDoi || (p.doi && p.doi.startsWith('http'))) {
+            const target = cleanDoi ? `https://doi.org/${cleanDoi}` : p.doi;
+            const instName = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().shortName || 'มหิดล') : 'มหิดล';
+            ezproxyLink.href = Dashboard.proxy ? Dashboard.proxy.resolveUrl(target) : `https://login.ezproxy.mahidol.ac.th/login?url=${encodeURIComponent(target)}`;
+            ezproxyLink.style.display = 'inline-flex';
+            ezproxyLink.innerHTML = `🔓 เปิดผ่าน EZproxy ${instName} ↗`;
+        } else {
+            ezproxyLink.style.display = 'none';
+        }
+    }
 
     const pdfLink = document.getElementById('abstractModalPdfLink');
     if (pdfLink) {
