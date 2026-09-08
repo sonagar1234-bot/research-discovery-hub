@@ -2788,6 +2788,17 @@
                 <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
                     ระบบจะสร้างลิงก์เปิดอ่านบทความวิจัยฉบับเต็ม (Closed-Access) จาก ScienceDirect, Springer, Wiley ผ่านสิทธิ์ล็อกอินของมหาวิทยาลัยให้อัตโนมัติ
                 </p>
+                <!-- Mahidol Official Access Instructions -->
+                <div style="background: #fdf4ff; border: 1px solid #e9d5ff; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 12px; font-size: 12px; line-height: 1.5; color: #581c87;">
+                    <div style="font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 13px;">
+                        <span>💡</span> คำแนะนำการเข้าถึงบทความลิขสิทธิ์ของ ม.มหิดล (Off-Campus Access):
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px;">
+                        <li><strong>วิธีที่ 1 (แนะนำสูงสุด 100% เสถียร):</strong> เชื่อมต่อ <strong>VPN@Mahidol</strong> (เซิร์ฟเวอร์ <code>vpn.mahidol.ac.th</code>) ด้วยรหัสผ่าน MU Internet — เมื่อต่อแล้วสามารถกดเปิด DOI อ่านบทความ ScienceDirect / Springer ได้ฟรีทันที</li>
+                        <li><strong>วิธีที่ 2:</strong> เข้าสู่ระบบที่หน้าพอร์ทัลหลัก <a href="https://ejournal.mahidol.ac.th" target="_blank" style="color: #7e22ce; font-weight: 700; text-decoration: underline;">ejournal.mahidol.ac.th ↗</a> ก่อนหนึ่งครั้ง เพื่อให้ระบบบันทึก Session Cookie ในเบราว์เซอร์</li>
+                        <li><strong>วิธีที่ 3:</strong> ติดตั้งส่วนขยายเบราว์เซอร์ <strong>"EZProxy Redirect"</strong> บน Chrome/Edge ตามคำแนะนำของหอสมุดมหิดล</li>
+                    </ul>
+                </div>
                 <select id="settingProxyPreset" class="form-control" style="width: 100%; margin-bottom: 8px;" onchange="Dashboard.proxy.handlePresetChange(this.value)">
                     <option value="mahidol">มหาวิทยาลัยมหิดล (Mahidol University EZproxy) - ค่าเริ่มต้น</option>
                     <option value="chula">จุฬาลงกรณ์มหาวิทยาลัย (Chulalongkorn University EZproxy)</option>
@@ -2809,7 +2820,7 @@
                 <div style="margin-top: 10px;">
                     <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">ตัวอย่าง URL ที่จะเปิดใช้งาน:</span>
                     <div class="proxy-preview-box" id="proxyLivePreview">
-                        https://login.ezproxy.mahidol.ac.th/login?url=https://doi.org/10.1016/j.cemconres.2023.107388
+                        https://ejournal.mahidol.ac.th/login?url=https://doi.org/10.1016/j.cemconres.2023.107388
                     </div>
                 </div>
                 <div style="margin-top: 8px;">
@@ -3741,7 +3752,7 @@ var Dashboard = window.Dashboard = {
             mahidol: {
                 name: 'มหาวิทยาลัยมหิดล (Mahidol University EZproxy)',
                 shortName: 'มหิดล',
-                prefix: 'https://login.ezproxy.mahidol.ac.th/login?url='
+                prefix: 'https://ejournal.mahidol.ac.th/login?url='
             },
             chula: {
                 name: 'จุฬาลงกรณ์มหาวิทยาลัย (Chulalongkorn EZproxy)',
@@ -3820,7 +3831,7 @@ var Dashboard = window.Dashboard = {
             const cfg = this.getConfig();
             const instName = cfg.shortName || 'มหิดล';
             if (typeof showToast === 'function') {
-                showToast(`🔓 กำลังเปิดผ่าน EZproxy ${instName}... กรุณาเข้าสู่ระบบด้วยบัญชีสถาบัน`);
+                showToast(`🔓 กำลังเปิดผ่าน EZproxy ${instName}... (หากเปิดไม่ได้ แนะนำให้เชื่อมต่อ VPN@Mahidol หรือล็อกอินที่ ejournal.mahidol.ac.th)`);
             }
             window.open(fullUrl, '_blank', 'noopener,noreferrer');
         },
@@ -7357,7 +7368,7 @@ function openPaperDrawer(paperId, targetPass = null) {
         if (cleanDoi || (p.doi && p.doi.startsWith('http'))) {
             const target = cleanDoi ? `https://doi.org/${cleanDoi}` : p.doi;
             const instName = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().shortName || 'มหิดล') : 'มหิดล';
-            drawerEzBtn.href = Dashboard.proxy ? Dashboard.proxy.resolveUrl(target) : `https://login.ezproxy.mahidol.ac.th/login?url=${encodeURIComponent(target)}`;
+            drawerEzBtn.href = Dashboard.proxy ? Dashboard.proxy.resolveUrl(target) : `https://ejournal.mahidol.ac.th/login?url=${encodeURIComponent(target)}`;
             drawerEzBtn.style.display = 'inline-flex';
             drawerEzBtn.innerHTML = `🔓 เปิดอ่านผ่าน EZproxy ${instName} (สิทธิ์มหาลัย) ↗`;
         } else {
@@ -7650,7 +7661,7 @@ function openAbstractModal(paperId) {
         if (cleanDoi || (p.doi && p.doi.startsWith('http'))) {
             const target = cleanDoi ? `https://doi.org/${cleanDoi}` : p.doi;
             const instName = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().shortName || 'มหิดล') : 'มหิดล';
-            ezproxyLink.href = Dashboard.proxy ? Dashboard.proxy.resolveUrl(target) : `https://login.ezproxy.mahidol.ac.th/login?url=${encodeURIComponent(target)}`;
+            ezproxyLink.href = Dashboard.proxy ? Dashboard.proxy.resolveUrl(target) : `https://ejournal.mahidol.ac.th/login?url=${encodeURIComponent(target)}`;
             ezproxyLink.style.display = 'inline-flex';
             ezproxyLink.innerHTML = `🔓 เปิดผ่าน EZproxy ${instName} ↗`;
         } else {
