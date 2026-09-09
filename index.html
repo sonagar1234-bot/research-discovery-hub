@@ -2049,7 +2049,7 @@
             <span class="brand-badge">RESEARCH WORKSPACE</span>
             <div class="header-title">
                 <h1>📚 Research Discovery & Smart Reading Hub</h1>
-                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis)</p>
+                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.5 (Google Web / ResearchGate / Local PDF พร้อมใช้งาน)</span></p>
             </div>
         </div>
         <div class="header-actions">
@@ -2480,7 +2480,9 @@
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
                 <a id="drawerOaLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; display:none;">📄 ดาวน์โหลด PDF ฟรี</a>
                 <a id="drawerDoiLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; display:none;">🔗 ลิงก์ DOI สำนักพิมพ์</a>
-                <a id="drawerScholarLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none;">🎓 Google Scholar ↗</a>
+                <a id="drawerGoogleLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; border-color: #3b82f6; font-weight: 600;">🌐 ค้นหาบน Google (เว็บสมาคม/มจธ.) ↗</a>
+                    <a id="drawerRgLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; border-color: #00ccbb; font-weight: 600;">RG ResearchGate ↗</a>
+                    <a id="drawerScholarLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none;">🎓 Google Scholar ↗</a>
                 <a id="drawerS2Link" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none;">🌐 Semantic Scholar ↗</a>
                 <button type="button" class="btn btn-sm" onclick="copyCitationText()">📋 คัดลอก APA Citation</button>
             </div>
@@ -2747,6 +2749,12 @@
                 </a>
                 <a id="abstractModalDoiLink" href="#" target="_blank" class="btn btn-sm" style="font-weight: 700; text-decoration: none; display: none;">
                     🔗 สำนักพิมพ์ DOI ↗
+                </a>
+                <a id="abstractModalGoogleLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration: none; border-color: #3b82f6; font-weight: 600;">
+                    🌐 ค้นหาบน Google (เว็บสมาคม/มจธ.) ↗
+                </a>
+                <a id="abstractModalRgLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration: none; border-color: #00ccbb; font-weight: 600;">
+                    RG ResearchGate ↗
                 </a>
                 <a id="abstractModalScholarLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration: none;">
                     🎓 Google Scholar ↗
@@ -3516,7 +3524,7 @@ const SEED_PAPERS = [
         journal: 'Proceedings of the 20th Asian Conference on Civil Engineering (ACC20), KMUTT',
         doi: '',
         citationCount: 4,
-        openAccessUrl: '',
+        openAccessUrl: 'raw/Paper_ทำเม็ดหินไบโอชาร์_Leang2024_ACC20.pdf',
         abstract: 'This study investigates the production of artificial lightweight coarse aggregates using coal bottom ash as a core and a shell of biochar-fly ash-cement. Cold bonding pelletization was used. At 100% replacement of natural coarse aggregate, concrete density reached 1630 kg/m3 with 28-day compressive strength of 19.0 MPa, satisfying ACI 213R requirements.',
         priority: 'must',
         status: 'done',
@@ -3666,7 +3674,7 @@ const SEED_PAPERS = [
         journal: 'การประชุมวิชาการวิศวกรรมโยธาแห่งชาติ ครั้งที่ 31 (NCCE 31), ID: ncce31-2460',
         doi: '',
         citationCount: 2,
-        openAccessUrl: '',
+        openAccessUrl: 'raw/ncce31-2460-coconut-porous-carbon-onepart-geopolymer-mortar.pdf',
         abstract: 'การเติมคาร์บอนพรุนจากกะลามะพร้าว (Coconut Porous Carbon: CPC) 3% โดยน้ำหนักในมอร์ตาร์จีโอโพลิเมอร์เถ้าลอยผสมเถ้าชานอ้อย ช่วยเพิ่มกำลังอัด 28 วันแตะ 52.8 MPa (+33.7%) ลดความพรุนเหลือ 15% และลดการปล่อยคาร์บอนลง 65.8%',
         priority: 'must',
         status: 'done',
@@ -4104,7 +4112,7 @@ var Dashboard = window.Dashboard = {
 
             const LEGACY_ID_MAP = {
                 'vault-choi-2012': { id: 'vault-gupta-2018', doi: '10.1016/j.conbuildmat.2017.10.095', openAccessUrl: 'https://doi.org/10.1016/j.conbuildmat.2017.10.095', title: 'Effect of water entrainment by pre-soaked biochar particles on strength and permeability of cement mortar', journal: 'Construction and Building Materials', year: 2018, authors: ['Souradeep Gupta', 'Harn Wei Kua'] },
-                'vault-leang-2023': { id: 'vault-leang-2024', doi: '', openAccessUrl: '', title: 'Development of Low CO2 Aggregate Made with High Biochar Content for Producing Lightweight Concrete', journal: 'Proceedings of the 20th Asian Conference on Civil Engineering (ACC20), KMUTT', year: 2024, authors: ['Navin Leang', 'Kasidis Mangkhan', 'Weerachart Tangchirapat', 'Chai Jaturapitakkul'] },
+                'vault-leang-2023': { id: 'vault-leang-2024', doi: '', openAccessUrl: 'raw/Paper_ทำเม็ดหินไบโอชาร์_Leang2024_ACC20.pdf', title: 'Development of Low CO2 Aggregate Made with High Biochar Content for Producing Lightweight Concrete', journal: 'Proceedings of the 20th Asian Conference on Civil Engineering (ACC20), KMUTT', year: 2024, authors: ['Navin Leang', 'Kasidis Mangkhan', 'Weerachart Tangchirapat', 'Chai Jaturapitakkul'] },
                 'vault-sarker-2014': { doi: '10.1016/j.matdes.2014.06.059', openAccessUrl: 'https://doi.org/10.1016/j.matdes.2014.06.059', title: 'Effect of fire exposure on cracking, spalling and residual strength of fly ash geopolymer concrete', journal: 'Materials & Design', year: 2014, authors: ['P. K. Sarker', 'S. Kelly', 'Z. Yao'] },
                 'vault-habert-2020': { id: 'vault-habert-2016', doi: '10.21809/rilemtechlett.2016.6', openAccessUrl: 'https://letters.rilem.net/index.php/rilem/article/view/6/8', title: 'Recent update on the environmental impact of geopolymers', journal: 'RILEM Technical Letters', year: 2016, authors: ['Guillaume Habert', 'Claudiane Ouellet-Plamondon'] },
                 'vault-chindasiriphan-2024': { id: 'vault-chindasiriphan-2020', doi: '10.1016/j.conbuildmat.2019.116975', openAccessUrl: 'https://doi.org/10.1016/j.conbuildmat.2019.116975', title: 'Effect of fly ash and superabsorbent polymer on concrete self-healing ability', journal: 'Construction and Building Materials', year: 2020, authors: ['Phattaraphon Chindasiriphan', 'H. Yokota', 'P. Pimpakan'] },
@@ -4125,6 +4133,18 @@ var Dashboard = window.Dashboard = {
             }
             if (p.id && LEGACY_ID_MAP[p.id]) {
                 Object.assign(p, LEGACY_ID_MAP[p.id]);
+            }
+
+                        // Automatic mapping for local raw PDFs in project
+            if (p.id === 'seed-leang-2024' || p.id === 'vault-leang-2024' || (p.title && p.title.toLowerCase().includes('low co2 aggregate made with high biochar'))) {
+                p.openAccessUrl = 'raw/Paper_ทำเม็ดหินไบโอชาร์_Leang2024_ACC20.pdf';
+                p.journal = 'Annual Concrete Conference 20 (ACC20), Thailand Concrete Association / KMUTT';
+            }
+            if (p.id === 'seed-chindasiriphan-2026' || (p.title && p.title.includes('คาร์บอนพรุนจากกะลามะพร้าว'))) {
+                p.openAccessUrl = 'raw/ncce31-2460-coconut-porous-carbon-onepart-geopolymer-mortar.pdf';
+            }
+            if (p.id === 'vault-wongsa-2016' || (p.title && p.title.toLowerCase().includes('containing bottom ash as aggregates') && (!p.openAccessUrl || p.openAccessUrl.includes('doi.org')))) {
+                p.openAccessUrl = 'raw/Wongsa_2016_Lightweight_BottomAsh_Geopolymer.pdf';
             }
 
             p.id = p.id || ('paper-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5));
@@ -5018,8 +5038,12 @@ var Dashboard = window.Dashboard = {
                 
                 const badges = [];
                 const cleanDoiRow = (p.doi || '').replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').trim();
-                if (p.openAccessUrl) {
-                    badges.push(`<a href="${escapeHtml(p.openAccessUrl)}" target="_blank" class="paper-badge" style="background:#ecfdf5; color:#059669; text-decoration:none; font-weight:700;" title="เปิดอ่าน PDF ฟรี">📄 PDF ฟรี ↗</a>`);
+                const effectivePdfQueue = p.openAccessUrl || (typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '');
+                if (effectivePdfQueue) {
+                    const isLocal = effectivePdfQueue.startsWith('raw/') || effectivePdfQueue.startsWith('file:') || effectivePdfQueue.endsWith('.pdf');
+                    const badgeLabel = isLocal ? '📄 เปิด PDF ในเครื่อง ↗' : '📄 PDF ฟรี ↗';
+                    const badgeTitle = isLocal ? 'เปิดไฟล์ PDF ต้นฉบับจากคลังในเครื่อง (raw/) โดยตรง' : 'เปิดอ่าน PDF ฟรีผ่าน Open Access';
+                    badges.push(`<a href="${escapeHtml(effectivePdfQueue)}" target="_blank" class="paper-badge" style="background:#ecfdf5; color:#059669; text-decoration:none; font-weight:700;" title="${badgeTitle}">${badgeLabel}</a>`);
                 }
                 if (cleanDoiRow) {
                     badges.push(`<a href="https://doi.org/${encodeURI(cleanDoiRow)}" target="_blank" class="paper-badge" style="background:#eff6ff; color:#2563eb; text-decoration:none;" title="เปิด DOI สำนักพิมพ์">🔗 DOI ↗</a>`);
@@ -5029,8 +5053,12 @@ var Dashboard = window.Dashboard = {
                         badges.push(`<a href="${escapeHtml(proxyHref)}" target="_blank" class="paper-badge btn-ezproxy-badge" title="เปิดอ่านบทความฉบับเต็มผ่าน EZproxy ${instName} (สิทธิ์มหาลัย)">🔓 EZproxy ${instName}</a>`);
                     }
                 }
-                const scholarQuery = encodeURIComponent(`${p.title} ${authorsText.split(',')[0] || ''}`);
-                badges.push(`<a href="https://scholar.google.com/scholar?q=${scholarQuery}" target="_blank" class="paper-badge" style="background:var(--bg-subtle); color:var(--text-muted); text-decoration:none;">🎓 Scholar</a>`);
+                const googleWebQuery = encodeURIComponent(`${p.title} ${authorsText.split(',')[0] || ''}`);
+                badges.push(`<a href="https://www.google.com/search?q=${googleWebQuery}" target="_blank" class="paper-badge" style="background:#eff6ff; color:#1d4ed8; text-decoration:none; font-weight:600; border: 1px solid #93c5fd;" title="ค้นหาบน Google (เว็บสมาคมคอนกรีต/คลัง มจธ.)">🌐 Google (สมาคม/มจธ.) ↗</a>`);
+                const rgQuery = encodeURIComponent(p.title);
+                badges.push(`<a href="https://www.researchgate.net/search/publication?q=${rgQuery}" target="_blank" class="paper-badge" style="background:#f0fdfa; color:#0d9488; text-decoration:none; font-weight:600; border: 1px solid #99f6e4;" title="ค้นหาหรือขอบทความบน ResearchGate">RG ↗</a>`);
+                const scholarQuery = encodeURIComponent(p.title);
+                badges.push(`<a href="https://scholar.google.com/scholar?q=${scholarQuery}" target="_blank" class="paper-badge" style="background:var(--bg-subtle); color:var(--text-muted); text-decoration:none;" title="ค้นหาบน Google Scholar">🎓 Scholar</a>`);
 
                 const pillarsHtml = (p.pillars || []).map(k => {
                     return `<span class="paper-tag">${escapeHtml(getPillarName(k))}</span>`;
@@ -6396,7 +6424,7 @@ const LOCAL_BENCHMARK_PAPERS = [
         journal: 'Proceedings of the 20th Asian Conference on Civil Engineering (ACC20), KMUTT',
         doi: '',
         citationCount: 42,
-        openAccessUrl: '',
+        openAccessUrl: 'raw/Paper_ทำเม็ดหินไบโอชาร์_Leang2024_ACC20.pdf',
         isOA: false,
         abstract: 'Cold-bonding pelletization process using high biochar content shell and bottom ash core for artificial coarse aggregates. Demonstrates aggregate specific gravity 1.20-1.55, dry density 850 kg/m3, and water absorption 60%, ideal for lightweight concrete.',
         concepts: ['Cold-Bonded Pelletization', 'Biochar Coarse Aggregate', 'Lightweight Concrete'],
@@ -6502,6 +6530,39 @@ const LOCAL_BENCHMARK_PAPERS = [
     }
 ];
 
+
+// -------------------------------------------------------------
+// UNIVERSAL LOCAL PDF AUTO-RESOLVER
+// -------------------------------------------------------------
+function resolvePaperPdf(p) {
+    if (!p) return '';
+    if (p.openAccessUrl && (p.openAccessUrl.startsWith('raw/') || p.openAccessUrl.startsWith('file:') || p.openAccessUrl.endsWith('.pdf'))) {
+        return p.openAccessUrl;
+    }
+    const title = (p.title || '').toLowerCase();
+    const authorsStr = Array.isArray(p.authors) ? p.authors.join(' ').toLowerCase() : String(p.authors || '').toLowerCase();
+    
+    if (title.includes('low co2 aggregate') || title.includes('high biochar content') || authorsStr.includes('leang') || p.id === 'seed-leang-2024' || p.id === 'vault-leang-2024') {
+        return 'raw/Paper_ทำเม็ดหินไบโอชาร์_Leang2024_ACC20.pdf';
+    }
+    if (title.includes('คาร์บอนพรุนจากกะลามะพร้าว') || title.includes('ncce31-2460') || p.id === 'seed-chindasiriphan-2026') {
+        return 'raw/ncce31-2460-coconut-porous-carbon-onepart-geopolymer-mortar.pdf';
+    }
+    if (title.includes('bottom ash as aggregates') || (authorsStr.includes('wongsa') && title.includes('bottom ash')) || p.id === 'vault-wongsa-2016') {
+        return 'raw/Wongsa_2016_Lightweight_BottomAsh_Geopolymer.pdf';
+    }
+    if (title.includes('pumice') && title.includes('geopolymer')) {
+        return 'raw/Wongsa_2018_Lightweight_Geopolymer_Pumice.pdf';
+    }
+    if (title.includes('rubber') && title.includes('geopolymer')) {
+        return 'raw/Wongsa_2018_Lightweight_Geopolymer_Rubber.pdf';
+    }
+    if (title.includes('recycle') && title.includes('block') && title.includes('geopolymer')) {
+        return 'raw/Zaetang_2013_Lightweight_Geopolymer_Recycle_Block.pdf';
+    }
+    return p.openAccessUrl || '';
+}
+
 function executeLocalVaultSearch(query) {
     const qLower = query.toLowerCase().trim();
     const tokens = qLower.split(/\s+/).filter(t => t.length > 1);
@@ -6534,8 +6595,7 @@ function executeLocalVaultSearch(query) {
             journal: p.journal || 'Thesis Benchmark Record',
             doi: p.doi || '',
             citationCount: p.citationCount || 0,
-            openAccessUrl: p.openAccessUrl || '',
-            isOA: Boolean(p.openAccessUrl),
+            openAccessUrl: resolvePaperPdf(p) || p.openAccessUrl || '', isOA: Boolean(resolvePaperPdf(p) || p.openAccessUrl),
             abstract: p.abstract || p.notes || 'เอกสารวิจัยในคลังวิทยานิพนธ์',
             concepts: p.concepts || (p.pillars ? p.pillars.map(getPillarName) : ['Thesis Benchmark']),
             sourceEngine: '💾 คลังวิจัยในเครื่อง (Local Vault)'
@@ -7067,12 +7127,19 @@ function renderSearchResults(query = '') {
     updateAbstractStatsHeader();
 
     list.innerHTML = searchResults.map((p, idx) => {
+        // Auto-resolve local raw PDF
+        const resolvedPdf = typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '';
+        if (resolvedPdf) {
+            p.openAccessUrl = resolvedPdf;
+            p.isOA = true;
+        }
+
         const isAlreadySaved = myPapers.some(saved => (saved.doi && saved.doi === p.doi) || saved.title.toLowerCase() === p.title.toLowerCase());
         const authorsText = p.authors.length > 0 ? p.authors.join(', ') : 'Unknown Authors';
-                const cleanDoi = (p.doi || '').replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').trim();
+        const cleanDoi = (p.doi || '').replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').trim();
         const canonicalDoiUrl = cleanDoi ? `https://doi.org/${cleanDoi}` : '';
-        const scholarFallbackUrl = `https://scholar.google.com/scholar?q=${encodeURIComponent(((Array.isArray(p.authors) ? p.authors[0] : '') + ' ' + (p.title || '')).trim())}`;
-        const titleHref = canonicalDoiUrl || p.openAccessUrl || scholarFallbackUrl;
+        const scholarFallbackUrl = `https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}`;
+        const titleHref = p.openAccessUrl || canonicalDoiUrl || scholarFallbackUrl;
         const hasAbstract = !isMissingAbstract(p.abstract);
 
         // Tag paper with search index for Trust Score popup
@@ -7185,15 +7252,40 @@ function renderSearchResults(query = '') {
                     ${(p.concepts || []).map(c => `<span class="paper-tag">${escapeHtml(c)}</span>`).join('')}
                 </div>
 
-                <div class="paper-actions">
+                                <div class="paper-actions">
                     <div class="paper-action-group">
+                        <!-- 1. Local or OA Fulltext PDF (Green Priority Button) -->
+                        ${(p.openAccessUrl || (typeof resolvePaperPdf === 'function' && resolvePaperPdf(p))) ? `
+                            <a href="${escapeHtml(p.openAccessUrl || resolvePaperPdf(p))}" target="_blank" class="btn btn-sm btn-primary" style="background:#059669; border-color:#059669; font-weight:700; color:#ffffff !important; box-shadow:0 1px 3px rgba(5,150,105,0.3);" title="เปิดอ่านบทความฉบับเต็ม">
+                                📄 ${(p.openAccessUrl || resolvePaperPdf(p)).startsWith('raw/') ? 'เปิดอ่าน PDF ในเครื่อง ↗' : 'ดาวน์โหลด PDF ฟรี ↗'}
+                            </a>
+                        ` : ''}
+
+                        <!-- 2. EZproxy Gateway & DOI Link -->
                         ${cleanDoi ? `
                             <button type="button" class="btn btn-sm btn-ezproxy ${!p.openAccessUrl ? 'btn-ezproxy-paywall' : ''}" onclick="Dashboard.proxy.open('${cleanDoi}', '${escapeHtml(p.title)}')" title="เปิดอ่านบทความฉบับเต็มผ่านระบบ EZproxy ของมหาวิทยาลัย (สิทธิ์มหาลัย)">
                                 🔓 ${!p.openAccessUrl ? 'EZproxy ' + ((typeof Dashboard !== 'undefined' && Dashboard.proxy) ? Dashboard.proxy.getConfig().shortName : 'มหิดล') + ' (ปลดล็อกเปเปอร์ปิด)' : 'EZproxy ' + ((typeof Dashboard !== 'undefined' && Dashboard.proxy) ? Dashboard.proxy.getConfig().shortName : 'มหิดล')} ↗
                             </button>
+                            <a href="${canonicalDoiUrl}" target="_blank" class="btn btn-sm" title="เปิดหน้าเว็บหลักของสำนักพิมพ์ผ่าน DOI สากล">🔗 เปิด DOI ↗</a>
                         ` : ''}
-                        ${p.openAccessUrl ? `<a href="${p.openAccessUrl}" target="_blank" class="btn btn-sm btn-primary">📄 ดาวน์โหลด PDF ฟรี</a>` : ''}
-                        ${canonicalDoiUrl ? `<a href="${canonicalDoiUrl}" target="_blank" class="btn btn-sm" title="เปิดหน้าเว็บหลักของสำนักพิมพ์ผ่าน DOI สากล">🔗 เปิด DOI ↗</a>` : `<a href="${scholarFallbackUrl}" target="_blank" class="btn btn-sm" title="ค้นหาบทความต้นฉบับบน Google Scholar">🔍 Scholar ↗</a>`}
+
+                        <!-- 3. Direct Online Search Buttons (Google Web & ResearchGate) -->
+                        <a href="https://www.google.com/search?q=${encodeURIComponent(p.title + ' ' + (authorsText.split(',')[0] || ''))}" target="_blank" class="btn btn-sm" style="border-color: #2563eb; color: #1d4ed8; background: #eff6ff; font-weight: 700;" title="ค้นหาบน Google (เว็บสมาคมคอนกรีต/คลัง มจธ.)">
+                            🌐 ค้นหาบน Google (เว็บสมาคม/มจธ.) ↗
+                        </a>
+                        <a href="https://www.researchgate.net/search/publication?q=${encodeURIComponent(p.title)}" target="_blank" class="btn btn-sm" style="border-color: #0d9488; color: #0f766e; background: #f0fdfa; font-weight: 700;" title="ค้นหาหรือขอบทความบน ResearchGate">
+                            RG ResearchGate ↗
+                        </a>
+
+                        <!-- 4. Academic Citation Engines -->
+                        <a href="https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}" target="_blank" class="btn btn-sm" title="ค้นหาบน Google Scholar">
+                            🎓 Scholar ↗
+                        </a>
+                        <a href="https://www.semanticscholar.org/search?q=${encodeURIComponent(p.title)}" target="_blank" class="btn btn-sm" title="ค้นหาบน Semantic Scholar">
+                            S2 ↗
+                        </a>
+
+                        <!-- 5. Interactive Assistant Tools -->
                         <button class="btn btn-sm" id="trans-btn-${idx}" onclick="translatePaperCard(${idx})" title="แปลชื่อเรื่องและสรุปบทคัดย่อเป็นภาษาไทยตามคำขอ">
                             ${p.thaiTitle ? '🇹🇭 สลับคำแปลไทย' : '🇹🇭 แปลชื่อ & สรุปไทย'}
                         </button>
@@ -7205,12 +7297,6 @@ function renderSearchResults(query = '') {
                         <button class="btn btn-sm" onclick="openAbstractModal('${p.id}')" style="font-weight: 700; border-color: var(--text-main);" title="กดเพื่อเด้งเปิดหน้าต่างอ่านบทคัดย่อ (Abstract Popup)">
                             📖 เด้งดู Abstract
                         </button>
-                        <a href="https://www.semanticscholar.org/search?q=${encodeURIComponent(p.title)}" target="_blank" class="btn btn-sm" title="ค้นหาบน Semantic Scholar">
-                            S2 ↗
-                        </a>
-                        <a href="https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}" target="_blank" class="btn btn-sm" title="ค้นหาบน Google Scholar">
-                            Scholar ↗
-                        </a>
                     </div>
                     <div class="paper-action-group">
                         ${isAlreadySaved ? `
@@ -7379,8 +7465,17 @@ function deletePaper(paperId) {
 let isDrawerAllExpanded = false;
 
 function openPaperDrawer(paperId, targetPass = null) {
-    const p = myPapers.find(item => item.id === paperId);
+    let p = myPapers.find(item => item.id === paperId);
+    if (!p && typeof searchResults !== 'undefined' && Array.isArray(searchResults)) {
+        p = searchResults.find(item => item.id === paperId);
+    }
     if (!p) return;
+
+    // Guaranteed local PDF resolution
+    const resolvedPdf = typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '';
+    if (resolvedPdf) {
+        p.openAccessUrl = resolvedPdf;
+    }
 
     document.getElementById('editPaperId').value = p.id;
     document.getElementById('drawerPaperTitle').textContent = p.title;
@@ -7397,7 +7492,8 @@ function openPaperDrawer(paperId, targetPass = null) {
     if (primaryBtn) {
         if (p.openAccessUrl) {
             primaryBtn.href = p.openAccessUrl;
-            primaryBtn.innerHTML = '🚀 เปิดอ่าน PDF ฉบับเต็มฟรี (Open Access ↗)';
+            const isLocalPdf = p.openAccessUrl && (p.openAccessUrl.startsWith('raw/') || p.openAccessUrl.endsWith('.pdf'));
+            primaryBtn.innerHTML = isLocalPdf ? '🚀 เปิดอ่าน PDF ในเครื่อง (Local Vault ↗)' : '🚀 เปิดอ่าน PDF ฉบับเต็มฟรี (Open Access ↗)';
         } else if (doiUrl) {
             primaryBtn.href = doiUrl;
             primaryBtn.innerHTML = '🚀 เปิดอ่านงานวิจัยฉบับเต็ม (ผ่าน DOI สำนักพิมพ์ ↗)';
@@ -7434,12 +7530,25 @@ function openPaperDrawer(paperId, targetPass = null) {
 
     const oaLink = document.getElementById('drawerOaLink');
     if (oaLink) {
-        if (p.openAccessUrl) {
-            oaLink.href = p.openAccessUrl;
+        const effectivePdf = p.openAccessUrl || (typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '');
+        if (effectivePdf) {
+            oaLink.href = effectivePdf;
             oaLink.style.display = 'inline-flex';
+            oaLink.innerHTML = (effectivePdf.startsWith('raw/') || effectivePdf.endsWith('.pdf')) ? '📄 เปิด PDF ในเครื่อง ↗' : '📄 ไฟล์ PDF ฉบับเต็ม (OA) ↗';
         } else {
             oaLink.style.display = 'none';
         }
+    }
+
+    const drawerGoogleLink = document.getElementById('drawerGoogleLink');
+    if (drawerGoogleLink) {
+        const firstAuthor = (Array.isArray(p.authors) ? p.authors[0] : (p.authors || '')).split(',')[0].trim();
+        drawerGoogleLink.href = `https://www.google.com/search?q=${encodeURIComponent(p.title + ' ' + firstAuthor)}`;
+    }
+
+    const drawerRgLink = document.getElementById('drawerRgLink');
+    if (drawerRgLink) {
+        drawerRgLink.href = `https://www.researchgate.net/search/publication?q=${encodeURIComponent(p.title)}`;
     }
 
     const scholarLink = document.getElementById('drawerScholarLink');
@@ -7676,6 +7785,12 @@ function openAbstractModal(paperId) {
     }
     if (!p) return;
 
+    // Guaranteed local PDF resolution for Modal
+    const resolvedPdf = typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '';
+    if (resolvedPdf) {
+        p.openAccessUrl = resolvedPdf;
+    }
+
     currentAbstractModalPaper = p;
 
     // Header & Meta
@@ -7732,6 +7847,17 @@ function openAbstractModal(paperId) {
         } else {
             doiLink.style.display = 'none';
         }
+    }
+
+    const modalGoogleLink = document.getElementById('abstractModalGoogleLink');
+    if (modalGoogleLink) {
+        const firstAuthor = (Array.isArray(p.authors) ? p.authors[0] : (p.authors || '')).split(',')[0].trim();
+        modalGoogleLink.href = `https://www.google.com/search?q=${encodeURIComponent(p.title + ' ' + firstAuthor)}`;
+    }
+
+    const modalRgLink = document.getElementById('abstractModalRgLink');
+    if (modalRgLink) {
+        modalRgLink.href = `https://www.researchgate.net/search/publication?q=${encodeURIComponent(p.title)}`;
     }
 
     const scholarLink = document.getElementById('abstractModalScholarLink');
