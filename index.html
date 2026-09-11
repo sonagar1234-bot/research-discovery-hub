@@ -2049,7 +2049,7 @@
             <span class="brand-badge">RESEARCH WORKSPACE</span>
             <div class="header-title">
                 <h1>📚 Research Discovery & Smart Reading Hub</h1>
-                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.5 (Google Web / ResearchGate / Local PDF พร้อมใช้งาน)</span></p>
+                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.6 (System Hardened: 3-Pass Drawer & Auto-Sync Fixed)</span></p>
             </div>
         </div>
         <div class="header-actions">
@@ -2525,6 +2525,14 @@
             <div class="pass-guide-box">
                 <div class="pass-guide-title">⚡ Pass 1: Bird's Eye Screening (อ่านคัดกรอง 5-10 นาที)</div>
                 <div>อ่านเฉพาะ <strong>Title, Abstract, และ Conclusions</strong> เพื่อตอบคำถาม 5C: <em>Category (ประเภทงาน), Context (บริบททฤษฎี), Correctness (ความน่าเชื่อถือ), Contributions (สิ่งที่เพิ่มให้องค์ความรู้), Clarity (เขียนเข้าใจง่ายไหม)</em></div>
+            </div>
+
+            <div class="form-section" style="margin-bottom: 12px;">
+                <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>📖 บทคัดย่อสำหรับอ่านคัดกรอง Pass 1 (Abstract):</span>
+                    <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">Quick Screen 5-10 นาที</span>
+                </label>
+                <div id="drawerPaperAbstract" style="font-size: 12.5px; line-height: 1.6; color: var(--text-body); background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; max-height: 140px; overflow-y: auto; white-space: pre-wrap;"></div>
             </div>
 
             <div class="form-grid-2 form-section">
@@ -4720,6 +4728,7 @@ var Dashboard = window.Dashboard = {
   journal   = {{${cleanJournal}}},
   year      = {${p.year || ''}},
   doi       = {${p.doi || ''}},
+  url       = {${p.openAccessUrl || (typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '')}},
   note      = {Pillars: ${(p.pillars || []).join(', ')}; Priority: ${p.priority || ''}; Status: ${p.status || ''}},
   abstract  = {{${cleanAbstract}}}
 }`;
@@ -4748,7 +4757,8 @@ var Dashboard = window.Dashboard = {
                 if (p.journal) lines.push(`JO  - ${p.journal}`);
                 if (p.year) lines.push(`PY  - ${p.year}`);
                 if (p.doi) lines.push(`DO  - ${p.doi}`);
-                if (p.openAccessUrl) lines.push(`UR  - ${p.openAccessUrl}`);
+                const effectivePdf = p.openAccessUrl || (typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '');
+                if (effectivePdf) lines.push(`UR  - ${effectivePdf}`);
                 if (p.abstract) lines.push(`AB  - ${p.abstract.replace(/\r?\n/g, ' ')}`);
                 if (p.notes) lines.push(`N1  - Notes: ${p.notes.replace(/\r?\n/g, ' ')}`);
                 if (p.gaps) lines.push(`N2  - Research Gap: ${p.gaps.replace(/\r?\n/g, ' ')}`);
@@ -4971,7 +4981,7 @@ var Dashboard = window.Dashboard = {
                                     <button class="onboard-btn onboard-primary" onclick="switchTab('search')">
                                         <span>🔍</span> ค้นหาและดึงงานวิจัย (Search APIs)
                                     </button>
-                                    <button class="onboard-btn onboard-secondary" onclick="openAddPaperModal()">
+                                    <button class="onboard-btn onboard-secondary" onclick="Dashboard.import.openDoiModal()">
                                         <span>➕</span> เพิ่มงานวิจัย / ใส่ DOI
                                     </button>
                                     <button class="onboard-btn onboard-secondary" onclick="Dashboard.import.openModal()">
@@ -7479,7 +7489,8 @@ function openPaperDrawer(paperId, targetPass = null) {
 
     document.getElementById('editPaperId').value = p.id;
     document.getElementById('drawerPaperTitle').textContent = p.title;
-    document.getElementById('drawerPaperAuthors').textContent = `${p.authors.join(', ')} (${p.year}) — ${p.journal || ''}`;
+    const safeDrawerAuthors = Array.isArray(p.authors) ? p.authors.join(', ') : (p.authors || 'Unknown Authors');
+    document.getElementById('drawerPaperAuthors').textContent = `${safeDrawerAuthors} (${p.year || 'N/A'}) — ${p.journal || ''}`;
 
     // Clean DOI and external links
     const cleanDoi = (p.doi || '').replace('https://doi.org/', '').trim();
@@ -7576,7 +7587,8 @@ function openPaperDrawer(paperId, targetPass = null) {
     }
 
     // Pass 1 Fields
-    document.getElementById('drawerPaperAbstract').textContent = p.abstract || '(ไม่มีบทคัดย่อในฐานข้อมูล)';
+    const drawerAbsEl = document.getElementById('drawerPaperAbstract');
+    if (drawerAbsEl) drawerAbsEl.textContent = p.abstract || '(ไม่มีบทคัดย่อในฐานข้อมูล)';
     document.getElementById('editPaperPriority').value = p.priority || 'should';
     document.getElementById('editPaperStatus').value = p.status || 'queued';
     document.getElementById('editPaperIsKey').checked = !!p.isKey;
@@ -7634,9 +7646,15 @@ function switchDrawerPass(passNum) {
 
 function advanceToPass(nextPass) {
     const id = document.getElementById('editPaperId').value;
-    const p = myPapers.find(item => item.id === id);
+    let p = myPapers.find(item => item.id === id);
+    if (!p && typeof searchResults !== 'undefined' && Array.isArray(searchResults)) {
+        const foundInSearch = searchResults.find(item => item.id === id);
+        if (foundInSearch) {
+            p = { ...foundInSearch };
+            myPapers.unshift(p);
+        }
+    }
     if (p) {
-        // Collect current state into paper object silently
         collectDrawerDataToPaper(p);
         if ((p.readingPass || 1) < nextPass) {
             p.readingPass = nextPass;
@@ -7646,6 +7664,9 @@ function advanceToPass(nextPass) {
             document.getElementById('editPaperStatus').value = 'reading';
         }
         savePapersToStorage();
+        if (typeof renderSearchResults === 'function' && searchResults && searchResults.length > 0) {
+            renderSearchResults();
+        }
     }
     switchDrawerPass(nextPass);
     showToast(`เข้าสู่ Pass ${nextPass} เรียบร้อยแล้ว`);
@@ -7653,7 +7674,14 @@ function advanceToPass(nextPass) {
 
 function completePass3() {
     const id = document.getElementById('editPaperId').value;
-    const p = myPapers.find(item => item.id === id);
+    let p = myPapers.find(item => item.id === id);
+    if (!p && typeof searchResults !== 'undefined' && Array.isArray(searchResults)) {
+        const foundInSearch = searchResults.find(item => item.id === id);
+        if (foundInSearch) {
+            p = { ...foundInSearch };
+            myPapers.unshift(p);
+        }
+    }
     if (p) {
         collectDrawerDataToPaper(p);
         p.readingPass = 3;
@@ -7661,13 +7689,16 @@ function completePass3() {
         savePapersToStorage();
         closeDrawer();
         renderQueueView();
+        if (typeof renderSearchResults === 'function' && searchResults && searchResults.length > 0) {
+            renderSearchResults();
+        }
         showToast('🎉 วิเคราะห์ครบ 3-Pass และจัดเก็บ Gap สังเคราะห์แล้ว!');
     }
 }
 
 function toggleAllPassesView() {
     isDrawerAllExpanded = !isDrawerAllExpanded;
-    const toggleBtn = document.getElementById('toggleAllPassesBtn');
+    const toggleBtn = document.getElementById('btnToggleAllPasses');
     if (toggleBtn) {
         toggleBtn.textContent = isDrawerAllExpanded ? '📑 แสดงทีละขั้นตอน (Step View)' : '📑 แสดงทั้ง 3 ขั้นตอนพร้อมกัน';
     }
@@ -7708,6 +7739,12 @@ function collectDrawerDataToPaper(p) {
     };
 }
 
+function openAddPaperModal() {
+    if (typeof Dashboard !== 'undefined' && Dashboard.import) {
+        Dashboard.import.openDoiModal();
+    }
+}
+
 function openDrawerForNewPaper() {
     const newId = 'manual-' + Date.now();
     const newPaper = {
@@ -7741,7 +7778,16 @@ function closeDrawer() {
 
 function savePaperDrawerChanges() {
     const id = document.getElementById('editPaperId').value;
-    const p = myPapers.find(item => item.id === id);
+    let p = myPapers.find(item => item.id === id);
+    let isNewlyAdded = false;
+    if (!p && typeof searchResults !== 'undefined' && Array.isArray(searchResults)) {
+        const foundInSearch = searchResults.find(item => item.id === id);
+        if (foundInSearch) {
+            p = { ...foundInSearch };
+            myPapers.unshift(p);
+            isNewlyAdded = true;
+        }
+    }
     if (!p) return;
 
     collectDrawerDataToPaper(p);
@@ -7750,7 +7796,10 @@ function savePaperDrawerChanges() {
     savePapersToStorage();
     closeDrawer();
     renderQueueView();
-    showToast('บันทึกการวิเคราะห์และตัวเลขผลการทดลองแล้ว');
+    if (typeof renderSearchResults === 'function' && searchResults && searchResults.length > 0) {
+        renderSearchResults();
+    }
+    showToast(isNewlyAdded ? '📥 เพิ่มเข้าคลังวิจัยและบันทึกข้อมูลเรียบร้อยแล้ว' : 'บันทึกการวิเคราะห์และตัวเลขผลการทดลองแล้ว');
 }
 
 function deleteCurrentPaper() {
@@ -7761,12 +7810,13 @@ function deleteCurrentPaper() {
 
 function copyCitationText() {
     const id = document.getElementById('editPaperId').value;
-    const p = myPapers.find(item => item.id === id);
+    const p = myPapers.find(item => item.id === id) || (typeof searchResults !== 'undefined' ? searchResults.find(item => item.id === id) : null);
     if (!p) return;
 
-    const firstAuthor = p.authors.length > 0 ? p.authors[0] : 'Author';
-    const authorsStr = p.authors.length > 2 ? `${firstAuthor} et al.` : p.authors.join(' & ');
-    const text = `${authorsStr} (${p.year}). ${p.title}. ${p.journal || ''}.${p.doi ? ' https://doi.org/' + p.doi : ''}`;
+    const authorsArr = Array.isArray(p.authors) ? p.authors : (p.authors ? [String(p.authors)] : []);
+    const firstAuthor = authorsArr.length > 0 ? authorsArr[0] : 'Author';
+    const authorsStr = authorsArr.length > 2 ? `${firstAuthor} et al.` : (authorsArr.length > 0 ? authorsArr.join(' & ') : 'Unknown Authors');
+    const text = `${authorsStr} (${p.year || 'n.d.'}). ${p.title}. ${p.journal || ''}.${p.doi ? ' https://doi.org/' + p.doi : ''}`;
 
     navigator.clipboard.writeText(text).then(() => {
         showToast('คัดลอกรูปแบบการอ้างอิง (APA) ลงคลิปบอร์ดแล้ว');
