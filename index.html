@@ -2049,7 +2049,7 @@
             <span class="brand-badge">RESEARCH WORKSPACE</span>
             <div class="header-title">
                 <h1>📚 Research Discovery & Smart Reading Hub</h1>
-                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.6 (System Hardened: 3-Pass Drawer & Auto-Sync Fixed)</span></p>
+                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.7 (ScienceDirect Abstract & Engineering Translation Engine Active)</span></p>
             </div>
         </div>
         <div class="header-actions">
@@ -3658,7 +3658,9 @@ const SEED_PAPERS = [
         doi: '10.1016/j.dibe.2022.100115',
         citationCount: 31,
         openAccessUrl: 'https://doi.org/10.1016/j.dibe.2022.100115',
-        abstract: 'Investigation of lightweight self-compacting geopolymer concrete using expanded clay aggregates (ECA) and ambient curing. The mix achieved a slump flow of 735 mm, V-funnel time of 8.8 s, and compressive strength of 32.8 MPa, proving sufficient plastic viscosity to eliminate lightweight aggregate floating.',
+        abstract: `Geopolymer Concrete (GPC) is a unique and sustainable building material that has the potential to be transformed into a self-compacted lightweight composite for industrial applications. This paper investigates the sustainability of self-compactable lightweight geopolymer concrete (SCLGC) made from Expanded Clay Aggregate (ECA) to further explore this front. In this study, the physical properties of SCLGC, such as slump flow test, T500 test, V-funnel, and J-ring tests, are examined. Furthermore, the density, Ultrasonic Pulse Velocity (UPV), compressive strength, splitting tensile strength, and impact resistance are also tested to evaluate the mechanical properties of SCLGC mix with various concentrations of Sodium Hydroxide (SH) cured under different curing regimes. The aforenoted properties are examined following the American, Indian and European guidelines. In addition, microstructural analysis is conducted to assess the compactness and internal structure of SCLGC blends with varying SH concentrations cured under different curing regimes. Finally, the sustainability aspects of GPC and SCLGC mixes are analyzed through the Life Cycle Assessment (LCA) and Environmental Impact Assessment (EIA) to evaluate the energy requirement and CO2 emission and cost. The Sustainability analysis was performed to evaluate the energy requirement and CO2 emission of SCLGC in the production of 1 m3 concrete based on the previous literatures. The significance of the proposed research work emphasizes the utilization of ECA as an aggregate material for the development of SCLGC. The cost, carbon and energy efficiency of the SCLGC's mixes were estimated. Mix with ECA requires higher energy demand and emits high CO2 in the open atmosphere. Based on the present analysis it can be concluded that an increase in the concentration of activator solution increases the energy demand and emits more amount of CO2. The inference from the present study reveals ECA can be employed for the production of SCLGC with the replacement percentage not exceeding 50%.`,
+        thaiTitle: 'ลักษณะทางกายภาพและสมบัติทางกลของจีโอโพลิเมอร์คอนกรีตมวลเบาอัดตัวได้เองที่ยั่งยืน ผสมมวลรวมดินเหนียวขยายตัว (ECA)',
+        thaiSummary: 'การศึกษาความเป็นไปได้และความยั่งยืนในการพัฒนาจีโอโพลิเมอร์คอนกรีตมวลเบาอัดตัวได้เอง (SCLGC) โดยใช้มวลรวมดินเหนียวขยายตัว (ECA) พบว่าสามารถควบคุมความหนืดพลาสติกเพื่อป้องกันการลอยตัวของเม็ดหินมวลเบาได้ โดยแนะนำสัดส่วนการแทนที่ ECA ไม่เกิน 50% เพื่อให้ได้สมบัติด้านกำลังและการไหลตัวตามเกณฑ์มาตรฐาน',
         priority: 'should',
         status: 'done',
         isKey: false,
@@ -5987,8 +5989,17 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Background Hydration from IndexedDB
     if (Dashboard.storage.loadAsync) {
         Dashboard.storage.loadAsync().then(() => {
-            Dashboard.queue.render();
-            if (typeof initCharts === 'function') initCharts();
+            // Auto-upgrade legacy seed abstract in storage
+        const kPaper = myPapers.find(p => p.id === 'seed-kanagaraj-2022' || (p.doi && p.doi.includes('100115')));
+        if (kPaper && (!kPaper.abstract || kPaper.abstract.length < 300)) {
+            console.log('Upgrading legacy seed-kanagaraj-2022 to official ScienceDirect abstract...');
+            kPaper.abstract = `Geopolymer Concrete (GPC) is a unique and sustainable building material that has the potential to be transformed into a self-compacted lightweight composite for industrial applications. This paper investigates the sustainability of self-compactable lightweight geopolymer concrete (SCLGC) made from Expanded Clay Aggregate (ECA) to further explore this front. In this study, the physical properties of SCLGC, such as slump flow test, T500 test, V-funnel, and J-ring tests, are examined. Furthermore, the density, Ultrasonic Pulse Velocity (UPV), compressive strength, splitting tensile strength, and impact resistance are also tested to evaluate the mechanical properties of SCLGC mix with various concentrations of Sodium Hydroxide (SH) cured under different curing regimes. The aforenoted properties are examined following the American, Indian and European guidelines. In addition, microstructural analysis is conducted to assess the compactness and internal structure of SCLGC blends with varying SH concentrations cured under different curing regimes. Finally, the sustainability aspects of GPC and SCLGC mixes are analyzed through the Life Cycle Assessment (LCA) and Environmental Impact Assessment (EIA) to evaluate the energy requirement and CO2 emission and cost. The Sustainability analysis was performed to evaluate the energy requirement and CO2 emission of SCLGC in the production of 1 m3 concrete based on the previous literatures. The significance of the proposed research work emphasizes the utilization of ECA as an aggregate material for the development of SCLGC. The cost, carbon and energy efficiency of the SCLGC's mixes were estimated. Mix with ECA requires higher energy demand and emits high CO2 in the open atmosphere. Based on the present analysis it can be concluded that an increase in the concentration of activator solution increases the energy demand and emits more amount of CO2. The inference from the present study reveals ECA can be employed for the production of SCLGC with the replacement percentage not exceeding 50%.`;
+            kPaper.thaiTitle = 'ลักษณะทางกายภาพและสมบัติทางกลของจีโอโพลิเมอร์คอนกรีตมวลเบาอัดตัวได้เองที่ยั่งยืน ผสมมวลรวมดินเหนียวขยายตัว (ECA)';
+            kPaper.thaiSummary = 'การศึกษาความเป็นไปได้และความยั่งยืนในการพัฒนาจีโอโพลิเมอร์คอนกรีตมวลเบาอัดตัวได้เอง (SCLGC) โดยใช้มวลรวมดินเหนียวขยายตัว (ECA) พบว่าสามารถควบคุมความหนืดพลาสติกเพื่อป้องกันการลอยตัวของเม็ดหินมวลเบาได้ โดยแนะนำสัดส่วนการแทนที่ ECA ไม่เกิน 50% เพื่อให้ได้สมบัติด้านกำลังและการไหลตัวตามเกณฑ์มาตรฐาน';
+            Dashboard.storage.save();
+        }
+        Dashboard.queue.render();
+        if (typeof initCharts === 'function') initCharts();
         });
     }
     Dashboard.undo.initKeyboardShortcuts();
@@ -6492,7 +6503,7 @@ const LOCAL_BENCHMARK_PAPERS = [
         citationCount: 31,
         openAccessUrl: 'https://doi.org/10.1016/j.dibe.2022.100115',
         isOA: true,
-        abstract: 'Investigation of lightweight self-compacting geopolymer concrete achieving slump flow of 735 mm, V-funnel time of 8.8 s, and compressive strength of 32.8 MPa, proving sufficient plastic viscosity to eliminate lightweight aggregate floating.',
+        abstract: `Geopolymer Concrete (GPC) is a unique and sustainable building material that has the potential to be transformed into a self-compacted lightweight composite for industrial applications. This paper investigates the sustainability of self-compactable lightweight geopolymer concrete (SCLGC) made from Expanded Clay Aggre-gate (ECA) to further explore this front. In this study, the physical properties of SCLGC, such as slump flow test, T 500 test, V-funnel, and J-ring tests, are examined. Furthermore, the density, Ultrasonic Pulse Velocity (UPV), compressive strength, splitting tensile strength, and impact resistance are also tested to evaluate the mechanical properties of SCLGC mix with various concentrations of Sodium Hydroxide (SH) cured under different curing regimes. The aforenoted properties are examined following the American, Indian and European guidelines. In addition, microstructural analysis is conducted to assess the compactness and internal structure of SCLGC blends with varying SH concentrations cured under different curing regimes. Finally, the sustainability aspects of GPC and SCLGC mixes are analyzed through the Life Cycle Assessment (LCA) and Environmental Impact Assessment (EIA) to evaluate the energy requirement and CO 2 emission and cost. The Sustainability analysis was performed to evaluate the energy requirement and CO 2 emission of SCLGC in the production of 1 m 3 concrete based on the previous literatures. The significance of the proposed research work emphasizes the utilization of ECA as an aggregate material for the development of SCLGC. The cost, carbon and energy efficiency of the SCLGC ’ s mixes were estimated. Mix with ECA requires higher energy demand and emits high CO 2 in the open atmosphere. Based on the present analysis it can be concluded that an increase in the concentration of activator solution increases the energy demand and emits more amount of CO 2 . The inference from the present study reveals ECA can be employed for the production of SCLGC with the replacement percentage not exceeding 50%.`,
         concepts: ['Self-Compacting Geopolymer', 'Anti-floating Rheology', 'EFNARC'],
         sourceEngine: '💾 คลังวิจัยในเครื่อง (Local Vault)'
     },
@@ -6915,19 +6926,35 @@ async function batchFetchMissingAbstracts() {
 const translationCache = {};
 
 // Helper to extract core summary sentences
+function sanitizeCivilEngineeringThai(thaiText) {
+    if (!thaiText || typeof thaiText !== 'string') return '';
+    return thaiText
+        .replace(/วิโอโพลิเมอร์/g, 'จีโอโพลิเมอร์')
+        .replace(/จีโอโพลีเมอร์/g, 'จีโอโพลิเมอร์')
+        .replace(/ความหนืดของพลาสติก/g, 'ความหนืดพลาสติก (Plastic Viscosity)')
+        .replace(/การบ่มโดยรอบ/g, 'การบ่มที่อุณหภูมิห้อง (Ambient Curing)')
+        .replace(/มวลรวมของดินเหนียวขยายตัว/g, 'มวลรวมดินเหนียวขยายตัว (Expanded Clay Aggregate: ECA)')
+        .replace(/มวลรวมดินเหนียวที่ขยายตัว/g, 'มวลรวมดินเหนียวขยายตัว (ECA)')
+        .replace(/ขจัดมวลรวมที่ลอยอยู่ในน้ำ/g, 'ป้องกันการลอยตัวแยกชั้นของเม็ดหินมวลเบา')
+        .replace(/มวลรวมที่ลอยอยู่ในน้ำ/g, 'การลอยตัวของมวลรวมมวลเบา')
+        .replace(/การแผ่ตัวสลัมป์/g, 'การแผ่ตัวสลัมป์โฟลว์ (Slump Flow)')
+        .replace(/การไหลของสลัมป์/g, 'การแผ่ตัวสลัมป์โฟลว์ (Slump Flow)');
+}
+
 function extractAbstractSummarySnippet(abstract, tldr) {
     if (tldr && tldr.trim().length > 20) return tldr.trim();
     if (!abstract || isMissingAbstract(abstract)) return '';
     const clean = abstract.trim();
-    const sentences = clean.match(/[^.!?]+[.!?]+/g);
-    if (!sentences || sentences.length <= 2) {
-        return clean.length > 400 ? clean.substring(0, 400) + '...' : clean;
+    // Scientific-aware split: Match sentence terminator followed by whitespace and capital letter (avoids decimals like 8.8 s, 32.8 MPa)
+    const sentences = clean.split(/(?<=[.!?])\s+(?=[A-Z])/).map(s => s.trim()).filter(s => s.length > 0);
+    if (sentences.length <= 2) {
+        return clean.length > 500 ? clean.substring(0, 500) + '...' : clean;
     }
-    // Combine 1st sentence (objective) and last sentence (conclusion)
-    const first = sentences[0].trim();
-    const last = sentences[sentences.length - 1].trim();
+    // Combine 1st sentence (objective/background) and last sentence (key inference/conclusion)
+    const first = sentences[0];
+    const last = sentences[sentences.length - 1];
     const combined = `${first} ${last}`;
-    return combined.length > 500 ? combined.substring(0, 500) + '...' : combined;
+    return combined.length > 650 ? combined.substring(0, 650) + '...' : combined;
 }
 
 // Multi-Engine Translation client with fallback (Google GTX -> Google Clients5 -> MyMemory)
@@ -6951,8 +6978,9 @@ async function translateTextToThai(text) {
             if (Array.isArray(data) && Array.isArray(data[0])) {
                 const translated = data[0].map(item => (item && item[0]) ? item[0] : '').join('');
                 if (translated && translated.trim().length > 0) {
-                    translationCache[cleanText] = translated.trim();
-                    return translated.trim();
+                    const sanitized = sanitizeCivilEngineeringThai(translated.trim());
+                    translationCache[cleanText] = sanitized;
+                    return sanitized;
                 }
             }
         }
