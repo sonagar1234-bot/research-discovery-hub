@@ -2049,7 +2049,7 @@
             <span class="brand-badge">RESEARCH WORKSPACE</span>
             <div class="header-title">
                 <h1>📚 Research Discovery & Smart Reading Hub</h1>
-                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.7 (ScienceDirect Abstract & Engineering Translation Engine Active)</span></p>
+                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.8 (Exact Title Matching & Smart Pinning Active)</span></p>
             </div>
         </div>
         <div class="header-actions">
@@ -3708,9 +3708,12 @@ const SEED_PAPERS = [
         year: 2021,
         journal: 'Science of The Total Environment',
         doi: '10.1016/j.scitotenv.2020.142327',
-        citationCount: 52,
+        citationCount: 176,
         openAccessUrl: 'https://doi.org/10.1016/j.scitotenv.2020.142327',
-        abstract: 'Investigation of raw biochar fine particles as sand replacement in mortars. While toughness increased, direct addition of fine biochar weakened the Interfacial Transition Zone (ITZ) due to excess water absorption from the surrounding paste, showing that pelletization or pre-treatment is essential.',
+        abstract: `Currently, the global carbon footprint of cement industry is nearly 7 to 8% and this number is expected to grow in the near future given the continued global demand of cement usage in the construction and other sectors. Additionally, extraction of sand from the coastal and riverine environment is detrimental to ecosystem health and also gives rise to sand mafia in many developing countries. Biochar has the potential to sequester CO2 in cement mortars. The purpose of this study was to valorise a waste biomass (poultry litter) to carbon-rich biochar and utilise as filler material to replace the sand in the range of 10-40% of the total weight in cement. A total of four mix designs each with three replicates at 10%, 20%, and 40% replacement of sand and control (0% biochar addition) were investigated for their mechanical, durability and micro-computed tomography (CT) analysis. The results showed that the flexural strength of the composites at 20% biochar replacement of sand was improved by 26% when compared to control. Biochar addition lowered the thermal conductivity of the cement mortars and was optimised at 10% addition. The density of the mortars decreased ~20% with 40% biochar addition. Micro-CT analysis showed nearly a five-fold increase in the 2-dimensional porosity of the samples, from 2.5% (control) to 12% for samples which had 40% biochar; however, no marked changes were noticed for samples at 20% biochar addition. Taking mortar plastering as an example for 100 m2 area with standard 12 mm thickness revealed that CO2 emissions decreased 20% when sand was replaced with 40% biochar as compared to control specimen. It was concluded that biochar has the potential to replace the sand in the mortars for improving toughness, lowering thermal conductivity and density of the cement composites.`,
+        abstractSource: 'ScienceDirect / Science of The Total Environment',
+        thaiTitle: 'การปรับปรุงมอร์ตาร์ซีเมนต์ให้มีน้ำหนักเบา มีรูพรุน และเหนียวขึ้นด้วยการผสมไบโอชาร์: การวิเคราะห์สมบัติเชิงกล ความทนทาน และเอกซเรย์คอมพิวเตอร์ระดับไมโคร (Micro-CT)',
+        thaiSummary: 'การนำของเสียชีวมวล (มูลไก่) มาแปรรูปเป็นไบโอชาร์เพื่อใช้เป็นมวลรวมละเอียดแทนที่ทราย 10-40% ในมอร์ตาร์ซีเมนต์ พบว่าการแทนที่ทราย 20% ช่วยเพิ่มกำลังดัดงอ (Flexural Strength) สูงขึ้นถึง 26% ลดการนำความร้อน และการแทนที่ 40% ช่วยลดความหนาแน่นลง ~20% พร้อมลดการปล่อย CO2 ลง 20% ช่วยกักเก็บคาร์บอนในวัสดุก่อสร้าง',
         priority: 'should',
         status: 'done',
         isKey: false,
@@ -5991,6 +5994,16 @@ window.addEventListener('DOMContentLoaded', async () => {
         Dashboard.storage.loadAsync().then(() => {
             // Auto-upgrade legacy seed abstract in storage
         const kPaper = myPapers.find(p => p.id === 'seed-kanagaraj-2022' || (p.doi && p.doi.includes('100115')));
+                const pPaper = myPapers.find(p => p.id === 'seed-praneeth-2021' || (p.doi && p.doi.includes('142327')));
+        if (pPaper && (!pPaper.abstract || pPaper.abstract.length < 300 || pPaper.citationCount < 100)) {
+            console.log('Upgrading seed-praneeth-2021 to official ScienceDirect abstract and 176 citations...');
+            pPaper.abstract = `Currently, the global carbon footprint of cement industry is nearly 7 to 8% and this number is expected to grow in the near future given the continued global demand of cement usage in the construction and other sectors. Additionally, extraction of sand from the coastal and riverine environment is detrimental to ecosystem health and also gives rise to sand mafia in many developing countries. Biochar has the potential to sequester CO2 in cement mortars. The purpose of this study was to valorise a waste biomass (poultry litter) to carbon-rich biochar and utilise as filler material to replace the sand in the range of 10-40% of the total weight in cement. A total of four mix designs each with three replicates at 10%, 20%, and 40% replacement of sand and control (0% biochar addition) were investigated for their mechanical, durability and micro-computed tomography (CT) analysis. The results showed that the flexural strength of the composites at 20% biochar replacement of sand was improved by 26% when compared to control. Biochar addition lowered the thermal conductivity of the cement mortars and was optimised at 10% addition. The density of the mortars decreased ~20% with 40% biochar addition. Micro-CT analysis showed nearly a five-fold increase in the 2-dimensional porosity of the samples, from 2.5% (control) to 12% for samples which had 40% biochar; however, no marked changes were noticed for samples at 20% biochar addition. Taking mortar plastering as an example for 100 m2 area with standard 12 mm thickness revealed that CO2 emissions decreased 20% when sand was replaced with 40% biochar as compared to control specimen. It was concluded that biochar has the potential to replace the sand in the mortars for improving toughness, lowering thermal conductivity and density of the cement composites.`;
+            pPaper.citationCount = 176;
+            pPaper.thaiTitle = 'การปรับปรุงมอร์ตาร์ซีเมนต์ให้มีน้ำหนักเบา มีรูพรุน และเหนียวขึ้นด้วยการผสมไบโอชาร์: การวิเคราะห์สมบัติเชิงกล ความทนทาน และเอกซเรย์คอมพิวเตอร์ระดับไมโคร (Micro-CT)';
+            pPaper.thaiSummary = 'การนำของเสียชีวมวล (มูลไก่) มาแปรรูปเป็นไบโอชาร์เพื่อใช้เป็นมวลรวมละเอียดแทนที่ทราย 10-40% ในมอร์ตาร์ซีเมนต์ พบว่าการแทนที่ทราย 20% ช่วยเพิ่มกำลังดัดงอ (Flexural Strength) สูงขึ้นถึง 26% ลดการนำความร้อน และการแทนที่ 40% ช่วยลดความหนาแน่นลง ~20% พร้อมลดการปล่อย CO2 ลง 20% ช่วยกักเก็บคาร์บอนในวัสดุก่อสร้าง';
+            Dashboard.storage.save();
+        }
+
         if (kPaper && (!kPaper.abstract || kPaper.abstract.length < 300)) {
             console.log('Upgrading legacy seed-kanagaraj-2022 to official ScienceDirect abstract...');
             kPaper.abstract = `Geopolymer Concrete (GPC) is a unique and sustainable building material that has the potential to be transformed into a self-compacted lightweight composite for industrial applications. This paper investigates the sustainability of self-compactable lightweight geopolymer concrete (SCLGC) made from Expanded Clay Aggregate (ECA) to further explore this front. In this study, the physical properties of SCLGC, such as slump flow test, T500 test, V-funnel, and J-ring tests, are examined. Furthermore, the density, Ultrasonic Pulse Velocity (UPV), compressive strength, splitting tensile strength, and impact resistance are also tested to evaluate the mechanical properties of SCLGC mix with various concentrations of Sodium Hydroxide (SH) cured under different curing regimes. The aforenoted properties are examined following the American, Indian and European guidelines. In addition, microstructural analysis is conducted to assess the compactness and internal structure of SCLGC blends with varying SH concentrations cured under different curing regimes. Finally, the sustainability aspects of GPC and SCLGC mixes are analyzed through the Life Cycle Assessment (LCA) and Environmental Impact Assessment (EIA) to evaluate the energy requirement and CO2 emission and cost. The Sustainability analysis was performed to evaluate the energy requirement and CO2 emission of SCLGC in the production of 1 m3 concrete based on the previous literatures. The significance of the proposed research work emphasizes the utilization of ECA as an aggregate material for the development of SCLGC. The cost, carbon and energy efficiency of the SCLGC's mixes were estimated. Mix with ECA requires higher energy demand and emits high CO2 in the open atmosphere. Based on the present analysis it can be concluded that an increase in the concentration of activator solution increases the energy demand and emits more amount of CO2. The inference from the present study reveals ECA can be employed for the production of SCLGC with the replacement percentage not exceeding 50%.`;
@@ -6138,6 +6151,45 @@ function applyTemplate(keyword) {
     triggerSearch();
 }
 
+// -------------------------------------------------------------
+// TITLE SIMILARITY & SMART DETECTION ENGINE
+// -------------------------------------------------------------
+function calculateTitleSimilarity(query, targetTitle) {
+    if (!query || !targetTitle) return 0.0;
+    const cleanStr = (s) => (s || '').toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    const nq = cleanStr(query);
+    const nt = cleanStr(targetTitle);
+    if (!nq || !nt) return 0.0;
+    if (nq === nt) return 1.0;
+    
+    // Direct substring or inclusion
+    if (nt.includes(nq) || nq.includes(nt)) {
+        const ratio = Math.min(nq.length, nt.length) / Math.max(nq.length, nt.length);
+        if (ratio >= 0.7) return Math.max(0.95, ratio);
+    }
+    
+    const qWords = nq.split(' ').filter(w => w.length > 2);
+    const tWords = nt.split(' ').filter(w => w.length > 2);
+    if (qWords.length === 0 || tWords.length === 0) return 0.0;
+    
+    const setQ = new Set(qWords);
+    const setT = new Set(tWords);
+    let intersection = 0;
+    for (const w of setQ) {
+        if (setT.has(w)) intersection++;
+    }
+    
+    const queryCoverage = intersection / setQ.size;
+    const targetCoverage = intersection / setT.size;
+    
+    if (setQ.size >= 4 && queryCoverage >= 0.75) {
+        return Math.max(0.85, (queryCoverage * 0.7 + targetCoverage * 0.3));
+    }
+    
+    const unionSize = new Set([...qWords, ...tWords]).size;
+    return unionSize > 0 ? (intersection / unionSize) : 0.0;
+}
+
 async function triggerSearch() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) {
@@ -6231,10 +6283,126 @@ async function triggerSearch() {
             usedEngine = '💾 คลังวิทยานิพนธ์ในเครื่อง (Local Vault)';
         }
 
+        // -------------------------------------------------------------
+        // SMART TITLE DETECTION & PRIORITY PINNING AT RANK #1
+        // -------------------------------------------------------------
+        let pinnedExactTitleMatch = null;
+        const qClean = query.trim();
+        const isLikelyTitle = qClean.length >= 25 || qClean.split(/\s+/).filter(w => w.length > 2).length >= 4;
+
+        if (isLikelyTitle && finalItems.length > 0) {
+            let bestIdx = -1;
+            let bestScore = 0;
+            for (let i = 0; i < finalItems.length; i++) {
+                const score = calculateTitleSimilarity(qClean, finalItems[i].title);
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestIdx = i;
+                }
+            }
+
+            if (bestScore >= 0.70 && bestIdx >= 0) {
+                pinnedExactTitleMatch = finalItems[bestIdx];
+                pinnedExactTitleMatch._isExactTitleMatch = true;
+                pinnedExactTitleMatch._titleScore = bestScore;
+                if (bestIdx > 0) {
+                    // Extract from its current position (e.g. pushed down by citation sort) and pin to Rank #1
+                    finalItems.splice(bestIdx, 1);
+                    finalItems.unshift(pinnedExactTitleMatch);
+                }
+            } else {
+                // If OpenAlex returned items didn't include the exact title (pushed beyond page 1 or query nuances):
+                // Check A: Local Vault & SEED_PAPERS
+                const allLocal = [...(typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []), ...(typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : [])];
+                let localMatch = null;
+                for (const lp of allLocal) {
+                    if (calculateTitleSimilarity(qClean, lp.title) >= 0.70) {
+                        localMatch = lp;
+                        break;
+                    }
+                }
+
+                if (localMatch) {
+                    pinnedExactTitleMatch = {
+                        id: localMatch.id || 'vault-exact-' + Math.random().toString(36).substr(2, 9),
+                        title: localMatch.title,
+                        authors: localMatch.authors || ['Sean Research Group'],
+                        year: localMatch.year || 2024,
+                        journal: localMatch.journal || 'Thesis Benchmark Record',
+                        doi: localMatch.doi || '',
+                        citationCount: localMatch.citationCount || 0,
+                        openAccessUrl: (typeof resolvePaperPdf === 'function' ? resolvePaperPdf(localMatch) : '') || localMatch.openAccessUrl || '',
+                        isOA: Boolean((typeof resolvePaperPdf === 'function' ? resolvePaperPdf(localMatch) : '') || localMatch.openAccessUrl),
+                        abstract: localMatch.abstract || localMatch.notes || 'เอกสารวิจัยในคลังวิทยานิพนธ์',
+                        concepts: localMatch.concepts || (localMatch.pillars ? localMatch.pillars.map(getPillarName) : ['Exact Title Match']),
+                        sourceEngine: '💾 คลังวิจัยในเครื่อง (Exact Title Match)',
+                        _isExactTitleMatch: true,
+                        _titleScore: 1.0
+                    };
+                    finalItems.unshift(pinnedExactTitleMatch);
+                    finalCount = Math.max(finalCount + 1, finalItems.length);
+                } else if (engineMode === 'auto' || engineMode === 'openalex') {
+                    // Check B: Query CrossRef bibliographic specifically for exact title
+                    try {
+                        const crFastRes = await fetch(`https://api.crossref.org/works?query.bibliographic=${encodeURIComponent(query)}&rows=3&mailto=thanapat.phukham@gmail.com`);
+                        if (crFastRes.ok) {
+                            const crData = await crFastRes.json();
+                            const crItems = crData.message?.items || [];
+                            for (const crIt of crItems) {
+                                const crTitle = (crIt.title && crIt.title[0]) ? crIt.title[0].replace(/<[^>]+>/g, '').trim() : '';
+                                const crScore = calculateTitleSimilarity(qClean, crTitle);
+                                if (crScore >= 0.70) {
+                                    const authors = (crIt.author || []).map(a => `${a.given || ''} ${a.family || ''}`.trim()).filter(Boolean);
+                                    const year = (crIt.published && crIt.published['date-parts'] && crIt.published['date-parts'][0] && crIt.published['date-parts'][0][0]) || 'N/A';
+                                    const journal = (crIt['container-title'] && crIt['container-title'][0]) || crIt.publisher || 'Academic Publication';
+                                    const cleanDoi = crIt.DOI || '';
+                                    let cleanAbstract = '';
+                                    if (crIt.abstract) {
+                                        cleanAbstract = crIt.abstract.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+                                    }
+                                    pinnedExactTitleMatch = {
+                                        id: 'cr-exact-' + (cleanDoi ? cleanDoi.replace(/[^a-zA-Z0-9]/g, '_') : Math.random().toString(36).substr(2, 9)),
+                                        title: crTitle,
+                                        authors: authors.slice(0, 5),
+                                        year: year,
+                                        journal: journal,
+                                        doi: cleanDoi,
+                                        citationCount: crIt['is-referenced-by-count'] || 0,
+                                        openAccessUrl: cleanDoi ? `https://doi.org/${cleanDoi}` : '',
+                                        isOA: false,
+                                        abstract: cleanAbstract || 'พบบทความวิจัยตรงกับชื่อเรื่องที่ค้นหา สามารถคลิกเปิดอ่านฉบับเต็มผ่าน DOI ได้โดยตรง',
+                                        abstractSource: cleanAbstract ? 'CrossRef Academic' : '',
+                                        concepts: ['Exact Title Match', 'Peer-Reviewed'],
+                                        sourceEngine: '📚 CrossRef Academic (Exact Title)',
+                                        _isExactTitleMatch: true,
+                                        _titleScore: crScore
+                                    };
+                                    finalItems.unshift(pinnedExactTitleMatch);
+                                    finalCount = Math.max(finalCount + 1, finalItems.length);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (crTitleErr) {
+                        console.warn('Fast CrossRef title lookup error:', crTitleErr);
+                    }
+                }
+            }
+        }
+
         searchResults = finalItems;
+        const hasExactPin = finalItems.length > 0 && finalItems[0]._isExactTitleMatch;
         headerEl.innerHTML = `
-            <span>พบงานวิจัยทั้งหมด <strong>${finalCount.toLocaleString()}</strong> ฉบับ (แสดง ${finalItems.length} ฉบับแรก)</span>
-            ${usedEngine ? `<span style="background: var(--bg-muted); color: var(--text-main); font-size: 11.5px; margin-left: 10px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border);">${usedEngine}</span>` : ''}
+            <div>
+                <span>พบงานวิจัยทั้งหมด <strong>${finalCount.toLocaleString()}</strong> ฉบับ (แสดง ${finalItems.length} ฉบับแรก)</span>
+                ${usedEngine ? `<span style="background: var(--bg-muted); color: var(--text-main); font-size: 11.5px; margin-left: 10px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border);">${usedEngine}</span>` : ''}
+                ${hasExactPin ? `
+                    <div style="margin-top: 8px; font-size: 12.5px; color: #0369a1; background: #f0f9ff; border: 1px solid #7dd3fc; padding: 7px 14px; border-radius: 8px; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(3,105,161,0.08);">
+                        <span style="font-size: 17px;">🎯</span>
+                        <span><strong>ปักหมุดอันดับ 1 ให้ทันที:</strong> ระบบตรวจพบว่าคุณค้นหาด้วยชื่อเรื่องบทความวิจัยตรงตัว จึงดึงบทความนี้มาแสดงเป็นอันดับแรกให้ตรงเป้าหมายทันที (ส่วนลำดับที่ 2 เป็นต้นไปจะจัดเรียงตามเกณฑ์ที่คุณเลือก)</span>
+                    </div>
+                ` : ''}
+            </div>
         `;
         renderSearchResults(query);
 
@@ -6423,6 +6591,21 @@ async function executeCrossRefSearch(query) {
 
 // Local Vault & Benchmark Papers Database for 100% Offline Search
 const LOCAL_BENCHMARK_PAPERS = [
+    {
+        id: 'vault-praneeth-2021',
+        title: 'Biochar admixtured lightweight, porous and tougher cement mortars: Mechanical, durability and micro computed tomography analysis',
+        authors: ['S. Praneeth', 'L. Saavedra', 'M. Zeng', 'B. K. Dubey', 'M. Sarmah'],
+        year: 2021,
+        journal: 'Science of The Total Environment',
+        doi: '10.1016/j.scitotenv.2020.142327',
+        citationCount: 176,
+        openAccessUrl: 'https://doi.org/10.1016/j.scitotenv.2020.142327',
+        isOA: true,
+        abstract: `Currently, the global carbon footprint of cement industry is nearly 7 to 8% and this number is expected to grow in the near future given the continued global demand of cement usage in the construction and other sectors. Additionally, extraction of sand from the coastal and riverine environment is detrimental to ecosystem health and also gives rise to sand mafia in many developing countries. Biochar has the potential to sequester CO2 in cement mortars. The purpose of this study was to valorise a waste biomass (poultry litter) to carbon-rich biochar and utilise as filler material to replace the sand in the range of 10-40% of the total weight in cement. A total of four mix designs each with three replicates at 10%, 20%, and 40% replacement of sand and control (0% biochar addition) were investigated for their mechanical, durability and micro-computed tomography (CT) analysis. The results showed that the flexural strength of the composites at 20% biochar replacement of sand was improved by 26% when compared to control. Biochar addition lowered the thermal conductivity of the cement mortars and was optimised at 10% addition. The density of the mortars decreased ~20% with 40% biochar addition. Micro-CT analysis showed nearly a five-fold increase in the 2-dimensional porosity of the samples, from 2.5% (control) to 12% for samples which had 40% biochar; however, no marked changes were noticed for samples at 20% biochar addition. Taking mortar plastering as an example for 100 m2 area with standard 12 mm thickness revealed that CO2 emissions decreased 20% when sand was replaced with 40% biochar as compared to control specimen. It was concluded that biochar has the potential to replace the sand in the mortars for improving toughness, lowering thermal conductivity and density of the cement composites.`,
+        abstractSource: 'ScienceDirect / Science of The Total Environment',
+        concepts: ['Biochar Sand Replacement', 'Lightweight Mortar', 'Micro-CT Porosity', 'Thermal Conductivity'],
+        sourceEngine: '💾 คลังวิจัยในเครื่อง (Local Vault)'
+    },
     {
         id: 'vault-gupta-2018',
         title: 'Effect of water entrainment by pre-soaked biochar particles on strength and permeability of cement mortar',
@@ -7199,14 +7382,16 @@ function renderSearchResults(query = '') {
             fitTip = 'มีเสาหลักที่ตรงโดยตรง แนะนำเก็บไว้เปรียบเทียบในมิติที่ตรวจพบ';
         }
 
+        const isExactPin = Boolean(p._isExactTitleMatch);
         return `
-            <article class="paper-card" id="search-card-${idx}">
+            <article class="paper-card ${isExactPin ? 'exact-match-pinned' : ''}" id="search-card-${idx}" style="${isExactPin ? 'border: 1.5px solid #0284c7; box-shadow: 0 4px 18px -2px rgba(2, 132, 199, 0.22); background: linear-gradient(180deg, #f0f9ff 0%, var(--bg-card) 70px);' : ''}">
                 <div class="paper-card-header">
                     <a href="${titleHref}" target="_blank" class="paper-title" title="คลิกเปิดอ่านบทความวิจัยฉบับเต็ม">
-                        ${escapeHtml(p.title)} ↗
+                        ${isExactPin ? '🎯 ' : ''}${escapeHtml(p.title)} ↗
                     </a>
                 </div>
                 <div class="paper-meta">
+                    ${isExactPin ? `<span class="meta-pill" style="font-weight: 700; background: #0284c7; color: #ffffff; border: 1px solid #0369a1; box-shadow: 0 1px 3px rgba(3,105,161,0.25);">🎯 ตรงกับชื่อเรื่องที่ค้นหา (Exact Title Match) • ปักหมุดอันดับ 1</span>` : ''}
                     <span>👤 ${escapeHtml(authorsText)}</span>
                     <span>•</span>
                     <span>🏛️ ${escapeHtml(p.journal)}</span>
