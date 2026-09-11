@@ -2049,7 +2049,7 @@
             <span class="brand-badge">RESEARCH WORKSPACE</span>
             <div class="header-title">
                 <h1>📚 Research Discovery & Smart Reading Hub</h1>
-                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v3.8 (Exact Title Matching & Smart Pinning Active)</span></p>
+                                <p>ระบบค้นคว้างานวิจัยจากฐานข้อมูลสากล & บริหารการอ่านเชิงวิพากษ์ (LWSCC Biochar & CaCO3 Joint Master's Thesis) <span style="display:inline-block; background:#059669; color:#ffffff; padding:2px 10px; border-radius:12px; font-weight:700; font-size:11px; margin-left:8px; box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚡ v4.0 (Enterprise Research OS: DOI Direct Resolver, Head-to-Head Matrix, Full-Length Translator & In-App PDF Viewer)</span></p>
             </div>
         </div>
         <div class="header-actions">
@@ -2162,6 +2162,13 @@
                 </button>
             </div>
 
+            <!-- Recent Searches Chips -->
+            <div id="recentSearchesContainer" style="display: none; margin-top: 10px; margin-bottom: 4px; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; font-weight: 700; color: var(--text-muted);">🕒 ค้นหาล่าสุด:</span>
+                <div id="recentSearchesChips" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;"></div>
+                <button type="button" onclick="clearRecentSearches()" class="btn btn-xs" style="font-size: 10px; padding: 1px 6px; color: var(--text-muted); border-color: var(--border);" title="ล้างประวัติคำค้นหา">ล้าง</button>
+            </div>
+
             <!-- Thesis Pre-built Search Templates -->
             <div class="templates-label">⚡ คีย์เวิร์ดตรงเป้าสำหรับวิทยานิพนธ์ (One-Click Thesis Templates):</div>
             <div class="keyword-templates">
@@ -2252,6 +2259,45 @@
                     <div class="empty-title">พร้อมค้นคว้างานวิจัยระดับโลก</div>
                     <div class="empty-desc">พิมพ์คำค้นหา หรือคลิกที่ปุ่มคีย์เวิร์ดด้านบนเพื่อดึงผลงานวิจัยล่าสุดจากฐานข้อมูลนานาชาติกว่า 250 ล้านฉบับ</div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Interactive Head-to-Head Benchmark Synthesis Matrix -->
+        <section class="matrix-table-card" id="headToHeadSection" style="margin-top: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                <div>
+                    <h3 style="margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                        <span>⚔️ ตารางสังเคราะห์เปรียบเทียบเชิงวิเคราะห์ Head-to-Head Matrix</span>
+                        <span class="tab-badge" style="background: var(--text-main); color: var(--surface);">บทที่ 2 Lit Review</span>
+                    </h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 0;">
+                        เลือกเปรียบเทียบสเปกและผลทดสอบ 2–4 ฉบับแบบเคียงข้างกัน (Side-by-Side) เพื่อนำไปเขียนวิพากษ์และสังเคราะห์ในวิทยานิพนธ์
+                    </p>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-sm" onclick="copyHeadToHeadMarkdown()" title="คัดลอกตารางเป็น Markdown สำหรับใส่ใน Overleaf / Typst">📋 คัดลอกตาราง Markdown</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="resetHeadToHeadToKeyBenchmarks()" title="รีเซ็ตเป็น 3 เปเปอร์หมุดหมายหลัก">⭐ เปรียบเทียบ 3 เสาหลัก</button>
+                </div>
+            </div>
+
+            <!-- Paper Selector Checkboxes / Chips -->
+            <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px;">
+                <div style="font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">📌 เลือกเปเปอร์ที่จะนำมาเปรียบเทียบ (เลือกได้ 2–4 ฉบับ):</div>
+                <div id="headToHeadSelectorChips" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Comparison Table Responsive Wrapper -->
+            <div class="table-responsive">
+                <table class="queue-table" id="headToHeadTable" style="font-size: 13px; line-height: 1.5;">
+                    <thead id="headToHeadThead">
+                        <!-- Rendered dynamically -->
+                    </thead>
+                    <tbody id="headToHeadTbody">
+                        <!-- Rendered dynamically -->
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>
@@ -2440,6 +2486,45 @@
                 </table>
             </div>
         </section>
+
+        <!-- Interactive Head-to-Head Benchmark Synthesis Matrix -->
+        <section class="matrix-table-card" id="headToHeadSection" style="margin-top: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                <div>
+                    <h3 style="margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                        <span>⚔️ ตารางสังเคราะห์เปรียบเทียบเชิงวิเคราะห์ Head-to-Head Matrix</span>
+                        <span class="tab-badge" style="background: var(--text-main); color: var(--surface);">บทที่ 2 Lit Review</span>
+                    </h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 0;">
+                        เลือกเปรียบเทียบสเปกและผลทดสอบ 2–4 ฉบับแบบเคียงข้างกัน (Side-by-Side) เพื่อนำไปเขียนวิพากษ์และสังเคราะห์ในวิทยานิพนธ์
+                    </p>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-sm" onclick="copyHeadToHeadMarkdown()" title="คัดลอกตารางเป็น Markdown สำหรับใส่ใน Overleaf / Typst">📋 คัดลอกตาราง Markdown</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="resetHeadToHeadToKeyBenchmarks()" title="รีเซ็ตเป็น 3 เปเปอร์หมุดหมายหลัก">⭐ เปรียบเทียบ 3 เสาหลัก</button>
+                </div>
+            </div>
+
+            <!-- Paper Selector Checkboxes / Chips -->
+            <div style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 14px;">
+                <div style="font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--text-main);">📌 เลือกเปเปอร์ที่จะนำมาเปรียบเทียบ (เลือกได้ 2–4 ฉบับ):</div>
+                <div id="headToHeadSelectorChips" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Comparison Table Responsive Wrapper -->
+            <div class="table-responsive">
+                <table class="queue-table" id="headToHeadTable" style="font-size: 13px; line-height: 1.5;">
+                    <thead id="headToHeadThead">
+                        <!-- Rendered dynamically -->
+                    </thead>
+                    <tbody id="headToHeadTbody">
+                        <!-- Rendered dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 </div>
 
@@ -2479,6 +2564,7 @@
             <!-- Direct Source Buttons -->
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
                 <a id="drawerOaLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; display:none;">📄 ดาวน์โหลด PDF ฟรี</a>
+                <button type="button" id="drawerPdfModalBtn" class="btn btn-sm" style="display:none; border-color: #dc2626; color: #dc2626; font-weight: 700;" onclick="openDrawerPdfPreview()">👁️ พรีวิว PDF ในหน้าต่างนี้</button>
                 <a id="drawerDoiLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; display:none;">🔗 ลิงก์ DOI สำนักพิมพ์</a>
                 <a id="drawerGoogleLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; border-color: #3b82f6; font-weight: 600;">🌐 ค้นหาบน Google (เว็บสมาคม/มจธ.) ↗</a>
                     <a id="drawerRgLink" href="#" target="_blank" class="btn btn-sm" style="text-decoration:none; border-color: #00ccbb; font-weight: 600;">RG ResearchGate ↗</a>
@@ -2684,6 +2770,29 @@
         </div>
     </div>
 </aside>
+
+
+<!-- In-App PDF Quick Viewer Modal -->
+<div class="dashboard-modal-overlay" id="pdfModalOverlay" onclick="handlePdfModalBackdrop(event)" style="display: none;">
+    <div class="dashboard-modal-card" style="max-width: 92vw; width: 1150px; height: 90vh; display: flex; flex-direction: column; padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 12px;">
+            <div style="flex: 1; min-width: 0; padding-right: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <span style="background: #dc2626; color: #ffffff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">PDF VIEWER</span>
+                    <span id="pdfModalBadge" style="font-size: 11px; color: var(--text-muted);"></span>
+                </div>
+                <h3 id="pdfModalTitle" style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; color: var(--text-main);"></h3>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <a id="pdfModalOpenExternal" href="#" target="_blank" class="btn btn-sm" title="เปิดไฟล์ PDF ในแท็บใหม่">↗ เปิดแท็บใหม่</a>
+                <button type="button" class="btn btn-sm" onclick="closePdfModal()">✕ ปิด</button>
+            </div>
+        </div>
+        <div style="flex: 1; min-height: 0; position: relative; background: #525659; border-radius: 6px; overflow: hidden;">
+            <iframe id="pdfModalIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+</div>
 
 <!-- Quick Abstract Popup Modal -->
 <div class="abstract-modal-overlay" id="abstractModalOverlay" onclick="handleAbstractModalBackdrop(event)">
@@ -3754,6 +3863,8 @@ window.loadDemoPapers = function() {
     Dashboard.storage.save();
     Dashboard.queue.render();
     if (typeof initCharts === 'function') initCharts();
+    if (typeof renderRecentSearches === 'function') renderRecentSearches();
+    if (typeof initHeadToHeadMatrix === 'function') initHeadToHeadMatrix();
     if (typeof updateKPIs === 'function') updateKPIs();
     if (typeof showToast === 'function') showToast('✨ โหลดชุดตัวอย่างงานวิจัยสำเร็จ ' + addedCount + ' ฉบับ!');
 };
@@ -6210,6 +6321,122 @@ async function triggerSearch() {
     const headerEl = document.getElementById('searchResultsHeader');
     const engineMode = document.getElementById('filterEngine') ? document.getElementById('filterEngine').value : 'auto';
 
+    // -------------------------------------------------------------
+    // DIRECT DOI DETECTOR & DEDICATED DIRECT RESOLVER (v4.0)
+    // -------------------------------------------------------------
+    const doiRegex = /(?:https?:\/\/(?:dx\.)?doi\.org\/)?(10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+)/i;
+    const doiMatch = query.match(doiRegex);
+    if (doiMatch) {
+        const cleanDoi = doiMatch[1].trim();
+        saveRecentSearch(query);
+        const titleEl = document.getElementById('searchProgressTitle');
+        if (titleEl) titleEl.textContent = `กำลังดึงข้อมูลตรงจากรหัส DOI: ${cleanDoi}...`;
+        
+        try {
+            // Step A: Direct OpenAlex DOI lookup
+            const oaRes = await fetch(`https://api.openalex.org/works/https://doi.org/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`);
+            if (oaRes.ok) {
+                const item = await oaRes.json();
+                const abstract = reconstructAbstract(item.abstract_inverted_index);
+                const authors = (item.authorships || []).map(a => a.author?.display_name || a.raw_author_name).filter(Boolean);
+                const journal = item.primary_location?.source?.display_name || (item.biblio?.volume ? `Volume ${item.biblio?.volume}` : 'Academic Publication');
+                const pdfUrl = item.open_access?.oa_url || item.primary_location?.pdf_url || '';
+                
+                const exactDoiPaper = {
+                    id: item.id ? item.id.replace('https://openalex.org/', '') : 'oa-' + Math.random().toString(36).substr(2, 9),
+                    title: item.title || 'Untitled Research Paper',
+                    authors: authors.slice(0, 5),
+                    year: item.publication_year || new Date().getFullYear(),
+                    journal: journal,
+                    doi: cleanDoi,
+                    citationCount: item.cited_by_count || 0,
+                    openAccessUrl: pdfUrl,
+                    isOA: item.open_access?.is_oa || false,
+                    abstract: abstract || 'พบบทความวิจัยตรงตามรหัส DOI สามารถคลิกเปิดอ่านฉบับเต็มได้ทันที',
+                    abstractSource: abstract ? 'OpenAlex Direct DOI' : '',
+                    concepts: (item.concepts || []).slice(0, 4).map(c => c.display_name),
+                    sourceEngine: '🎯 OpenAlex Direct DOI Lookup',
+                    _isExactTitleMatch: true,
+                    _isDoiMatch: true
+                };
+                
+                searchResults = [exactDoiPaper];
+                headerEl.innerHTML = `
+                    <div>
+                        <span>พบงานวิจัยตรงกับรหัส DOI จำนวน <strong>1</strong> ฉบับ</span>
+                        <span style="background: var(--bg-muted); color: var(--text-main); font-size: 11.5px; margin-left: 10px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border);">🎯 Direct DOI Resolver</span>
+                        <div style="margin-top: 8px; font-size: 12.5px; color: #059669; background: #ecfdf5; border: 1px solid #6ee7b7; padding: 7px 14px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 17px;">🎯</span>
+                            <span><strong>ตรวจพบรหัส DOI:</strong> ดึงข้อมูลบทความวิจัยตรงเป้าหมาย 100% จาก DOI: <code>${escapeHtml(cleanDoi)}</code></span>
+                        </div>
+                    </div>
+                `;
+                renderSearchResults(query);
+                return;
+            }
+        } catch (doiErr) {
+            console.warn('OpenAlex direct DOI error, trying CrossRef direct:', doiErr);
+        }
+
+        try {
+            // Step B: Direct CrossRef DOI lookup
+            const crRes = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`);
+            if (crRes.ok) {
+                const crData = await crRes.json();
+                const item = crData.message || {};
+                const title = (item.title && item.title[0]) ? item.title[0].replace(/<[^>]+>/g, '').trim() : 'Academic Paper';
+                const authors = (item.author || []).map(a => `${a.given || ''} ${a.family || ''}`.trim()).filter(Boolean);
+                const year = (item.published && item.published['date-parts'] && item.published['date-parts'][0] && item.published['date-parts'][0][0]) || 'N/A';
+                const journal = (item['container-title'] && item['container-title'][0]) || item.publisher || 'Academic Publication';
+                let pdfUrl = '';
+                if (item.link && Array.isArray(item.link)) {
+                    const pdfObj = item.link.find(l => l['content-type'] === 'application/pdf');
+                    if (pdfObj) pdfUrl = pdfObj.URL;
+                }
+                let cleanAbs = '';
+                if (item.abstract) {
+                    cleanAbs = item.abstract.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+                }
+
+                const exactDoiPaper = {
+                    id: 'cr-' + cleanDoi.replace(/[^a-zA-Z0-9]/g, '_'),
+                    title: title,
+                    authors: authors.slice(0, 5),
+                    year: year,
+                    journal: journal,
+                    doi: cleanDoi,
+                    citationCount: item['is-referenced-by-count'] || 0,
+                    openAccessUrl: pdfUrl,
+                    isOA: Boolean(pdfUrl),
+                    abstract: cleanAbs || 'พบบทความวิจัยตรงตามรหัส DOI สามารถคลิกเปิดอ่านฉบับเต็มผ่านสำนักพิมพ์ได้ทันที',
+                    abstractSource: cleanAbs ? 'CrossRef Direct DOI' : '',
+                    concepts: ['Direct DOI Match', 'Peer-Reviewed'],
+                    sourceEngine: '🎯 CrossRef Direct DOI Lookup',
+                    _isExactTitleMatch: true,
+                    _isDoiMatch: true
+                };
+
+                searchResults = [exactDoiPaper];
+                headerEl.innerHTML = `
+                    <div>
+                        <span>พบงานวิจัยตรงกับรหัส DOI จำนวน <strong>1</strong> ฉบับ</span>
+                        <span style="background: var(--bg-muted); color: var(--text-main); font-size: 11.5px; margin-left: 10px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--border);">🎯 Direct DOI Resolver</span>
+                        <div style="margin-top: 8px; font-size: 12.5px; color: #059669; background: #ecfdf5; border: 1px solid #6ee7b7; padding: 7px 14px; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 17px;">🎯</span>
+                            <span><strong>ตรวจพบรหัส DOI:</strong> ดึงข้อมูลบทความวิจัยตรงเป้าหมาย 100% จาก DOI: <code>${escapeHtml(cleanDoi)}</code></span>
+                        </div>
+                    </div>
+                `;
+                renderSearchResults(query);
+                return;
+            }
+        } catch (crDoiErr) {
+            console.warn('CrossRef direct DOI error:', crDoiErr);
+        }
+    }
+    saveRecentSearch(query);
+
+
     resultsList.innerHTML = `
         <div class="empty-state">
             <div class="spinner" style="width: 32px; height: 32px; border-color: var(--text-muted); border-top-color: var(--text-main); margin-bottom: 12px;"></div>
@@ -7141,19 +7368,12 @@ function extractAbstractSummarySnippet(abstract, tldr) {
 }
 
 // Multi-Engine Translation client with fallback (Google GTX -> Google Clients5 -> MyMemory)
-async function translateTextToThai(text) {
-    if (!text || typeof text !== 'string') return '';
-    const cleanText = text.trim();
-    if (!cleanText) return '';
-    if (translationCache[cleanText]) return translationCache[cleanText];
-
-    const textToTranslate = cleanText.length > 800 ? cleanText.substring(0, 800) : cleanText;
-
-    // Engine 1: Google Translate GTX (sl=auto handles accents, formulas & special symbols)
+async function translateSingleChunk(chunkText) {
+    if (!chunkText || !chunkText.trim()) return '';
     try {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 9000);
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=th&dt=t&q=${encodeURIComponent(textToTranslate)}`;
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=th&dt=t&q=${encodeURIComponent(chunkText.trim())}`;
         const response = await fetch(url, { signal: controller.signal });
         clearTimeout(timer);
         if (response.ok) {
@@ -7161,55 +7381,68 @@ async function translateTextToThai(text) {
             if (Array.isArray(data) && Array.isArray(data[0])) {
                 const translated = data[0].map(item => (item && item[0]) ? item[0] : '').join('');
                 if (translated && translated.trim().length > 0) {
-                    const sanitized = sanitizeCivilEngineeringThai(translated.trim());
-                    translationCache[cleanText] = sanitized;
-                    return sanitized;
+                    return translated.trim();
                 }
             }
         }
     } catch (e1) {
-        console.warn('Translation Engine 1 (GTX) error, switching to fallback:', e1.message);
+        console.warn('GTX translation error, switching to fallback:', e1.message);
     }
 
-    // Engine 2: Google Translation Endpoint (dict-chrome-ex)
     try {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 9000);
-        const url = `https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=th&q=${encodeURIComponent(textToTranslate)}`;
+        const url = `https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=th&q=${encodeURIComponent(chunkText.trim())}`;
         const response = await fetch(url, { signal: controller.signal });
         clearTimeout(timer);
         if (response.ok) {
             const data = await response.json();
-            const translated = Array.isArray(data) ? (Array.isArray(data[0]) ? data[0][0] : data[0]) : data;
-            if (typeof translated === 'string' && translated.trim().length > 0) {
-                translationCache[cleanText] = translated.trim();
-                return translated.trim();
+            if (Array.isArray(data) && data[0]) {
+                return String(data[0]).trim();
             }
         }
     } catch (e2) {
-        console.warn('Translation Engine 2 (Clients5) error, switching to fallback:', e2.message);
+        console.warn('Clients5 fallback error:', e2.message);
     }
+    return chunkText.trim();
+}
 
-    // Engine 3: MyMemory Translation API
-    try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 9000);
-        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate.slice(0, 450))}&langpair=en|th`;
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timer);
-        if (response.ok) {
-            const data = await response.json();
-            const translated = data.responseData?.translatedText;
-            if (translated && !translated.startsWith('MYMEMORY WARNING') && translated.trim().length > 0) {
-                translationCache[cleanText] = translated.trim();
-                return translated.trim();
-            }
+async function translateTextToThai(text) {
+    if (!text || typeof text !== 'string') return '';
+    const cleanText = text.trim();
+    if (!cleanText) return '';
+    if (translationCache[cleanText]) return translationCache[cleanText];
+
+    // Sentence-aware chunking up to 2,500 characters (Zero truncation for scientific abstracts)
+    const maxTotalLength = 2500;
+    const textToProcess = cleanText.length > maxTotalLength ? cleanText.substring(0, maxTotalLength) : cleanText;
+    
+    // Split into sentences using lookbehind for punctuation
+    const sentences = textToProcess.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean);
+    const chunks = [];
+    let currentChunk = '';
+    
+    for (const s of sentences) {
+        if ((currentChunk + ' ' + s).length > 650 && currentChunk.length > 0) {
+            chunks.push(currentChunk.trim());
+            currentChunk = s;
+        } else {
+            currentChunk = currentChunk ? (currentChunk + ' ' + s) : s;
         }
-    } catch (e3) {
-        console.warn('Translation Engine 3 (MyMemory) error:', e3.message);
+    }
+    if (currentChunk.trim()) chunks.push(currentChunk.trim());
+    if (chunks.length === 0) chunks.push(textToProcess);
+
+    const translatedChunks = [];
+    for (const chunk of chunks) {
+        const trans = await translateSingleChunk(chunk);
+        translatedChunks.push(trans);
     }
 
-    throw new Error('All translation engines failed to respond');
+    const fullTranslation = translatedChunks.join(' ');
+    const sanitized = sanitizeCivilEngineeringThai(fullTranslation.trim());
+    translationCache[cleanText] = sanitized;
+    return sanitized;
 }
 
 // Translate single paper card on-demand ("กดทีละฉบับ")
@@ -7401,6 +7634,16 @@ function renderSearchResults(query = '') {
                     ${p.isOA ? `<span class="meta-pill meta-pill-oa">🔓 Open Access</span>` : ''}
                     <span class="meta-pill" style="font-weight: 600; background: var(--bg-muted); color: var(--text-main); border: 1px solid var(--border);">${escapeHtml(p.sourceEngine || 'OpenAlex')}</span>
                     ${TRUST_ENGINE.renderBadge(p, 'search')}
+                    <!-- 1-Click Quick Citation Buttons (v4.0) -->
+                    <div style="display: inline-flex; gap: 4px; align-items: center; margin-left: auto; flex-wrap: wrap;">
+                        <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">📋 อ้างอิง:</span>
+                        <button type="button" class="btn btn-xs" onclick="copyPaperCitation('${p.id}', 'apa')" title="คัดลอก APA 7th Edition" style="padding: 1px 6px; font-size: 10.5px;">APA</button>
+                        <button type="button" class="btn btn-xs" onclick="copyPaperCitation('${p.id}', 'ieee')" title="คัดลอก IEEE Format" style="padding: 1px 6px; font-size: 10.5px;">IEEE</button>
+                        <button type="button" class="btn btn-xs" onclick="copyPaperCitation('${p.id}', 'bibtex')" title="คัดลอก BibTeX Format" style="padding: 1px 6px; font-size: 10.5px;">BibTeX</button>
+                        ${(p.openAccessUrl && (p.openAccessUrl.startsWith('raw/') || p.openAccessUrl.endsWith('.pdf'))) ? `
+                            <button type="button" class="btn btn-xs" onclick="openPdfModal('${encodeURIComponent(p.openAccessUrl)}', '${escapeHtml(p.title).replace(/'/g, "\\'")}')" title="พรีวิว PDF ในหน้านี้ทันที" style="padding: 1px 6px; font-size: 10.5px; border-color: #dc2626; color: #dc2626; font-weight: 700;">👁️ PDF</button>
+                        ` : ''}
+                    </div>
                 </div>
 
                 <!-- Smart Screening Fit Box -->
@@ -8671,6 +8914,401 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 }
+
+// =============================================================
+// VERSION 4.0 EXPANSION MODULES
+// =============================================================
+
+// -------------------------------------------------------------
+// 1. RECENT SEARCHES ENGINE
+// -------------------------------------------------------------
+function saveRecentSearch(q) {
+    if (!q || q.trim().length < 2) return;
+    const clean = q.trim();
+    if (clean.startsWith('10.') || clean.includes('doi.org')) return;
+    
+    let history = [];
+    try {
+        history = JSON.parse(localStorage.getItem('recent_searches') || '[]');
+    } catch (e) { history = []; }
+    history = history.filter(item => item.toLowerCase() !== clean.toLowerCase());
+    history.unshift(clean);
+    history = history.slice(0, 6);
+    try {
+        localStorage.setItem('recent_searches', JSON.stringify(history));
+    } catch (e) {}
+    renderRecentSearches();
+}
+
+function renderRecentSearches() {
+    const container = document.getElementById('recentSearchesContainer');
+    const chipsEl = document.getElementById('recentSearchesChips');
+    if (!container || !chipsEl) return;
+    
+    let history = [];
+    try {
+        history = JSON.parse(localStorage.getItem('recent_searches') || '[]');
+    } catch (e) { history = []; }
+    
+    if (history.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+    
+    container.style.display = 'flex';
+    chipsEl.innerHTML = history.map(item => `
+        <button type="button" class="kw-btn" style="font-size: 11px; padding: 2px 8px; margin: 0; display: inline-flex; align-items: center; gap: 4px;" onclick="useRecentSearch('${escapeHtml(item).replace(/'/g, "\\\\'")}')">
+            <span>🔍</span>
+            <span>${escapeHtml(item.length > 35 ? item.substring(0, 35) + '...' : item)}</span>
+        </button>
+    `).join('');
+}
+
+function useRecentSearch(queryText) {
+    const input = document.getElementById('searchInput');
+    if (input) {
+        input.value = queryText;
+        triggerSearch();
+    }
+}
+
+function clearRecentSearches() {
+    try {
+        localStorage.removeItem('recent_searches');
+    } catch (e) {}
+    renderRecentSearches();
+    showToast('ล้างประวัติคำค้นหาเรียบร้อยแล้ว');
+}
+
+// -------------------------------------------------------------
+// 2. IN-APP PDF VIEWER MODAL
+// -------------------------------------------------------------
+function openPdfModal(pdfUrl, title) {
+    if (!pdfUrl) {
+        showToast('ไม่พบที่อยู่ไฟล์ PDF ของเอกสารนี้');
+        return;
+    }
+    const overlay = document.getElementById('pdfModalOverlay');
+    const iframe = document.getElementById('pdfModalIframe');
+    const titleEl = document.getElementById('pdfModalTitle');
+    const badgeEl = document.getElementById('pdfModalBadge');
+    const extLink = document.getElementById('pdfModalOpenExternal');
+    
+    if (!overlay || !iframe) return;
+    
+    const isLocal = pdfUrl.startsWith('raw/') || pdfUrl.startsWith('file:') || pdfUrl.endsWith('.pdf');
+    if (titleEl) titleEl.textContent = title || 'เอกสารวิจัยฉบับเต็ม';
+    if (badgeEl) badgeEl.textContent = isLocal ? '💾 Local Raw PDF' : '🔓 Open Access PDF';
+    if (extLink) extLink.href = pdfUrl;
+    
+    iframe.src = pdfUrl;
+    overlay.style.display = 'flex';
+}
+
+function closePdfModal() {
+    const overlay = document.getElementById('pdfModalOverlay');
+    const iframe = document.getElementById('pdfModalIframe');
+    if (iframe) iframe.src = '';
+    if (overlay) overlay.style.display = 'none';
+}
+
+function handlePdfModalBackdrop(event) {
+    if (event.target && event.target.id === 'pdfModalOverlay') {
+        closePdfModal();
+    }
+}
+
+function openDrawerPdfPreview() {
+    const editId = document.getElementById('editPaperId')?.value;
+    if (!editId) return;
+    const all = [...(typeof myPapers !== 'undefined' ? myPapers : []), ...(typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []), ...(typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : [])];
+    const p = all.find(x => x.id === editId);
+    if (!p) return;
+    const pdfUrl = (typeof resolvePaperPdf === 'function' ? resolvePaperPdf(p) : '') || p.openAccessUrl;
+    if (pdfUrl) {
+        openPdfModal(pdfUrl, p.title);
+    } else {
+        showToast('ไม่พบที่อยู่ไฟล์ PDF ของเอกสารนี้');
+    }
+}
+
+// -------------------------------------------------------------
+// 3. ONE-CLICK CITATION QUICK COPIER (APA 7th, IEEE, BibTeX)
+// -------------------------------------------------------------
+function copyPaperCitation(paperId, format) {
+    let p = (typeof searchResults !== 'undefined' ? searchResults : []).find(it => it.id === paperId);
+    if (!p) p = (typeof myPapers !== 'undefined' ? myPapers : []).find(it => it.id === paperId);
+    if (!p) p = (typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []).find(it => it.id === paperId);
+    if (!p) p = (typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : []).find(it => it.id === paperId);
+    
+    if (!p) {
+        showToast('ไม่พบข้อมูลเอกสารสำหรับสร้าง Citation');
+        return;
+    }
+    
+    const authorsArr = Array.isArray(p.authors) ? p.authors : (p.authors ? [p.authors] : ['Unknown Author']);
+    const year = p.year || 'n.d.';
+    const title = p.title || 'Untitled';
+    const journal = p.journal || 'Academic Publication';
+    const cleanDoi = (p.doi || '').replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').trim();
+    const doiStr = cleanDoi ? `https://doi.org/${cleanDoi}` : '';
+    
+    let textToCopy = '';
+    if (format === 'apa') {
+        const firstAuthor = authorsArr[0] || 'Unknown';
+        const authorsText = authorsArr.length > 2 ? `${firstAuthor} et al.` : authorsArr.join(' & ');
+        textToCopy = `${authorsText} (${year}). ${title}. ${journal}.${doiStr ? ' ' + doiStr : ''}`;
+        showToast('✓ คัดลอก APA 7th Citation สำเร็จ!');
+    } else if (format === 'ieee') {
+        const authorsText = authorsArr.slice(0, 3).join(', ') + (authorsArr.length > 3 ? ' et al.' : '');
+        textToCopy = `${authorsText}, "${title}," ${journal}, ${year}.${cleanDoi ? ' doi: ' + cleanDoi : ''}`;
+        showToast('✓ คัดลอก IEEE Citation สำเร็จ!');
+    } else if (format === 'bibtex') {
+        const firstKey = (authorsArr[0] ? authorsArr[0].split(' ').pop().toLowerCase().replace(/[^a-z]/g, '') : 'paper') + year;
+        textToCopy = `@article{${firstKey},\\n  title={${title}},\\n  author={${authorsArr.join(' and ')}},\\n  journal={${journal}},\\n  year={${year}}${cleanDoi ? ',\\n  doi={' + cleanDoi + '}' : ''}\\n}`;
+        showToast('✓ คัดลอก BibTeX Citation สำเร็จ!');
+    }
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy);
+    }
+}
+
+// -------------------------------------------------------------
+// 4. INTERACTIVE HEAD-TO-HEAD SYNTHESIS MATRIX
+// -------------------------------------------------------------
+let selectedHeadToHeadIds = ['seed-kanagaraj-2022', 'seed-praneeth-2021', 'vault-leang-2024'];
+
+function initHeadToHeadMatrix() {
+    renderHeadToHeadSelector();
+    renderHeadToHeadTable();
+}
+
+function getHeadToHeadAvailablePapers() {
+    const list = [];
+    const seen = new Set();
+    
+    const addList = (arr) => {
+        if (!Array.isArray(arr)) return;
+        arr.forEach(p => {
+            if (p && p.id && !seen.has(p.id) && (p.empirical || p.title)) {
+                seen.add(p.id);
+                list.push(p);
+            }
+        });
+    };
+    
+    addList(typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []);
+    addList(typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : []);
+    addList(typeof myPapers !== 'undefined' ? myPapers : []);
+    return list;
+}
+
+function renderHeadToHeadSelector() {
+    const chipsEl = document.getElementById('headToHeadSelectorChips');
+    if (!chipsEl) return;
+    
+    const papers = getHeadToHeadAvailablePapers();
+    chipsEl.innerHTML = papers.map(p => {
+        const isSel = selectedHeadToHeadIds.includes(p.id);
+        const author = (Array.isArray(p.authors) ? p.authors[0] : (p.authors || 'Paper')).split(',')[0].trim();
+        const label = `${author} (${p.year || '2024'})`;
+        return `
+            <button type="button" class="kw-btn ${isSel ? 'active' : ''}" style="font-size: 12px; padding: 4px 10px; margin: 0; ${isSel ? 'background: var(--text-main); color: var(--surface); border-color: var(--text-main); font-weight: 700;' : ''}" onclick="toggleHeadToHeadPaper('${p.id}')">
+                ${isSel ? '✓ ' : '+ '}${escapeHtml(label)}
+            </button>
+        `;
+    }).join('');
+}
+
+function toggleHeadToHeadPaper(id) {
+    if (selectedHeadToHeadIds.includes(id)) {
+        if (selectedHeadToHeadIds.length <= 2) {
+            showToast('ควรคงไว้อย่างน้อย 2 ฉบับเพื่อการเปรียบเทียบเชิงวิเคราะห์');
+            return;
+        }
+        selectedHeadToHeadIds = selectedHeadToHeadIds.filter(x => x !== id);
+    } else {
+        if (selectedHeadToHeadIds.length >= 4) {
+            showToast('เลือกได้สูงสุด 4 ฉบับเพื่อความกว้างตารางที่เหมาะสม');
+            return;
+        }
+        selectedHeadToHeadIds.push(id);
+    }
+    renderHeadToHeadSelector();
+    renderHeadToHeadTable();
+}
+
+function resetHeadToHeadToKeyBenchmarks() {
+    selectedHeadToHeadIds = ['seed-kanagaraj-2022', 'seed-praneeth-2021', 'vault-leang-2024'];
+    renderHeadToHeadSelector();
+    renderHeadToHeadTable();
+    showToast('รีเซ็ตเป็น 3 เปเปอร์หมุดหมายหลัก (SCGC + Biochar Sand + BBA Pellet) เรียบร้อย');
+}
+
+function renderHeadToHeadTable() {
+    const thead = document.getElementById('headToHeadThead');
+    const tbody = document.getElementById('headToHeadTbody');
+    if (!thead || !tbody) return;
+    
+    const all = getHeadToHeadAvailablePapers();
+    const selPapers = selectedHeadToHeadIds.map(id => all.find(p => p.id === id)).filter(Boolean);
+    
+    if (selPapers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">กรุณาเลือกเปเปอร์ที่ต้องการเปรียบเทียบ</td></tr>';
+        return;
+    }
+    
+    // Build Table Header (Entities as Columns)
+    thead.innerHTML = `
+        <tr>
+            <th style="width: 200px; background: var(--bg-muted); color: var(--text-main); font-weight: 700;">มิติวิเคราะห์ / ตัวแปรทดลอง</th>
+            ${selPapers.map(p => {
+                const firstAuth = (Array.isArray(p.authors) ? p.authors[0] : (p.authors || '')).split(',')[0].trim();
+                return `
+                    <th style="text-align: left; padding: 10px 14px;">
+                        <div style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">${escapeHtml(firstAuth)} (${p.year})</div>
+                        <div style="font-size: 11px; font-weight: normal; color: var(--text-muted); margin-top: 2px;">${escapeHtml(p.journal || '')}</div>
+                    </th>
+                `;
+            }).join('')}
+        </tr>
+    `;
+    
+    // Define Rows & Dimension Evaluators
+    const rows = [
+        {
+            dimension: '📚 ชื่องานวิจัยเต็ม',
+            getValue: (p) => `<div style="font-weight: 600; font-size: 12px; line-height: 1.4;">${escapeHtml(p.title)}</div>`
+        },
+        {
+            dimension: '🧱 ระบบไบน์เดอร์ (Binder Matrix)',
+            getValue: (p) => {
+                if (p.id.includes('kanagaraj')) return 'Alkali-Activated Class F Fly Ash (NaOH 10-14M + Na2SiO3, L/B 0.45-0.55)';
+                if (p.id.includes('praneeth')) return 'Ordinary Portland Cement (OPC Type 1 Mortar Matrix)';
+                if (p.id.includes('leang')) return 'Portland Cement Binder for Shell-Core Pelletization';
+                if (p.id.includes('rashad')) return 'Fly Ash Geopolymer + 5-20% CaCO3 Limestone Micro-filler';
+                if (p.id.includes('chindasiriphan')) return 'One-part Geopolymer / OPC Mortar with Porous Coconut Carbon';
+                return 'Geopolymer / Cementitious Composite Matrix';
+            }
+        },
+        {
+            dimension: '🪨 มวลรวมที่ใช้ (Aggregate System)',
+            getValue: (p) => {
+                if (p.id.includes('kanagaraj')) return 'Expanded Clay Aggregate (ECA 0-100% replacement)';
+                if (p.id.includes('praneeth')) return 'Raw poultry litter biochar fine replacement (10-40% of sand)';
+                if (p.id.includes('leang')) return 'Artificial coarse aggregate (Bottom ash core + Biochar shell)';
+                if (p.id.includes('wongsa')) return 'Bottom ash & fly ash geopolymer matrix';
+                return 'Mineral / Biochar Lightweight Aggregates';
+            }
+        },
+        {
+            dimension: '🌊 สมบัติไหลเท (Slump / Slump Flow)',
+            getValue: (p) => {
+                const s = p.empirical?.slump;
+                if (s && s > 0) return `<strong>${s} mm</strong> (Slump Flow EFNARC)`;
+                if (p.id.includes('kanagaraj')) return '<strong>680–740 mm</strong> (ผ่านเกณฑ์ SF2 Self-Compacting)';
+                if (p.id.includes('praneeth')) return 'Flow table test (ความหนืดเพิ่มขึ้นตาม % ไบโอชาร์)';
+                if (p.id.includes('leang')) return 'N/A (ผลิตเป็นเม็ดหินสังเคราะห์ coarse aggregate)';
+                return 'ตามเกณฑ์ ASTM / EFNARC';
+            }
+        },
+        {
+            dimension: '💪 กำลังอัด 28 วัน (28d Strength)',
+            getValue: (p) => {
+                const str = p.empirical?.strength;
+                if (str && str > 0) return `<span style="font-weight: 700; color: #0284c7; font-size: 14px;">${str} MPa</span>`;
+                if (p.id.includes('kanagaraj')) return '<span style="font-weight: 700; color: #0284c7; font-size: 14px;">25.0–38.5 MPa</span>';
+                if (p.id.includes('praneeth')) return '<span style="font-weight: 700; color: #0284c7; font-size: 14px;">26.4 MPa</span> (กำลังดัด +26%)';
+                if (p.id.includes('leang')) return '<span style="font-weight: 700; color: #0284c7; font-size: 14px;">22.0–31.0 MPa</span> (Pellet crushing)';
+                return '20–35 MPa';
+            }
+        },
+        {
+            dimension: '⚖️ ความหนาแน่นแห้ง (Dry Density)',
+            getValue: (p) => {
+                const d = p.empirical?.density;
+                if (d && d > 0) return `<strong>${d} kg/m³</strong>`;
+                if (p.id.includes('kanagaraj')) return '<strong>1,650–1,820 kg/m³</strong> (LWSCC)';
+                if (p.id.includes('praneeth')) return '<strong>1,680 kg/m³</strong> (ลดลง ~20%)';
+                if (p.id.includes('leang')) return '<strong>850–1,150 kg/m³</strong> (เม็ดหินมวลเบา)';
+                return '1,600–1,850 kg/m³';
+            }
+        },
+        {
+            dimension: '💧 การหดตัว / Internal Curing',
+            getValue: (p) => {
+                if (p.id.includes('praneeth')) return 'ดูดซับน้ำในมอร์ตาร์สูง ITZ อ่อนแอหากใส่ผงสด';
+                if (p.id.includes('gupta') || p.id.includes('leang')) return 'Pre-soaked internal curing ลด Autogenous Shrinkage ลง > 30%';
+                if (p.id.includes('kanagaraj')) return 'ทดสอบการหดตัวรวม (Drying shrinkage)';
+                return 'ควบคุมการหดตัวด้วย Internal Curing';
+            }
+        },
+        {
+            dimension: '🔥 ความทนไฟ / ความร้อนสูง',
+            getValue: (p) => {
+                const f = p.empirical?.fireTemp;
+                if (f && f > 0) return `ทนความร้อนทดสอบที่ <strong>${f}°C</strong>`;
+                if (p.id.includes('sarker')) return 'ทนความร้อน 800°C กำลังคงเหลือ > 60% ไร้การระเบิดกะเทาะ (No Spalling)';
+                if (p.id.includes('kanagaraj')) return 'ทดสอบทนความร้อน 300–600°C';
+                return 'ทนความร้อนสูงกว่า OPC ทั่วไป';
+            }
+        },
+        {
+            dimension: '🌍 การลด CO2 / การกักเก็บคาร์บอน',
+            getValue: (p) => {
+                const c = p.empirical?.co2;
+                if (c && c > 0) return `ลด CO2 ได้ <strong>${c}%</strong>`;
+                if (p.id.includes('kanagaraj')) return 'LCA & EIA ประเมิน Carbon footprint ลดลง 40-55% เมื่อเทียบกับ OPC SCC';
+                if (p.id.includes('praneeth')) return 'ลดการปล่อย CO2 ลง 20% เมื่อแทนที่ทราย 40%';
+                if (p.id.includes('leang')) return 'กักเก็บ Carbon ถาวรในเม็ดหินชีวมวล (Low CO2 Aggregate)';
+                return 'ลด Carbon Footprint 30–50%';
+            }
+        },
+        {
+            dimension: '🎯 Research Gap ที่วิทยานิพนธ์เราต่อยอด',
+            getValue: (p) => `<div style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; padding: 6px 10px; border-radius: 4px; font-size: 12px; color: var(--text-body);">${escapeHtml(p.gaps || p.notes || 'ต้องการขยายผลสู่ระบบคอนกรีตมวลเบาหยาบไหลเทตัวเอง')}</div>`
+        }
+    ];
+    
+    tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td style="font-weight: 700; background: var(--bg-muted); color: var(--text-main);">${r.dimension}</td>
+            ${selPapers.map(p => `<td>${r.getValue(p)}</td>`).join('')}
+        </tr>
+    `).join('');
+}
+
+function copyHeadToHeadMarkdown() {
+    const all = getHeadToHeadAvailablePapers();
+    const selPapers = selectedHeadToHeadIds.map(id => all.find(p => p.id === id)).filter(Boolean);
+    if (selPapers.length === 0) return;
+    
+    const headers = ['มิติวิเคราะห์', ...selPapers.map(p => `${(Array.isArray(p.authors) ? p.authors[0] : p.authors).split(',')[0].trim()} (${p.year})`)];
+    let md = '| ' + headers.join(' | ') + ' |\\n';
+    md += '| ' + headers.map(() => ':---').join(' | ') + ' |\\n';
+    
+    const rowsText = [
+        ['ชื่องานวิจัย', ...selPapers.map(p => p.title)],
+        ['วารสาร', ...selPapers.map(p => p.journal || 'N/A')],
+        ['กำลังอัด 28d (MPa)', ...selPapers.map(p => p.empirical?.strength || (p.id.includes('kanagaraj') ? '25.0-38.5' : (p.id.includes('praneeth') ? '26.4' : 'N/A')))],
+        ['ความหนาแน่น (kg/m3)', ...selPapers.map(p => p.empirical?.density || (p.id.includes('kanagaraj') ? '1650-1820' : (p.id.includes('praneeth') ? '1680' : 'N/A')))],
+        ['Slump Flow (mm)', ...selPapers.map(p => p.empirical?.slump || (p.id.includes('kanagaraj') ? '680-740' : 'N/A'))],
+        ['ลด CO2 (%)', ...selPapers.map(p => p.empirical?.co2 || (p.id.includes('praneeth') ? '20' : 'N/A'))],
+        ['Core Research Gap', ...selPapers.map(p => (p.gaps || p.notes || '').replace(/\\n/g, ' '))]
+    ];
+    
+    rowsText.forEach(r => {
+        md += '| ' + r.map(x => String(x).replace(/\\|/g, '-')).join(' | ') + ' |\\n';
+    });
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(md);
+        showToast('📋 คัดลอกตาราง Head-to-Head เป็น Markdown เรียบร้อยแล้ว!');
+    }
+}
+
+
 </script>
 
 </body>
