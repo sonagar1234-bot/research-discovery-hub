@@ -61,6 +61,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
+            overflow-x: hidden;
             font-family: var(--font-main);
             background-color: var(--bg);
             color: var(--text-main);
@@ -1280,8 +1281,14 @@
             flex-direction: column;
             overflow: hidden;
         }
+        .drawer:not(.active) {
+            visibility: hidden;
+            pointer-events: none;
+        }
         .drawer.active {
             transform: translateX(0);
+            visibility: visible;
+            pointer-events: auto;
         }
         .drawer-header {
             padding: 20px 24px;
@@ -1463,6 +1470,9 @@
             grid-template-columns: 1.2fr 1fr;
             gap: 20px;
             margin-bottom: 22px;
+        }
+        .charts-grid > * {
+            min-width: 0;
         }
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
@@ -2889,6 +2899,16 @@
             <!-- Empirical Numbers Extractor -->
             <div class="form-section" style="background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px;">
                 <label class="form-label" style="margin-bottom: 12px;">📊 ตัวเลขผลการทดสอบเชิงประจักษ์ (Empirical Test Data):</label>
+                <div class="form-grid-2" style="margin-bottom: 10px;">
+                    <div>
+                        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">มวลรวมหยาบไบโอชาร์ (Biochar Agg, % แทนที่):</label>
+                        <input type="number" step="0.5" id="editNumBiochar" class="form-control" placeholder="เช่น 10.0">
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">แคลเซียมคาร์บอเนต (CaCO3 Powder, % ผง):</label>
+                        <input type="number" step="0.5" id="editNumCaCO3" class="form-control" placeholder="เช่น 10.0">
+                    </div>
+                </div>
                 <div class="form-grid-2" style="margin-bottom: 10px;">
                     <div>
                         <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">กำลังรับแรงอัด 28 วัน (fc, MPa):</label>
@@ -4768,6 +4788,14 @@ window.Dashboard = {
             this.redoStack = [];
             this.updateUI();
             return command;
+        },
+
+        canUndo() {
+            return this.undoStack.length > 0;
+        },
+
+        canRedo() {
+            return this.redoStack.length > 0;
         },
 
         undo() {
@@ -6686,6 +6714,11 @@ function isMissingAbstract(abstract) {
 }
 const isAbstractMissing = isMissingAbstract;
 
+async function cleanPaperTitle(title) {
+    if (!title || typeof title !== 'string') return 'Untitled Research Paper';
+    return title.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() || 'Untitled Research Paper';
+}
+
 async function triggerSearch() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) {
@@ -6739,7 +6772,7 @@ async function triggerSearch() {
                 
                 const exactDoiPaper = {
                     id: item.id ? item.id.replace('https://openalex.org/', '') : 'oa-' + Math.random().toString(36).substr(2, 9),
-                    title: item.title || 'Untitled Research Paper',
+                    title: cleanPaperTitle(item.title),
                     authors: authors.slice(0, 5),
                     year: item.publication_year || new Date().getFullYear(),
                     journal: journal,
@@ -6828,6 +6861,21 @@ async function triggerSearch() {
         } catch (crDoiErr) {
             console.warn('CrossRef direct DOI error:', crDoiErr);
         }
+
+        // If query was strictly a DOI link or code, but both OpenAlex & CrossRef returned 404
+        headerEl.innerHTML = `
+            <div>
+                <span>ผลการค้นหาตรงด้วยรหัส DOI: <strong>0</strong> ฉบับ</span>
+                <span style="background: #fef2f2; color: #dc2626; font-size: 11.5px; margin-left: 10px; font-weight: 600; padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid #fecaca;">⚠️ ไม่พบรหัส DOI ในฐานข้อมูล</span>
+            </div>
+        `;
+        resultsList.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-title">🎯 ไม่พบบทความวิจัยตรงกับรหัส DOI นี้</div>
+                <div class="empty-desc">ระบบเชื่อมต่อไปยัง OpenAlex Global และ CrossRef แล้ว แต่ไม่พบข้อมูลของ DOI <code>${escapeHtml(cleanDoi)}</code><br>โปรดตรวจสอบความถูกต้องของรหัส DOI อีกครั้ง หรือเปลี่ยนมาค้นหาด้วยชื่อบทความวิจัย</div>
+            </div>
+        `;
+        return;
     }
     saveRecentSearch(query);
 
@@ -7193,7 +7241,7 @@ async function executeOpenAlexSearch(query) {
 
         return {
             id: item.id ? item.id.replace('https://openalex.org/', '') : 'oa-' + Math.random().toString(36).substr(2, 9),
-            title: item.title || 'Untitled Research Paper',
+            title: cleanPaperTitle(item.title),
             authors: authors.slice(0, 5),
             year: item.publication_year || new Date().getFullYear(),
             journal: journal,
@@ -8059,6 +8107,7 @@ async function translateTextToThai(text) {
     translationCache[cleanText] = sanitized;
     return sanitized;
 }
+window.translateToThai = translateTextToThai;
 
 // Translate single paper card on-demand ("กดทีละฉบับ")
 async function translatePaperCard(idx) {
@@ -8672,6 +8721,8 @@ function openPaperDrawer(paperId, targetPass = null) {
 
     // Pass 2 Fields: Empirical numbers & Notes
     const emp = p.empirical || {};
+    if (document.getElementById('editNumBiochar')) document.getElementById('editNumBiochar').value = emp.biochar || '';
+    if (document.getElementById('editNumCaCO3')) document.getElementById('editNumCaCO3').value = emp.caco3 || '';
     document.getElementById('editNumStrength').value = emp.strength || '';
     document.getElementById('editNumDensity').value = emp.density || '';
     document.getElementById('editNumSlump').value = emp.slump || '';
@@ -8800,13 +8851,21 @@ function collectDrawerDataToPaper(p) {
     });
     p.pillars = selectedPillars;
 
+    const parseBound = (val, min, max) => {
+        const n = parseFloat(val);
+        if (isNaN(n)) return 0;
+        return Math.min(Math.max(n, min), max);
+    };
+
     p.empirical = {
-        strength: parseFloat(document.getElementById('editNumStrength').value) || 0,
-        density: parseFloat(document.getElementById('editNumDensity').value) || 0,
-        slump: parseFloat(document.getElementById('editNumSlump').value) || 0,
-        shrinkage: parseFloat(document.getElementById('editNumShrinkage').value) || 0,
-        fireTemp: parseFloat(document.getElementById('editNumFireTemp').value) || 0,
-        co2: parseFloat(document.getElementById('editNumCO2').value) || 0
+        biochar: parseBound(document.getElementById('editNumBiochar')?.value, 0, 100),
+        caco3: parseBound(document.getElementById('editNumCaCO3')?.value, 0, 100),
+        strength: parseBound(document.getElementById('editNumStrength')?.value, 0, 250),
+        density: parseBound(document.getElementById('editNumDensity')?.value, 0, 3500),
+        slump: parseBound(document.getElementById('editNumSlump')?.value, 0, 1000),
+        shrinkage: parseBound(document.getElementById('editNumShrinkage')?.value, 0, 5000),
+        fireTemp: parseBound(document.getElementById('editNumFireTemp')?.value, 0, 1200),
+        co2: parseBound(document.getElementById('editNumCO2')?.value, -100, 1000)
     };
 }
 
@@ -10002,30 +10061,43 @@ function renderHeadToHeadTable() {
 function copyHeadToHeadMarkdown() {
     const all = getHeadToHeadAvailablePapers();
     const selPapers = selectedHeadToHeadIds.map(id => all.find(p => p.id === id)).filter(Boolean);
-    if (selPapers.length === 0) return;
+    if (selPapers.length === 0) return '';
     
     const headers = ['มิติวิเคราะห์', ...selPapers.map(p => `${(Array.isArray(p.authors) ? p.authors[0] : p.authors).split(',')[0].trim()} (${p.year})`)];
-    let md = '| ' + headers.join(' | ') + ' |\\n';
-    md += '| ' + headers.map(() => ':---').join(' | ') + ' |\\n';
+    let lines = [];
+    lines.push('| ' + headers.join(' | ') + ' |');
+    lines.push('| ' + headers.map(() => ':---').join(' | ') + ' |');
     
     const rowsText = [
         ['ชื่องานวิจัย', ...selPapers.map(p => p.title)],
         ['วารสาร', ...selPapers.map(p => p.journal || 'N/A')],
+        ['ไบโอชาร์ (% แทนที่)', ...selPapers.map(p => p.empirical?.biochar ? `${p.empirical.biochar}%` : 'N/A')],
+        ['CaCO3 (% ผง)', ...selPapers.map(p => p.empirical?.caco3 ? `${p.empirical.caco3}%` : 'N/A')],
         ['กำลังอัด 28d (MPa)', ...selPapers.map(p => p.empirical?.strength || (p.id.includes('kanagaraj') ? '25.0-38.5' : (p.id.includes('praneeth') ? '26.4' : 'N/A')))],
         ['ความหนาแน่น (kg/m3)', ...selPapers.map(p => p.empirical?.density || (p.id.includes('kanagaraj') ? '1650-1820' : (p.id.includes('praneeth') ? '1680' : 'N/A')))],
         ['Slump Flow (mm)', ...selPapers.map(p => p.empirical?.slump || (p.id.includes('kanagaraj') ? '680-740' : 'N/A'))],
         ['ลด CO2 (%)', ...selPapers.map(p => p.empirical?.co2 || (p.id.includes('praneeth') ? '20' : 'N/A'))],
-        ['Core Research Gap', ...selPapers.map(p => (p.gaps || p.notes || '').replace(/\\n/g, ' '))]
+        ['Core Research Gap', ...selPapers.map(p => (p.gaps || p.notes || '').replace(/\r?\n/g, ' '))]
     ];
     
     rowsText.forEach(r => {
-        md += '| ' + r.map(x => String(x).replace(/\\|/g, '-')).join(' | ') + ' |\\n';
+        lines.push('| ' + r.map(x => String(x).replace(/\|/g, '-')).join(' | ') + ' |');
     });
     
+    const md = lines.join('\n');
+    
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(md);
-        showToast('📋 คัดลอกตาราง Head-to-Head เป็น Markdown เรียบร้อยแล้ว!');
+        navigator.clipboard.writeText(md).then(() => {
+            showToast('📋 คัดลอกตาราง Head-to-Head เป็น Markdown เรียบร้อยแล้ว!');
+        }).catch(() => {
+            if (typeof fallbackExecCopy === 'function') {
+                fallbackExecCopy(md, '📋 คัดลอกตาราง Head-to-Head เป็น Markdown เรียบร้อยแล้ว!');
+            }
+        });
+    } else if (typeof fallbackExecCopy === 'function') {
+        fallbackExecCopy(md, '📋 คัดลอกตาราง Head-to-Head เป็น Markdown เรียบร้อยแล้ว!');
     }
+    return md;
 }
 
 
