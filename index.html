@@ -2826,6 +2826,9 @@
                         📖 Original Abstract (English)
                     </span>
                     <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-xs" id="abstractModalToggleLangBtn" onclick="toggleAbstractModalLang()" style="display: none; font-weight: 700; border-color: #6366f1; color: #4f46e5; background: #eef2ff;" title="สลับระหว่างภาษาอังกฤษและบทคัดย่อภาษาไทยฉบับเต็ม">
+                            🇹🇭 สลับดูฉบับแปลไทย
+                        </button>
                         <div class="highlight-toolbar" style="margin-bottom: 0; padding: 2px 8px;" title="ไฮไลท์ข้อความ: ลากคลุมข้อความใน Abstract ด้านล่าง แล้วคลิกเลือกสี">
                             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-right: 2px;">🖍️ ไฮไลท์:</span>
                             <button type="button" class="hl-btn hl-btn-yellow" onclick="Dashboard.notes.applyHighlightToSelection('yellow')" title="ไฮไลท์สีเหลือง (ความรู้ทั่วไป / ข้อความสำคัญ)"></button>
@@ -2835,10 +2838,10 @@
                                 ✕ ลบ
                             </button>
                         </div>
-                        <button type="button" class="btn btn-xs" id="abstractModalCopyBtn" onclick="copyAbstractModalText()" title="คัดลอกบทคัดย่อภาษาอังกฤษ">
+                        <button type="button" class="btn btn-xs" id="abstractModalCopyBtn" onclick="copyAbstractModalText()" title="คัดลอกบทคัดย่อ">
                             📋 คัดลอก
                         </button>
-                        <button type="button" class="btn btn-xs" id="abstractModalTranslateBtn" onclick="translateCurrentAbstractModal()" title="แปลบทคัดย่อเป็นภาษาไทยทันที">
+                        <button type="button" class="btn btn-xs" id="abstractModalTranslateBtn" onclick="translateCurrentAbstractModal()" title="แปลบทคัดย่อเป็นภาษาไทยฉบับเต็มทันที">
                             🇹🇭 แปลไทย
                         </button>
                     </div>
@@ -2851,7 +2854,7 @@
                 <div id="abstractModalMissingAlert" style="display: none; margin-top: 12px; padding: 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm); font-size: 13px;">
                     <div style="font-weight: 600; color: #d97706; margin-bottom: 6px;">⚠️ เอกสารนี้ยังไม่มีข้อความ Abstract ในคลังข้อมูล</div>
                     <button type="button" class="btn btn-sm" id="abstractModalFetchFallbackBtn" onclick="fetchMissingAbstractForModal()" style="font-weight: 700;">
-                        ⚡ ดึง Abstract ทันทีจาก Semantic Scholar / CrossRef
+                        ⚡ ดึง Abstract ทันที (Europe PMC / คลังวิจัย / CrossRef)
                     </button>
                 </div>
             </div>
@@ -4281,8 +4284,9 @@ var Dashboard = window.Dashboard = {
             p.openAccessUrl = p.openAccessUrl || '';
             p.abstract = p.abstract || '';
             p.abstractSource = p.abstractSource || '';
-            p.thaiTitle = p.thaiTitle || '';
-            p.thaiSummary = p.thaiSummary || '';
+            p.thaiTitle = p.thaiTitle ? (typeof sanitizeCivilEngineeringThai === 'function' ? sanitizeCivilEngineeringThai(p.thaiTitle) : p.thaiTitle.replace(/,en$/i, '')) : '';
+            p.thaiSummary = p.thaiSummary ? (typeof sanitizeCivilEngineeringThai === 'function' ? sanitizeCivilEngineeringThai(p.thaiSummary) : p.thaiSummary.replace(/,en$/i, '')) : '';
+            p.thaiAbstract = p.thaiAbstract ? (typeof sanitizeCivilEngineeringThai === 'function' ? sanitizeCivilEngineeringThai(p.thaiAbstract) : p.thaiAbstract.replace(/,en$/i, '')) : '';
             p.priority = ['must', 'should', 'could'].includes(p.priority) ? p.priority : 'should';
             p.status = ['queued', 'reading', 'done', 'skipped'].includes(p.status) ? p.status : 'queued';
             
@@ -6267,7 +6271,15 @@ function applyTemplate(keyword) {
 // -------------------------------------------------------------
 function calculateTitleSimilarity(query, targetTitle) {
     if (!query || !targetTitle) return 0.0;
-    const cleanStr = (s) => (s || '').toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    // Unicode normalization: subscript/superscript digits, special dashes, smart quotes
+    const normalizeUnicode = (s) => s
+        .normalize('NFKD')
+        .replace(/[\u2080-\u2089]/g, c => String.fromCharCode(c.charCodeAt(0) - 8272 + 48))
+        .replace(/[\u2070\u00B9\u00B2\u00B3\u2074-\u2079]/g, c => '0123456789'['\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079'.indexOf(c)])
+        .replace(/[\u2013\u2014\u2015]/g, '-')
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"');
+    const cleanStr = (s) => normalizeUnicode((s || '').toLowerCase()).replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
     const nq = cleanStr(query);
     const nt = cleanStr(targetTitle);
     if (!nq || !nt) return 0.0;
@@ -6301,6 +6313,18 @@ function calculateTitleSimilarity(query, targetTitle) {
     return unionSize > 0 ? (intersection / unionSize) : 0.0;
 }
 
+// Check whether an abstract is missing or just a generic placeholder
+function isMissingAbstract(abstract) {
+    if (!abstract || typeof abstract !== 'string') return true;
+    const clean = abstract.trim().toLowerCase();
+    if (clean.length < 35) return true;
+    if (clean.includes('ไม่มีบทคัดย่อในฐานข้อมูล')) return true;
+    if (clean.includes('no abstract available')) return true;
+    if (clean.includes('no abstract')) return true;
+    return false;
+}
+const isAbstractMissing = isMissingAbstract;
+
 async function triggerSearch() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) {
@@ -6311,6 +6335,13 @@ async function triggerSearch() {
     currentSearchQuery = query;
     currentSearchOffset = 0;
     searchResults = [];
+
+    // Cancel any running batch abstract fetch (BUG-7 fix)
+    if (batchAbortController) {
+        batchAbortController.abort();
+        isBatchFetching = false;
+        batchAbortController = null;
+    }
 
     const searchBtnText = document.getElementById('searchBtnText');
     const searchBtnSpinner = document.getElementById('searchBtnSpinner');
@@ -6334,7 +6365,7 @@ async function triggerSearch() {
         
         try {
             // Step A: Direct OpenAlex DOI lookup
-            const oaRes = await fetch(`https://api.openalex.org/works/https://doi.org/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`);
+            const oaRes = await fetchWithRetry(`https://api.openalex.org/works/https://doi.org/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`, { timeout: 8000 }, 2);
             if (oaRes.ok) {
                 const item = await oaRes.json();
                 const abstract = reconstructAbstract(item.abstract_inverted_index);
@@ -6380,7 +6411,7 @@ async function triggerSearch() {
 
         try {
             // Step B: Direct CrossRef DOI lookup
-            const crRes = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`);
+            const crRes = await fetchWithRetry(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`, { timeout: 8000 }, 2);
             if (crRes.ok) {
                 const crData = await crRes.json();
                 const item = crData.message || {};
@@ -6532,6 +6563,28 @@ async function triggerSearch() {
                 pinnedExactTitleMatch = finalItems[bestIdx];
                 pinnedExactTitleMatch._isExactTitleMatch = true;
                 pinnedExactTitleMatch._titleScore = bestScore;
+
+                // Hydrate abstract if missing from OpenAlex
+                if (!pinnedExactTitleMatch.abstract || isAbstractMissing(pinnedExactTitleMatch.abstract)) {
+                    const localPool = [
+                        ...(typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : []),
+                        ...(typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []),
+                        ...(typeof myPapers !== 'undefined' ? myPapers : [])
+                    ];
+                    for (const lp of localPool) {
+                        if (!lp || !lp.abstract || isAbstractMissing(lp.abstract)) continue;
+                        const lpDoi = (lp.doi || '').replace('https://doi.org/', '').trim().toLowerCase();
+                        const pDoi = (pinnedExactTitleMatch.doi || '').replace('https://doi.org/', '').trim().toLowerCase();
+                        const isDoi = pDoi && lpDoi && (pDoi === lpDoi);
+                        const isTitle = pinnedExactTitleMatch.title && lp.title && (typeof calculateTitleSimilarity === 'function' ? calculateTitleSimilarity(pinnedExactTitleMatch.title, lp.title) >= 0.80 : false);
+                        if (isDoi || isTitle) {
+                            pinnedExactTitleMatch.abstract = lp.abstract;
+                            pinnedExactTitleMatch.abstractSource = lp.abstractSource || 'คลังวิทยานิพนธ์ (Local Vault)';
+                            break;
+                        }
+                    }
+                }
+
                 if (bestIdx > 0) {
                     // Extract from its current position (e.g. pushed down by citation sort) and pin to Rank #1
                     finalItems.splice(bestIdx, 1);
@@ -6694,15 +6747,8 @@ async function executeOpenAlexSearch(query) {
         url += `&sort=${sortBy}`;
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), resultsLimit > 30 ? 15000 : 8000);
-
-    let response;
-    try {
-        response = await fetch(url, { signal: controller.signal });
-    } finally {
-        clearTimeout(timeoutId);
-    }
+    const timeoutMs = resultsLimit > 30 ? 15000 : 8000;
+    const response = await fetchWithRetry(url, { timeout: timeoutMs }, 2);
 
     if (!response.ok) {
         throw new Error(`OpenAlex HTTP ${response.status}: ${response.statusText}`);
@@ -6712,11 +6758,32 @@ async function executeOpenAlexSearch(query) {
     const count = data.meta?.count || 0;
 
     const items = (data.results || []).map(item => {
-        const abstract = reconstructAbstract(item.abstract_inverted_index);
+        let abstract = reconstructAbstract(item.abstract_inverted_index);
+        let abstractSource = abstract ? 'OpenAlex Global' : '';
         const authors = (item.authorships || []).map(a => a.author?.display_name || a.raw_author_name).filter(Boolean);
         const journal = item.primary_location?.source?.display_name || (item.biblio?.volume ? `Volume ${item.biblio?.volume}` : 'Academic Publication');
         const cleanDoi = item.doi ? item.doi.replace('https://doi.org/', '').trim() : '';
         const pdfUrl = item.open_access?.oa_url || item.primary_location?.pdf_url || '';
+
+        // Instant Pre-hydration from Local Benchmark Vault if OpenAlex has no abstract
+        if (!abstract || isAbstractMissing(abstract)) {
+            const localPool = [
+                ...(typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : []),
+                ...(typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []),
+                ...(typeof myPapers !== 'undefined' ? myPapers : [])
+            ];
+            for (const lp of localPool) {
+                if (!lp || !lp.abstract || isAbstractMissing(lp.abstract)) continue;
+                const lpDoi = (lp.doi || '').replace('https://doi.org/', '').trim().toLowerCase();
+                const isDoi = cleanDoi && lpDoi && (cleanDoi.toLowerCase() === lpDoi);
+                const isTitle = item.title && lp.title && (typeof calculateTitleSimilarity === 'function' ? calculateTitleSimilarity(item.title, lp.title) >= 0.85 : false);
+                if (isDoi || isTitle) {
+                    abstract = lp.abstract;
+                    abstractSource = lp.abstractSource || 'คลังวิทยานิพนธ์ (Local Vault)';
+                    break;
+                }
+            }
+        }
 
         return {
             id: item.id ? item.id.replace('https://openalex.org/', '') : 'oa-' + Math.random().toString(36).substr(2, 9),
@@ -6729,7 +6796,7 @@ async function executeOpenAlexSearch(query) {
             openAccessUrl: pdfUrl,
             isOA: item.open_access?.is_oa || false,
             abstract: abstract || 'ไม่มีบทคัดย่อในฐานข้อมูล OpenAlex สามารถคลิกเปิดดูผ่านลิงก์ DOI ได้โดยตรง',
-            abstractSource: abstract ? 'OpenAlex Global' : '',
+            abstractSource: abstractSource,
             concepts: (item.concepts || []).slice(0, 4).map(c => c.display_name),
             sourceEngine: '🏛️ OpenAlex Global'
         };
@@ -6756,15 +6823,8 @@ async function executeCrossRefSearch(query) {
         url += `&sort=published&order=desc`;
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), resultsLimit > 30 ? 15000 : 8000);
-
-    let response;
-    try {
-        response = await fetch(url, { signal: controller.signal });
-    } finally {
-        clearTimeout(timeoutId);
-    }
+    const timeoutMs = resultsLimit > 30 ? 15000 : 8000;
+    const response = await fetchWithRetry(url, { timeout: timeoutMs }, 2);
 
     if (!response.ok) {
         throw new Error(`CrossRef HTTP ${response.status}: ${response.statusText}`);
@@ -7055,21 +7115,15 @@ function reconstructAbstract(invertedIndex) {
     return words.map(w => w.word).join(' ');
 }
 
-// Check whether an abstract is missing or just a generic placeholder
-function isMissingAbstract(abstract) {
-    if (!abstract || typeof abstract !== 'string') return true;
-    const clean = abstract.trim().toLowerCase();
-    if (clean.length < 35) return true;
-    if (clean.includes('ไม่มีบทคัดย่อในฐานข้อมูล')) return true;
-    if (clean.includes('no abstract available')) return true;
-    if (clean.includes('no abstract')) return true;
-    return false;
-}
+// (isMissingAbstract is defined once near Line 6309 — removed duplicate here)
 
 // In-memory abstract cache to avoid re-fetching
 const abstractCache = {};
 
-// Fallback abstract fetcher: Semantic Scholar -> CrossRef Works -> Semantic Scholar Title Search
+// Multi-Tier Abstract Fallback Engine:
+// Tier 0: In-memory Cache -> Tier 1: Local Benchmark Database & Vault (0ms) ->
+// Tier 2: Europe PMC REST API (Elsevier/Springer/Wiley) -> Tier 3: CrossRef Works API ->
+// Tier 4: Europe PMC Title Search -> Tier 5: Semantic Scholar by DOI -> Tier 6: S2 Title Search
 async function fetchAbstractFallback(doi, title) {
     const cleanDoi = (doi || '').replace('https://doi.org/', '').trim();
     const cacheKey = cleanDoi || (title || '').toLowerCase().trim();
@@ -7077,53 +7131,62 @@ async function fetchAbstractFallback(doi, title) {
         return abstractCache[cacheKey];
     }
 
-    // Attempt 1: Semantic Scholar API by DOI
+    // Tier 1: Local Benchmark Database & Vault (0ms Instant, Zero Network, High Precision)
+    try {
+        const localPool = [
+            ...(typeof LOCAL_BENCHMARK_PAPERS !== 'undefined' ? LOCAL_BENCHMARK_PAPERS : []),
+            ...(typeof SEED_PAPERS !== 'undefined' ? SEED_PAPERS : []),
+            ...(typeof myPapers !== 'undefined' ? myPapers : [])
+        ];
+        for (const lp of localPool) {
+            if (!lp || !lp.abstract || isAbstractMissing(lp.abstract)) continue;
+            const lpDoi = (lp.doi || '').replace('https://doi.org/', '').trim().toLowerCase();
+            const isDoiMatch = cleanDoi && lpDoi && (cleanDoi.toLowerCase() === lpDoi);
+            const isTitleMatch = title && lp.title && (typeof calculateTitleSimilarity === 'function' ? calculateTitleSimilarity(title, lp.title) >= 0.80 : title.toLowerCase() === lp.title.toLowerCase());
+            
+            if (isDoiMatch || isTitleMatch) {
+                const result = {
+                    source: lp.abstractSource || 'คลังวิทยานิพนธ์ (Local Benchmark Vault)',
+                    abstract: lp.abstract.trim(),
+                    tldr: lp.thaiSummary || ''
+                };
+                abstractCache[cacheKey] = result;
+                return result;
+            }
+        }
+    } catch (e) {
+        console.warn('Local abstract lookup error:', e);
+    }
+
+    // Tier 2: Europe PMC REST API by DOI (Free, high-speed, no API key, CORS *, covers Elsevier/PubMed/Springer)
     if (cleanDoi) {
         try {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 7000);
-            const s2Key = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().semanticScholarKey || '').trim() : '';
-            const fetchHeaders = {};
-            if (s2Key) fetchHeaders['x-api-key'] = s2Key;
-
-            const res = await fetch(`https://api.semanticscholar.org/graph/v1/paper/DOI:${encodeURIComponent(cleanDoi)}?fields=abstract,tldr,title`, {
-                signal: controller.signal,
-                headers: fetchHeaders
-            });
-
-            if (res.status === 429) {
-                console.warn('Semantic Scholar Rate Limit (HTTP 429). Pausing for 5 seconds...');
-                const batchBtn = document.getElementById('batchAbstractBtn');
-                if (batchBtn) batchBtn.innerHTML = '⏳ ติด Rate Limit เซิร์ฟเวอร์ พัก 5 วินาที...';
-                await new Promise(r => setTimeout(r, 5000));
-            }
-            clearTimeout(timer);
+            const res = await fetchWithRetry(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:${encodeURIComponent(cleanDoi)}&format=json&resultType=core`, { timeout: 6000 }, 1);
             if (res.ok) {
                 const data = await res.json();
-                if (data.abstract && data.abstract.trim().length > 35) {
-                    const result = {
-                        source: 'Semantic Scholar',
-                        abstract: data.abstract.trim(),
-                        tldr: data.tldr?.text || ''
-                    };
-                    abstractCache[cacheKey] = result;
-                    return result;
+                const hit = data.resultList?.result?.[0];
+                if (hit && hit.abstractText) {
+                    const cleanAbs = hit.abstractText.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+                    if (cleanAbs.length > 35) {
+                        const result = {
+                            source: 'Europe PMC (Open Academic)',
+                            abstract: cleanAbs,
+                            tldr: ''
+                        };
+                        abstractCache[cacheKey] = result;
+                        return result;
+                    }
                 }
             }
         } catch (e) {
-            console.warn('Semantic Scholar DOI lookup failed:', e);
+            console.warn('Europe PMC DOI lookup failed:', e);
         }
     }
 
-    // Attempt 2: CrossRef Works API by DOI
+    // Tier 3: CrossRef Works API by DOI
     if (cleanDoi) {
         try {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 7000);
-            const res = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`, {
-                signal: controller.signal
-            });
-            clearTimeout(timer);
+            const res = await fetchWithRetry(`https://api.crossref.org/works/${encodeURIComponent(cleanDoi)}?mailto=thanapat.phukham@gmail.com`, { timeout: 6000 }, 1);
             if (res.ok) {
                 const data = await res.json();
                 const rawAbs = data.message?.abstract;
@@ -7145,15 +7208,68 @@ async function fetchAbstractFallback(doi, title) {
         }
     }
 
-    // Attempt 3: Semantic Scholar Search by Title (if no DOI or DOI returned no abstract)
+    // Tier 4: Europe PMC Search by Title
+    if (title && title.length > 15) {
+        try {
+            const cleanTitleParam = title.replace(/['"\\/]/g, ' ').trim();
+            const res = await fetchWithRetry(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=TITLE:"${encodeURIComponent(cleanTitleParam)}"&format=json&resultType=core`, { timeout: 6000 }, 1);
+            if (res.ok) {
+                const data = await res.json();
+                const hits = data.resultList?.result || [];
+                for (const hit of hits) {
+                    if (hit && hit.abstractText) {
+                        const sim = typeof calculateTitleSimilarity === 'function' ? calculateTitleSimilarity(title, hit.title || '') : 1;
+                        if (sim >= 0.70) {
+                            const cleanAbs = hit.abstractText.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+                            if (cleanAbs.length > 35) {
+                                const result = {
+                                    source: 'Europe PMC (ค้นจากชื่อ)',
+                                    abstract: cleanAbs,
+                                    tldr: ''
+                                };
+                                abstractCache[cacheKey] = result;
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('Europe PMC title search failed:', e);
+        }
+    }
+
+    // Tier 5: Semantic Scholar API by DOI (Gracefully handled on 429)
+    if (cleanDoi) {
+        try {
+            const s2Key = (typeof Dashboard !== 'undefined' && Dashboard.proxy) ? (Dashboard.proxy.getConfig().semanticScholarKey || '').trim() : '';
+            const fetchHeaders = {};
+            if (s2Key) fetchHeaders['x-api-key'] = s2Key;
+
+            const res = await fetchWithRetry(`https://api.semanticscholar.org/graph/v1/paper/DOI:${encodeURIComponent(cleanDoi)}?fields=abstract,tldr,title`, { timeout: 5000, headers: fetchHeaders }, 1);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.abstract && data.abstract.trim().length > 35) {
+                    const result = {
+                        source: 'Semantic Scholar',
+                        abstract: data.abstract.trim(),
+                        tldr: data.tldr?.text || ''
+                    };
+                    abstractCache[cacheKey] = result;
+                    return result;
+                }
+            } else if (res.status === 429 || res.status === 403) {
+                console.warn(`Semantic Scholar HTTP ${res.status} - gracefully skipping to next tier`);
+            }
+        } catch (e) {
+            console.warn('Semantic Scholar DOI lookup failed:', e);
+        }
+    }
+
+    // Tier 6: Semantic Scholar Search by Title
     if (title && title.length > 10) {
         try {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), 7000);
-            const res = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(title)}&limit=1&fields=abstract,tldr,title`, {
-                signal: controller.signal
-            });
-            clearTimeout(timer);
+            const res = await fetchWithRetry(`https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(title)}&limit=1&fields=abstract,tldr,title`, { timeout: 5000 }, 1);
             if (res.ok) {
                 const data = await res.json();
                 const paper = (data.data && data.data[0]) || null;
@@ -7183,7 +7299,7 @@ async function fetchCardAbstract(idx) {
     const btn = document.getElementById(`fetch-abs-btn-${idx}`);
     if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '⏳ กำลังดึง Abstract...';
+        btn.innerHTML = '⏳ กำลังดึง Abstract (Europe PMC / คลัง)...';
     }
 
     try {
@@ -7197,7 +7313,7 @@ async function fetchCardAbstract(idx) {
             updateAbstractStatsHeader();
             showToast(`✨ ดึง Abstract จาก ${result.source} สำเร็จ!`);
         } else {
-            showToast('⚠️ ไม่พบบทคัดย่อใน Semantic Scholar / CrossRef — สามารถกด "✏️ แปะเอง" หรือเปิด Google Scholar');
+            showToast('⚠️ ไม่พบบทคัดย่อในฐานข้อมูลเปิด (Europe PMC / CrossRef / S2) — สามารถกด "✏️ แปะเอง" หรือเปิด Google Scholar');
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = '🔍 ลองค้นหาใหม่อีกครั้ง';
@@ -7221,6 +7337,9 @@ function promptManualAbstract(idx) {
     if (manual && manual.trim().length > 15) {
         paper.abstract = manual.trim();
         paper.abstractSource = 'ระบุเอง (Manual Input)';
+        // BUG-10 fix: Invalidate abstract cache so re-fetch won't return stale data
+        const cacheKey = (paper.doi || '').replace('https://doi.org/', '').trim() || (paper.title || '').toLowerCase().trim();
+        if (cacheKey && abstractCache[cacheKey]) delete abstractCache[cacheKey];
         renderCardAbstractSection(idx);
         updateAbstractStatsHeader();
         showToast('✓ บันทึกบทคัดย่อเรียบร้อยแล้ว');
@@ -7281,6 +7400,7 @@ function updateAbstractStatsHeader() {
 
 // Batch fetch missing abstracts with rate limiting
 let isBatchFetching = false;
+let batchAbortController = null;
 async function batchFetchMissingAbstracts() {
     if (isBatchFetching) return;
     const missingIndices = [];
@@ -7294,6 +7414,8 @@ async function batchFetchMissingAbstracts() {
     }
 
     isBatchFetching = true;
+    batchAbortController = new AbortController();
+    const batchSignal = batchAbortController.signal;
     const batchBtn = document.getElementById('batchAbstractBtn');
     const progressBar = document.getElementById('batchProgressBar');
     const progressFill = document.getElementById('batchProgressFill');
@@ -7320,12 +7442,18 @@ async function batchFetchMissingAbstracts() {
             console.warn('Batch fetch error for item', idx, e);
         }
 
-        // Polite delay (400ms) to prevent rate limits
-        // 600ms Throttling Queue to prevent HTTP 429 rate limit
+        // Polite delay (600ms) to prevent rate limits
         await new Promise(r => setTimeout(r, 600));
+
+        // Check if batch was cancelled (e.g., user started a new search)
+        if (batchSignal.aborted) {
+            showToast('⏹️ หยุดดึง Abstract อัตโนมัติ (เนื่องจากค้นหาใหม่)');
+            break;
+        }
     }
 
     isBatchFetching = false;
+    batchAbortController = null;
     if (progressBar) progressBar.style.display = 'none';
     if (batchBtn) batchBtn.disabled = false;
     updateAbstractStatsHeader();
@@ -7339,6 +7467,10 @@ const translationCache = {};
 function sanitizeCivilEngineeringThai(thaiText) {
     if (!thaiText || typeof thaiText !== 'string') return '';
     return thaiText
+        .replace(/,([a-z]{2,5})$/i, '')
+        .replace(/,([a-z]{2,5})\b/gi, '')
+        .replace(/,en$/i, '')
+        .replace(/,th$/i, '')
         .replace(/วิโอโพลิเมอร์/g, 'จีโอโพลิเมอร์')
         .replace(/จีโอโพลีเมอร์/g, 'จีโอโพลิเมอร์')
         .replace(/ความหนืดของพลาสติก/g, 'ความหนืดพลาสติก (Plastic Viscosity)')
@@ -7348,62 +7480,120 @@ function sanitizeCivilEngineeringThai(thaiText) {
         .replace(/ขจัดมวลรวมที่ลอยอยู่ในน้ำ/g, 'ป้องกันการลอยตัวแยกชั้นของเม็ดหินมวลเบา')
         .replace(/มวลรวมที่ลอยอยู่ในน้ำ/g, 'การลอยตัวของมวลรวมมวลเบา')
         .replace(/การแผ่ตัวสลัมป์/g, 'การแผ่ตัวสลัมป์โฟลว์ (Slump Flow)')
-        .replace(/การไหลของสลัมป์/g, 'การแผ่ตัวสลัมป์โฟลว์ (Slump Flow)');
+        .replace(/การไหลของสลัมป์/g, 'การแผ่ตัวสลัมป์โฟลว์ (Slump Flow)')
+        .trim();
 }
 
 function extractAbstractSummarySnippet(abstract, tldr) {
     if (tldr && tldr.trim().length > 20) return tldr.trim();
     if (!abstract || isMissingAbstract(abstract)) return '';
     const clean = abstract.trim();
-    // Scientific-aware split: Match sentence terminator followed by whitespace and capital letter (avoids decimals like 8.8 s, 32.8 MPa)
-    const sentences = clean.split(/(?<=[.!?])\s+(?=[A-Z])/).map(s => s.trim()).filter(s => s.length > 0);
-    if (sentences.length <= 2) {
-        return clean.length > 500 ? clean.substring(0, 500) + '...' : clean;
+    // Complete abstract preservation: If abstract is up to 1400 chars, return the FULL abstract
+    if (clean.length <= 1400) {
+        return clean;
     }
-    // Combine 1st sentence (objective/background) and last sentence (key inference/conclusion)
-    const first = sentences[0];
-    const last = sentences[sentences.length - 1];
-    const combined = `${first} ${last}`;
-    return combined.length > 650 ? combined.substring(0, 650) + '...' : combined;
+    // For exceptionally long abstracts, capture up to 1400 chars preserving whole sentences
+    const sentences = clean.split(/(?<=[.!?])\s+(?=[A-Z])/).map(s => s.trim()).filter(Boolean);
+    let selected = '';
+    for (const s of sentences) {
+        if ((selected + ' ' + s).length > 1400) break;
+        selected = selected ? (selected + ' ' + s) : s;
+    }
+    return selected || clean.substring(0, 1400);
 }
 
-// Multi-Engine Translation client with fallback (Google GTX -> Google Clients5 -> MyMemory)
+// Helper: Delay for rate-limiting protection
+function translationDelay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Helper: Fetch with retry + exponential backoff (handles TCP connection aborts)
+async function fetchWithRetry(url, opts = {}, maxRetries = 2) {
+    let lastError = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            const controller = new AbortController();
+            const timeoutMs = opts.timeout || 9000;
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            const response = await fetch(url, { ...opts, signal: controller.signal });
+            clearTimeout(timer);
+            return response;
+        } catch (err) {
+            lastError = err;
+            const isNetworkError = err.message?.includes('aborted') || 
+                                   err.message?.includes('network') ||
+                                   err.message?.includes('Failed to fetch') ||
+                                   err.name === 'TypeError';
+            if (attempt < maxRetries && isNetworkError) {
+                const backoff = Math.min(500 * Math.pow(2, attempt), 3000);
+                console.warn(`[Translation] Retry ${attempt + 1}/${maxRetries} after ${backoff}ms:`, err.message);
+                await translationDelay(backoff);
+                continue;
+            }
+            throw err;
+        }
+    }
+    throw lastError;
+}
+
+// Multi-Engine Translation client with retry + fallback (Google GTX -> Google Clients5 -> MyMemory)
 async function translateSingleChunk(chunkText) {
     if (!chunkText || !chunkText.trim()) return '';
+    
+    // Engine 1: Google Translate GTX Endpoint (with retry)
     try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 9000);
         const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=th&dt=t&q=${encodeURIComponent(chunkText.trim())}`;
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timer);
+        const response = await fetchWithRetry(url, { timeout: 9000 }, 2);
         if (response.ok) {
             const data = await response.json();
             if (Array.isArray(data) && Array.isArray(data[0])) {
                 const translated = data[0].map(item => (item && item[0]) ? item[0] : '').join('');
                 if (translated && translated.trim().length > 0) {
-                    return translated.trim();
+                    return translated.trim().replace(/,([a-z]{2,5})$/i, '');
                 }
             }
         }
     } catch (e1) {
-        console.warn('GTX translation error, switching to fallback:', e1.message);
+        console.warn('[Translation] GTX engine failed after retries:', e1.message);
     }
 
+    // Engine 2: Google Chrome Extension Clients5 Endpoint (with retry)
     try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 9000);
         const url = `https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl=th&q=${encodeURIComponent(chunkText.trim())}`;
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timer);
+        const response = await fetchWithRetry(url, { timeout: 9000 }, 2);
         if (response.ok) {
             const data = await response.json();
-            if (Array.isArray(data) && data[0]) {
-                return String(data[0]).trim();
+            let parsedText = '';
+            if (Array.isArray(data)) {
+                if (Array.isArray(data[0])) {
+                    parsedText = (typeof data[0][0] === 'string') ? data[0][0] : '';
+                } else if (typeof data[0] === 'string') {
+                    parsedText = data[0];
+                }
+            }
+            if (parsedText && typeof parsedText === 'string' && parsedText.trim().length > 0) {
+                return parsedText.trim().replace(/,([a-z]{2,5})$/i, '');
             }
         }
     } catch (e2) {
-        console.warn('Clients5 fallback error:', e2.message);
+        console.warn('[Translation] Clients5 engine failed after retries:', e2.message);
     }
+
+    // Engine 3: MyMemory Open Academic Translation Fallback (with retry)
+    try {
+        const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunkText.trim().substring(0, 450))}&langpair=en|th`;
+        const res = await fetchWithRetry(mmUrl, { timeout: 6000 }, 1);
+        if (res.ok) {
+            const mmData = await res.json();
+            if (mmData.responseData?.translatedText) {
+                const clean = mmData.responseData.translatedText.trim().replace(/,([a-z]{2,5})$/i, '');
+                if (clean.length > 0 && !clean.includes('MYMEMORY WARNING')) {
+                    return clean;
+                }
+            }
+        }
+    } catch (e3) {
+        console.warn('[Translation] MyMemory engine failed:', e3.message);
+    }
+
     return chunkText.trim();
 }
 
@@ -7434,8 +7624,10 @@ async function translateTextToThai(text) {
     if (chunks.length === 0) chunks.push(textToProcess);
 
     const translatedChunks = [];
-    for (const chunk of chunks) {
-        const trans = await translateSingleChunk(chunk);
+    for (let i = 0; i < chunks.length; i++) {
+        // Add 300ms delay between chunks to prevent rate-limiting & TCP resets
+        if (i > 0) await translationDelay(300);
+        const trans = await translateSingleChunk(chunks[i]);
         translatedChunks.push(trans);
     }
 
@@ -7516,10 +7708,10 @@ function renderThaiBox(idx) {
                 <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">แปลตามคำสั่ง (On-Demand)</span>
             </div>
             <div class="thai-title">
-                <strong>📌 ชื่อภาษาไทย:</strong> ${escapeHtml(paper.thaiTitle)}
+                <strong>📌 ชื่อภาษาไทย:</strong> ${escapeHtml(sanitizeCivilEngineeringThai(paper.thaiTitle))}
             </div>
             <div class="thai-summary">
-                <strong>💡 สรุปใจความสำคัญ:</strong> ${escapeHtml(paper.thaiSummary)}
+                <strong>💡 สรุปใจความสำคัญ:</strong> ${escapeHtml(sanitizeCivilEngineeringThai(paper.thaiSummary))}
             </div>
         </div>
     `;
@@ -7683,7 +7875,7 @@ function renderSearchResults(query = '') {
                         <div class="abstract-missing-box" id="abstract-missing-${idx}">
                             <div>
                                 <div style="font-weight: 600; color: var(--text-main);">⚠️ ยังไม่มีบทคัดย่อในฐานข้อมูล ${escapeHtml(p.sourceEngine || 'OpenAlex')}</div>
-                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">สามารถดึงข้อมูลอัตโนมัติจาก Semantic Scholar / CrossRef หรือคัดลอกมาแปะเองได้</div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">สามารถดึงข้อมูลอัตโนมัติจาก Europe PMC / คลังวิจัย / CrossRef / S2 หรือคัดลอกมาแปะเองได้</div>
                             </div>
                             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                                 <button class="btn btn-xs btn-primary" id="fetch-abs-btn-${idx}" onclick="fetchCardAbstract(${idx})">
@@ -7708,8 +7900,8 @@ function renderSearchResults(query = '') {
                                 <span>🇹🇭 แปลไทย & สรุปสาระสำคัญ</span>
                                 <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">แปลตามคำสั่ง (On-Demand)</span>
                             </div>
-                            <div class="thai-title"><strong>📌 ชื่อภาษาไทย:</strong> ${escapeHtml(p.thaiTitle)}</div>
-                            <div class="thai-summary"><strong>💡 สรุปใจความสำคัญ:</strong> ${escapeHtml(p.thaiSummary)}</div>
+                            <div class="thai-title"><strong>📌 ชื่อภาษาไทย:</strong> ${escapeHtml(sanitizeCivilEngineeringThai(p.thaiTitle))}</div>
+                            <div class="thai-summary"><strong>💡 สรุปใจความสำคัญ:</strong> ${escapeHtml(sanitizeCivilEngineeringThai(p.thaiSummary))}</div>
                         </div>
                     ` : ''}
                 </div>
@@ -8284,6 +8476,50 @@ function copyCitationText() {
 // -------------------------------------------------------------
 let currentAbstractModalPaper = null;
 
+let isModalShowingThai = false;
+
+function toggleAbstractModalLang() {
+    if (!currentAbstractModalPaper) return;
+    const p = currentAbstractModalPaper;
+    const contentEl = document.getElementById('abstractModalContent');
+    const labelEl = document.getElementById('abstractModalLangLabel');
+    const toggleBtn = document.getElementById('abstractModalToggleLangBtn');
+    if (!contentEl) return;
+
+    isModalShowingThai = !isModalShowingThai;
+
+    if (isModalShowingThai) {
+        const thaiText = p.thaiAbstract || p.thaiSummary || '';
+        if (thaiText) {
+            contentEl.textContent = thaiText;
+            if (labelEl) labelEl.textContent = '🇹🇭 บทคัดย่อภาษาไทยฉบับเต็ม (Full Thai Translation)';
+            if (toggleBtn) {
+                toggleBtn.innerHTML = '📖 สลับดูภาษาอังกฤษต้นฉบับ';
+                toggleBtn.style.background = '#ecfdf5';
+                toggleBtn.style.borderColor = '#10b981';
+                toggleBtn.style.color = '#047857';
+            }
+            showToast('แสดงบทคัดย่อภาษาไทยฉบับเต็ม');
+        } else {
+            isModalShowingThai = false;
+            showToast('ยังไม่มีคำแปลภาษาไทย กรุณากดปุ่ม 🇹🇭 แปลไทย ก่อน');
+        }
+    } else {
+        if (window.Dashboard && window.Dashboard.notes) {
+            contentEl.innerHTML = window.Dashboard.notes.renderSafeHighlightedAbstract(p.abstract.trim(), p.highlights || []);
+        } else {
+            contentEl.textContent = p.abstract || '';
+        }
+        if (labelEl) labelEl.textContent = '📖 Original Abstract (English)';
+        if (toggleBtn) {
+            toggleBtn.innerHTML = '🇹🇭 สลับดูฉบับแปลไทย';
+            toggleBtn.style.background = '#eef2ff';
+            toggleBtn.style.borderColor = '#6366f1';
+            toggleBtn.style.color = '#4f46e5';
+        }
+    }
+}
+
 function openAbstractModal(paperId) {
     let p = myPapers.find(item => item.id === paperId);
     if (!p && typeof searchResults !== 'undefined' && Array.isArray(searchResults)) {
@@ -8372,20 +8608,33 @@ function openAbstractModal(paperId) {
     const s2Link = document.getElementById('abstractModalS2Link');
     if (s2Link) s2Link.href = s2Url;
 
-    // Thai translation preview
+    // Thai translation preview & Lang toggle button setup
     const thaiBox = document.getElementById('abstractModalThaiBox');
     const thaiTitleEl = document.getElementById('abstractModalThaiTitle');
     const thaiSummaryEl = document.getElementById('abstractModalThaiSummary');
     const transBtn = document.getElementById('abstractModalTranslateBtn');
+    const toggleLangBtn = document.getElementById('abstractModalToggleLangBtn');
+
+    // Clean existing cached/stored strings from any ',en' artifacts
+    if (p.thaiTitle) p.thaiTitle = sanitizeCivilEngineeringThai(p.thaiTitle);
+    if (p.thaiSummary) p.thaiSummary = sanitizeCivilEngineeringThai(p.thaiSummary);
+    if (p.thaiAbstract) p.thaiAbstract = sanitizeCivilEngineeringThai(p.thaiAbstract);
+
+    isModalShowingThai = false;
+    const langLabelEl = document.getElementById('abstractModalLangLabel');
+    if (langLabelEl) langLabelEl.textContent = '📖 Original Abstract (English)';
+    if (toggleLangBtn) toggleLangBtn.innerHTML = '🇹🇭 สลับดูฉบับแปลไทย';
 
     if (p.thaiTitle || p.thaiSummary) {
         if (thaiBox) thaiBox.style.display = 'block';
         if (thaiTitleEl) thaiTitleEl.textContent = p.thaiTitle ? `📌 ${p.thaiTitle}` : '';
         if (thaiSummaryEl) thaiSummaryEl.textContent = p.thaiSummary ? `💡 ${p.thaiSummary}` : '';
         if (transBtn) transBtn.innerHTML = '🔄 แปลใหม่';
+        if (toggleLangBtn) toggleLangBtn.style.display = 'inline-flex';
     } else {
         if (thaiBox) thaiBox.style.display = 'none';
         if (transBtn) transBtn.innerHTML = '🇹🇭 แปลไทย';
+        if (toggleLangBtn) toggleLangBtn.style.display = 'none';
     }
 
     // Abstract Content
@@ -8474,22 +8723,23 @@ async function translateCurrentAbstractModal() {
         console.warn('Modal Title translation failed:', eTitle);
     }
 
-    // 2. Translate Abstract Summary using smart snippet extraction (objective + conclusion)
+    // 2. Translate Complete Abstract (Full Text Translation, Zero Truncation)
     if (p.abstract && p.abstract.trim().length > 25 && !p.abstract.includes('ไม่มีบทคัดย่อ')) {
-        const snippet = extractAbstractSummarySnippet(p.abstract, p.tldr);
         try {
-            const thSummary = await translateTextToThai(snippet);
-            if (thSummary && thSummary.trim().length > 0) {
-                p.thaiSummary = thSummary;
+            const thFull = await translateTextToThai(p.abstract);
+            if (thFull && thFull.trim().length > 0) {
+                p.thaiSummary = thFull;
+                p.thaiAbstract = thFull;
                 successCount++;
             }
         } catch (eAbs) {
-            console.warn('Modal Abstract snippet translation failed, trying first sentence:', eAbs);
+            console.warn('Modal Full Abstract translation failed, trying smart snippet:', eAbs);
             try {
-                const firstPart = p.abstract.trim().split('.')[0] + '.';
-                const thSummaryFallback = await translateTextToThai(firstPart);
+                const snippet = extractAbstractSummarySnippet(p.abstract, p.tldr);
+                const thSummaryFallback = await translateTextToThai(snippet);
                 if (thSummaryFallback && thSummaryFallback.trim().length > 0) {
                     p.thaiSummary = thSummaryFallback;
+                    p.thaiAbstract = thSummaryFallback;
                     successCount++;
                 }
             } catch (eFallback) {
@@ -8505,6 +8755,7 @@ async function translateCurrentAbstractModal() {
             if (found) {
                 found.thaiTitle = p.thaiTitle;
                 found.thaiSummary = p.thaiSummary;
+                found.thaiAbstract = p.thaiAbstract;
                 savePapersToStorage();
                 renderQueueView();
             }
@@ -8513,12 +8764,14 @@ async function translateCurrentAbstractModal() {
             const thaiBox = document.getElementById('abstractModalThaiBox');
             const thaiTitleEl = document.getElementById('abstractModalThaiTitle');
             const thaiSummaryEl = document.getElementById('abstractModalThaiSummary');
+            const toggleLangBtn = document.getElementById('abstractModalToggleLangBtn');
 
             if (thaiBox) thaiBox.style.display = 'block';
             if (thaiTitleEl) thaiTitleEl.textContent = p.thaiTitle ? `📌 ${p.thaiTitle}` : '';
             if (thaiSummaryEl) thaiSummaryEl.textContent = p.thaiSummary ? `💡 ${p.thaiSummary}` : '';
+            if (toggleLangBtn) toggleLangBtn.style.display = 'inline-flex';
 
-            showToast('✅ แปลชื่อเรื่องและสรุปสาระสำคัญเป็นภาษาไทยเรียบร้อยแล้ว');
+            showToast('✅ แปลชื่อเรื่องและบทคัดย่อภาษาไทยฉบับเต็มเรียบร้อยแล้ว');
         } else {
             showToast('⚠️ ไม่สามารถเชื่อมต่อระบบแปลภาษาได้ในขณะนี้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง');
         }
@@ -8527,7 +8780,7 @@ async function translateCurrentAbstractModal() {
     } finally {
         if (transBtn) {
             transBtn.disabled = false;
-            transBtn.innerHTML = '🔄 แปลใหม่';
+            transBtn.innerHTML = successCount > 0 ? '🔄 แปลใหม่' : '🇹🇭 แปลเป็นภาษาไทย';
         }
     }
 }
@@ -8541,7 +8794,7 @@ async function fetchMissingAbstractForModal() {
     try {
         if (fetchBtn) {
             fetchBtn.disabled = true;
-            fetchBtn.innerHTML = '⏳ กำลังดึง Abstract จาก Semantic Scholar / CrossRef...';
+            fetchBtn.innerHTML = '⏳ กำลังดึง Abstract (Europe PMC / คลังวิจัย / CrossRef)...';
         }
 
         const fallback = await fetchAbstractFallback(p.doi, p.title);
