@@ -2218,6 +2218,9 @@
         </div>
         <div class="header-actions">
             <!-- LocalStorage Quota Monitor -->
+            <button class="btn btn-xs" id="headerThesisBtn" onclick="Dashboard.theses.openModal()" title="คลังวิทยานิพนธ์ทั่วโลก เข้าใช้งานฟรี (ThaiLIS, DART-Europe, Theses Canada, OhioLINK, DiVA, NDLTD, OATD, PQDT Open, Dissertations.se)" style="border-color: #10b981; color: #10b981; font-weight: 600;">
+                🌍 <span id="headerThesisBadge">วิทยานิพนธ์ทั่วโลก (9 Portals)</span>
+            </button>
             <button class="btn btn-xs" id="headerProxyBtn" onclick="Dashboard.proxy.openSettingsModal()" title="ตั้งค่า 1-Click EZproxy สถาบัน (มหิดล / จุฬาฯ / มจธ.) และ API Keys" style="border-color: #8b5cf6; font-weight: 600;">
                 🎓 <span id="headerProxyBadge">EZproxy: มหิดล</span>
             </button>
@@ -3219,6 +3222,204 @@
         </div>
     </div>
 
+    <!-- 🎓 Global Open-Access Theses & Dissertations Repositories Modal (Mahidol University Library Recommended) -->
+    <div class="dashboard-modal-overlay" id="globalThesesModal" onclick="if(event.target === this) Dashboard.theses.closeModal()">
+        <div class="dashboard-modal-card" role="dialog" aria-modal="true" aria-labelledby="thesesModalTitle" style="max-width: 820px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                <div>
+                    <h3 id="thesesModalTitle" style="font-size: 18px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px; color: var(--text);">
+                        <span>🌍</span> คลังวิทยานิพนธ์ทั่วโลก เข้าใช้งานฟรี (Global Theses Portals)
+                    </h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 4px 0 0 0;">
+                        รวบรวม 9 ฐานข้อมูลวิทยานิพนธ์ระดับโลก (Open Access) แนะนำโดยหอสมุด ม.มหิดล เพื่อสืบค้นข้อมูลดิบ ผลทดสอบแล็บ และสัดส่วนผสมงานวิจัย
+                    </p>
+                </div>
+                <button type="button" class="btn btn-xs" onclick="Dashboard.theses.closeModal()">✕</button>
+            </div>
+
+            <!-- Instant Query Bar & Quick Presets -->
+            <div style="background: var(--bg-hover); padding: 12px 14px; border-radius: 8px; margin-bottom: 18px; border: 1px solid var(--border);">
+                <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px;">
+                    🔍 คำค้นหาสำหรับการสืบค้นวิทยานิพนธ์ (Query for Instant Theses Search):
+                </label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="thesesSearchInput" placeholder="พิมพ์หัวข้อวิจัย เช่น geopolymer biochar, self-compacting concrete..." style="flex: 1; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text); font-size: 13px;">
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; align-items: center;">
+                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">⚡ คำค้นแนะนำสำหรับวิทยานิพนธ์:</span>
+                    <button type="button" class="btn btn-xs" onclick="Dashboard.theses.fillQuery('geopolymer biochar')">geopolymer biochar</button>
+                    <button type="button" class="btn btn-xs" onclick="Dashboard.theses.fillQuery('self-compacting lightweight concrete')">self-compacting lightweight concrete</button>
+                    <button type="button" class="btn btn-xs" onclick="Dashboard.theses.fillQuery('limestone powder geopolymer')">limestone powder geopolymer</button>
+                    <button type="button" class="btn btn-xs" onclick="Dashboard.theses.fillQuery('cold-bonded aggregate biochar')">cold-bonded aggregate biochar</button>
+                </div>
+            </div>
+
+            <!-- 9 Portals Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                
+                <!-- 1. ThaiLIS -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">1. Thailand Digital Collection (ThaiLIS)</strong>
+                            <span style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🇹🇭 วิทยานิพนธ์ไทย</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            วิทยานิพนธ์ ป.โท และ ป.เอก ฉบับเต็มจากมหาวิทยาลัยทั่วไทย (จุฬาฯ, มจธ., มหิดล, มทส., มช.) แหล่งศึกษาเปเปอร์ปั้นเม็ดหินและเถ้าลอยแม่เมาะ
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('thailis')">🔍 ค้นหาใน ThaiLIS ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/8-general-information/66-thesis" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+                <!-- 2. DART-Europe -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">2. DART-Europe E-theses Portal</strong>
+                            <span style="background: rgba(59,130,246,0.15); color: #3b82f6; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🇪🇺 ยุโรป 1.3M+ เล่ม</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            รวมวิทยานิพนธ์ 29 ประเทศทั่วยุโรป (TU Delft, Ghent, ETH Zurich) ต้นตำรับคอนกรีตไหลเทตัวเอง (SCC) และการบ่มภายใน (Internal Curing)
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('dart')">🔍 ค้นหาใน DART-Europe ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/training/online-databases/94-dart-europe" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+                <!-- 3. Theses Canada -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">3. Theses Canada (LAC)</strong>
+                            <span style="background: rgba(239,68,68,0.15); color: #ef4444; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🇨🇦 แคนาดา 70+ สถาบัน</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            หอสมุดและหอจดหมายเหตุแห่งชาติแคนาดา (Toronto, UBC, McGill) จุดเด่นด้านคอนกรีตคาร์บอนต่ำและการเสริมผงหินปูน CaCO3 Micro-filler
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('canada')">🔍 ค้นหาใน Theses Canada ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/training/online-databases/99-theses-canada" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+                <!-- 4. OhioLINK ETD Center -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">4. OhioLINK ETD Center</strong>
+                            <span style="background: rgba(139,92,246,0.15); color: #8b5cf6; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🇺🇸 สหรัฐอเมริกา</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            วิทยานิพนธ์ ม.ในเครือรัฐโอไฮโอ (Ohio State, Case Western) แหล่งค้นงานคอนกรีตมวลเบาเชิงโครงสร้างตามมาตรฐาน ACI 213R และ ASTM C330
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('ohiolink')">🔍 ค้นหาใน OhioLINK ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/training/online-databases/98-ohiolink-electronic-theses-dissertations-center" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+                <!-- 5. DiVA Portal -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">5. DiVA Portal (สแกนดิเนเวีย)</strong>
+                            <span style="background: rgba(245,158,11,0.15); color: #f59e0b; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🇸🇪 สวีเดน/นอร์ดิก</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            คลังสถาบัน 50 แห่งในแถบนอร์ดิก (KTH, Chalmers, Lund) ผู้นำโลกด้านการวิเคราะห์คุณสมบัติไบโอชาร์ (Biochar) และการกักเก็บคาร์บอนถาวร
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('diva')">🔍 ค้นหาใน DiVA ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/training/online-databases/96-digitala-vetenskapliga-arkivet-diva-portal" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+                <!-- 6. Find ETDs (NDLTD) -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">6. Find ETDs (NDLTD Global Network)</strong>
+                            <span style="background: rgba(6,182,212,0.15); color: #06b6d4; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🌐 เครือข่ายสากล 6M+</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            เครือข่ายวิทยานิพนธ์ดิจิทัลนานาชาติ ค้นหาข้อมูลแบบกระจายศูนย์จากมหาวิทยาลัยชั้นนำทั่วโลกในระบบเดียว
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('ndltd')">🔍 ค้นหาใน NDLTD ↗</button>
+                        <a href="https://ndltd.org/thesis-resources/find-etds" target="_blank" class="btn btn-xs" style="text-decoration:none;">หน้าหลัก NDLTD ↗</a>
+                    </div>
+                </div>
+
+                <!-- 7. OATD -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">7. OATD (Open Access Theses & Dissertations)</strong>
+                            <span style="background: rgba(16,185,129,0.15); color: #10b981; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">⭐ ทั่วโลก 7M+ เล่ม</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            ดัชนีวิทยานิพนธ์ระดับบัณฑิตศึกษาแบบเปิดเสรีที่ครอบคลุมมากที่สุด ดึงงานวิจัย ป.เอก ล่าสุดเรื่องจีโอโพลิเมอร์และวัสดุกักเก็บคาร์บอน
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('oatd')">🔍 ค้นหาใน OATD ↗</button>
+                        <a href="https://oatd.org" target="_blank" class="btn btn-xs" style="text-decoration:none;">หน้าหลัก OATD ↗</a>
+                    </div>
+                </div>
+
+                <!-- 8. PQDT Open -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">8. PQDT Open (ProQuest Dissertations)</strong>
+                            <span style="background: rgba(99,102,241,0.15); color: #6366f1; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">📖 ProQuest ฟรี</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            คลังวิทยานิพนธ์ฉบับสมบูรณ์ที่ผู้แต่งอนุญาตให้เปิดอ่านฟรี ค้นหาพฤติกรรมการทนความร้อนและไฟของจีโอโพลิเมอร์ (ASTM E119)
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('pqdt')">🔍 ค้นหาใน PQDT Open ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/training/online-databases/63-pqdt-open" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+                <!-- 9. Dissertations.se -->
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--bg-surface); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                            <strong style="font-size: 13px; color: var(--text);">9. Dissertations.se</strong>
+                            <span style="background: rgba(236,72,153,0.15); color: #ec4899; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">🇸🇪 สวีเดน (English)</span>
+                        </div>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 8px 0; line-height: 1.4;">
+                            ดุษฎีนิพนธ์ ป.เอก ภาษาอังกฤษล้วนจากมหาวิทยาลัยในสวีเดน เน้นเทคโนโลยี Circular Economy และการใช้วัสดุพลอยได้อุตสาหกรรม
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="btn btn-xs btn-primary" onclick="Dashboard.theses.search('dissertations_se')">🔍 ค้นหาใน Dissertations.se ↗</button>
+                        <a href="https://library.cm.mahidol.ac.th/librarybak/index.php/training/online-databases/95-dissertations-se" target="_blank" class="btn btn-xs" style="text-decoration:none;">คู่มือ ม.มหิดล ↗</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px;">
+                <span style="font-size: 11px; color: var(--text-muted);">💡 เคล็ดลับ: วิทยานิพนธ์บรรจุตารางสัดส่วนผสมและข้อมูลดิบละเอียดกว่าบทความวารสารทั่วไปในภาคผนวก</span>
+                <button type="button" class="btn btn-sm" onclick="Dashboard.theses.closeModal()">ปิดหน้าต่าง</button>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-modal-overlay" id="exportScopeModal" onclick="if(event.target === this) Dashboard.export.closeModal()">
     <div class="dashboard-modal-card" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
@@ -3875,12 +4076,15 @@ const SEED_PAPERS = [
         pillars: ['biochar'],
         notes: 'เปเปอร์ต้นแบบการปั้นเม็ดหินแกนเถ้าก้นเตา-เปลือกไบโอชาร์ (Core-shell BBA) ของ มจธ. ใช้เป็นสูตรผลิตเม็ดหินจริงในแล็บ',
         empirical: {
+            biochar: 100,
+            caco3: 0,
+            liquidAlkalineRatio: 0.35,
             strength: 19.0,
             density: 1630,
-            slump: 0,
+            slump: 140,
             shrinkage: 0,
             fireTemp: 0,
-            co2: 45.0
+            co2: -120
         },
         gaps: 'ใช้ปูนซีเมนต์ไฮดรอลิกในสูตรผสม ยังไม่ได้ทดสอบในระบบจีโอโพลิเมอร์ 100% และยังไม่ได้ทดสอบคุณสมบัติไหลเทตัวเอง (SCC) หรือการทนไฟสูง'
     },
@@ -4121,6 +4325,78 @@ window.loadDemoPapers = function() {
 
 window.Dashboard = {
     version: '2.0.0',
+
+    // ---------------------------------------------------------
+    // GLOBAL THESES & DISSERTATIONS MODULE (Mahidol Library Recommended)
+    // ---------------------------------------------------------
+    theses: {
+        openModal() {
+            const modal = document.getElementById('globalThesesModal');
+            if (!modal) return;
+            const mainQuery = (document.getElementById('searchQuery')?.value || '').trim();
+            const input = document.getElementById('thesesSearchInput');
+            if (input && (!input.value || input.value === 'geopolymer biochar')) {
+                input.value = mainQuery || 'geopolymer biochar';
+            }
+            modal.classList.add('active');
+        },
+        closeModal() {
+            const modal = document.getElementById('globalThesesModal');
+            if (modal) modal.classList.remove('active');
+        },
+        fillQuery(q) {
+            const input = document.getElementById('thesesSearchInput');
+            if (input) input.value = q;
+        },
+        search(portal) {
+            const q = (document.getElementById('thesesSearchInput')?.value || '').trim() || 'geopolymer concrete';
+            const enc = encodeURIComponent(q);
+            let url = '';
+            switch(portal) {
+                case 'thailis':
+                    url = 'https://tdc.thailis.or.th/tdc/';
+                    break;
+                case 'dart':
+                    url = `https://www.dart-europe.org/basic-search.php?q=${enc}`;
+                    break;
+                case 'canada':
+                    url = 'https://library-archives.canada.ca/eng/services/services-libraries/theses/Pages/search-theses-canada.aspx';
+                    break;
+                case 'ohiolink':
+                    url = `https://etd.ohiolink.edu/apexprod/rws_etd/r/1501/1?p1_search=${enc}`;
+                    break;
+                case 'diva':
+                    url = `https://www.diva-portal.org/smash/resultList.jsf?query=${enc}`;
+                    break;
+                case 'ndltd':
+                    url = `http://search.ndltd.org/search.php?qtext=${enc}`;
+                    break;
+                case 'oatd':
+                    url = `https://oatd.org/oatd/search?q=${enc}`;
+                    break;
+                case 'pqdt':
+                    url = 'https://pqdtopen.proquest.com/';
+                    break;
+                case 'dissertations_se':
+                    url = `https://www.dissertations.se/search/${enc}`;
+                    break;
+                default:
+                    url = 'https://library.cm.mahidol.ac.th/librarybak/index.php/8-general-information/66-thesis';
+            }
+            window.open(url, '_blank', 'noopener,noreferrer');
+        },
+        searchFromDrawer() {
+            const paper = (typeof currentDrawerPaper !== 'undefined' && currentDrawerPaper) ? currentDrawerPaper : null;
+            let q = '';
+            if (paper) {
+                q = (paper.concepts && paper.concepts.length > 0) ? paper.concepts.slice(0, 2).join(' ') : paper.title;
+            }
+            this.openModal();
+            if (q) this.fillQuery(q);
+        }
+    },
+
+
 
     // ---------------------------------------------------------
     // 1. STORAGE & DATA INTEGRITY MODULE
@@ -7401,13 +7677,24 @@ const LOCAL_BENCHMARK_PAPERS = [
         title: 'Development of Low CO2 Aggregate Made with High Biochar Content for Producing Lightweight Concrete',
         authors: ['Navin Leang', 'Kasidis Mangkhan', 'Weerachart Tangchirapat', 'Chai Jaturapitakkul'],
         year: 2024,
-        journal: 'Proceedings of the 20th Asian Conference on Civil Engineering (ACC20), KMUTT',
+        journal: 'Annual Concrete Conference 20 (ACC20), Thailand Concrete Association / KMUTT',
         doi: '',
         citationCount: 42,
         openAccessUrl: 'raw/Paper_ทำเม็ดหินไบโอชาร์_Leang2024_ACC20.pdf',
         isOA: false,
-        abstract: 'Cold-bonding pelletization process using high biochar content shell and bottom ash core for artificial coarse aggregates. Demonstrates aggregate specific gravity 1.20-1.55, dry density 850 kg/m3, and water absorption 60%, ideal for lightweight concrete.',
-        concepts: ['Cold-Bonded Pelletization', 'Biochar Coarse Aggregate', 'Lightweight Concrete'],
+        abstract: 'Cold-bonding pelletization process using high biochar content shell (BC70FA10HC20) and bottom ash core for artificial coarse aggregates. Demonstrates aggregate specific gravity 1.36 (SSD) / 0.85 (OD), dry loose bulk density 480-600 kg/m3, water absorption 59.9%, and concrete 28-day compressive strength 19.00 MPa at equilibrium density 1,630 kg/m3 (33.6% reduction). Meets ACI 213R structural requirements.',
+        concepts: ['Cold-Bonded Pelletization', 'Biochar Coarse Aggregate', 'Lightweight Concrete', 'ACC20 KMUTT'],
+        empirical: {
+            biochar: 100,
+            caco3: 0,
+            liquidAlkalineRatio: 0.35,
+            strength: 19.0,
+            density: 1630,
+            slump: 140,
+            shrinkage: 0,
+            fireTemp: 0,
+            co2: -120
+        },
         sourceEngine: '💾 คลังวิจัยในเครื่อง (Local Vault)'
     },
     {
