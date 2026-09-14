@@ -5157,7 +5157,7 @@ window.Dashboard = {
         downloadExcel(papers) {
             const headers = [
                 'ID', 'Title', 'Authors', 'Year', 'Journal', 'DOI', 'Priority', 'Status', 'Pass', 'Key_Paper',
-                'Pillars', 'Strength_MPa', 'Density_kg_m3', 'Slump_mm', 'Shrinkage_pct', 'Fire_Temp_C', 'CO2_pct', 'Notes', 'Research_Gaps'
+                'Pillars', 'Biochar_pct', 'CaCO3_pct', 'Strength_MPa', 'Density_kg_m3', 'Slump_mm', 'Shrinkage_pct', 'Fire_Temp_C', 'CO2_pct', 'Notes', 'Research_Gaps'
             ];
 
             const rows = papers.map(p => {
@@ -5174,6 +5174,8 @@ window.Dashboard = {
                     p.readingPass || 1,
                     p.isKey ? 'YES' : 'NO',
                     (p.pillars || []).join(', '),
+                    emp.biochar || '',
+                    emp.caco3 || '',
                     emp.strength || '',
                     emp.density || '',
                     emp.slump || '',
@@ -5237,6 +5239,8 @@ window.Dashboard = {
                         Pass ${p.readingPass || 1}
                     </td>
                     <td style="border: 1px solid #999; padding: 8px; vertical-align: top; font-size: 9pt;">
+                        ${emp.biochar > 0 ? `<div>• Biochar Agg: <strong>${emp.biochar}%</strong></div>` : ''}
+                        ${emp.caco3 > 0 ? `<div>• CaCO3 Powder: <strong>${emp.caco3}%</strong></div>` : ''}
                         <div>• Strength: ${strVal}</div>
                         <div>• Density: ${densVal}</div>
                         <div>• Slump: ${slumpVal}</div>
@@ -5496,7 +5500,10 @@ window.Dashboard = {
                             ` : ''}
                             <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">
                                 <span>${escapeHtml(authorsText)}</span> • <span>${escapeHtml(p.journal || 'Journal')}</span>
+                                ${p.empirical?.biochar > 0 ? ` • <span style="background: rgba(16, 185, 129, 0.1); color: #059669; padding: 1px 5px; border-radius: 4px; font-weight: 600; font-size: 11px;" title="มวลรวมหยาบไบโอชาร์">🌱 Biochar ${p.empirical.biochar}%</span>` : ''}
+                                ${p.empirical?.caco3 > 0 ? ` • <span style="background: rgba(59, 130, 246, 0.1); color: #2563eb; padding: 1px 5px; border-radius: 4px; font-weight: 600; font-size: 11px;" title="ผงแคลเซียมคาร์บอเนต">⚪ CaCO3 ${p.empirical.caco3}%</span>` : ''}
                                 ${p.empirical?.strength > 0 ? ` • <strong style="color: var(--text-main); font-family: var(--font-mono);">${p.empirical.strength} MPa</strong>` : ''}
+                                ${p.empirical?.density > 0 ? ` • <span style="color: var(--text-muted); font-size: 11px;">${p.empirical.density} kg/m³</span>` : ''}
                             </div>
                             ${p.notes ? `
                                 <div class="queue-notes-snippet" onclick="Dashboard.queue.toggleNotesSnippet('${p.id}')" title="คลิกเพื่อขยาย/ย่อบันทึก">
@@ -6399,6 +6406,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         });
     }
     Dashboard.undo.initKeyboardShortcuts();
+Dashboard.undo.updateUI();
     initTheme();
     updateKPIs();
     Dashboard.queue.render();
@@ -6714,9 +6722,18 @@ function isMissingAbstract(abstract) {
 }
 const isAbstractMissing = isMissingAbstract;
 
-async function cleanPaperTitle(title) {
+function cleanPaperTitle(title) {
     if (!title || typeof title !== 'string') return 'Untitled Research Paper';
-    return title.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() || 'Untitled Research Paper';
+    let t = title
+        .replace(/<sub>(\d+)<\/sub>/gi, '$1')
+        .replace(/<sup>(\d+)<\/sup>/gi, '$1')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/\s+/g, ' ')
+        .trim();
+    return t || 'Untitled Research Paper';
 }
 
 async function triggerSearch() {
@@ -7174,7 +7191,8 @@ async function executeOpenAlexSearch(query) {
         } else if (lowerQ === 'aggregate' || lowerQ === 'aggregates') {
             effectiveQuery = 'aggregate (concrete OR geopolymer OR mortar)';
         } else if (words.length <= 2) {
-            effectiveQuery = `${effectiveQuery} (concrete OR cement OR mortar OR binder OR "civil engineering")`;
+            const quotedPrimary = words.map(w => `"${w}"`).join(' ');
+            effectiveQuery = `${quotedPrimary} (concrete OR cement OR mortar OR binder OR "civil engineering")`;
         }
     }
 
@@ -9959,6 +9977,21 @@ function renderHeadToHeadTable() {
         {
             dimension: '📚 ชื่องานวิจัยเต็ม',
             getValue: (p) => `<div style="font-weight: 600; font-size: 12px; line-height: 1.4;">${escapeHtml(p.title)}</div>`
+        },
+        {
+            dimension: '🌱 สัดส่วนไบโอชาร์ & CaCO3 (Mix Design)',
+            getValue: (p) => {
+                const b = p.empirical?.biochar;
+                const c = p.empirical?.caco3;
+                if (b > 0 || c > 0) {
+                    return `<strong>Biochar: ${b || 0}%</strong> • <strong>CaCO3: ${c || 0}%</strong>`;
+                }
+                if (p.id.includes('kanagaraj')) return 'ECA 0-100% (Expanded Clay)';
+                if (p.id.includes('praneeth')) return 'Biochar 10–40% (ทราย)';
+                if (p.id.includes('leang')) return 'Biochar 15–30% (Shell-Core Pellet)';
+                if (p.id.includes('rashad')) return 'CaCO3 micro-filler 5–20%';
+                return 'ตามสัดส่วนผสมการทดลอง';
+            }
         },
         {
             dimension: '🧱 ระบบไบน์เดอร์ (Binder Matrix)',
