@@ -2170,28 +2170,93 @@
             </div>
 
             <!-- Thesis Pre-built Search Templates -->
-            <div class="templates-label">⚡ คีย์เวิร์ดตรงเป้าสำหรับวิทยานิพนธ์ (One-Click Thesis Templates):</div>
-            <div class="keyword-templates">
-                <button class="kw-btn" onclick="applyTemplate('biochar lightweight geopolymer concrete')">
-                    🌱 Biochar Lightweight Geopolymer
+            <!-- Thesis Pre-built Search Templates -->
+            <div style="margin-top: 14px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                <div class="templates-label" style="margin-bottom: 0;">⚡ คีย์เวิร์ดตรงเป้าสำหรับวิทยานิพนธ์ (One-Click Thesis Templates):</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">ครอบคลุม 4 แกนเทคโนโลยี & Landmark Benchmarks</div>
+            </div>
+            
+            <div class="keyword-templates" style="margin-bottom: 10px;">
+                <!-- Category 1: Geopolymer Binder & Biochar Aggregate -->
+                <button class="kw-btn" onclick="applyTemplate('biochar lightweight geopolymer concrete')" title="ค้นหาคอนกรีตมวลเบาจีโอโพลิเมอร์ผสมถ่านชีวภาพ">
+                    🌱 Biochar Geopolymer
                 </button>
-                <button class="kw-btn" onclick="applyTemplate('lightweight self-compacting geopolymer concrete')">
-                    🌊 Self-Compacting Geopolymer (SCGC)
+                <button class="kw-btn" onclick="applyTemplate('lightweight self-compacting geopolymer concrete')" title="ค้นหาคอนกรีตมวลเบาไหลเทตัวเองจีโอโพลิเมอร์ (LWSCC)">
+                    🌊 Self-Compacting Geopolymer (LWSCC)
                 </button>
-                <button class="kw-btn" onclick="applyTemplate('internal curing biochar shrinkage concrete')">
-                    💧 Internal Curing & Shrinkage Mitigation
-                </button>
-                <button class="kw-btn" onclick="applyTemplate('limestone powder CaCO3 fly ash geopolymer')">
-                    🧱 CaCO3 Limestone Micro-filler
-                </button>
-                <button class="kw-btn" onclick="applyTemplate('fire resistance elevated temperature geopolymer lightweight')">
-                    🔥 Fire Resistance & High Temperature
-                </button>
-                <button class="kw-btn" onclick="applyTemplate('cold bonded biochar aggregate pelletization')">
+                <button class="kw-btn" onclick="applyTemplate('cold bonded biochar aggregate pelletization')" title="ค้นหาการผลิตเม็ดหินสังเคราะห์ไบโอชาร์ด้วยจานปั้นเม็ด">
                     ⚙️ Cold-Bonded Biochar Aggregate (BBA)
                 </button>
-                <button class="kw-btn" onclick="applyTemplate('carbon footprint LCA geopolymer biochar')">
-                    🌍 LCA & Carbon Sequestration
+                <button class="kw-btn" onclick="applyTemplate('core shell artificial aggregate bottom ash biochar pelletization')" title="ค้นหาเม็ดหินสังเคราะห์โครงสร้างแกน-เปลือก (CBA + Biochar)">
+                    🎯 Core-Shell BBA (CBA/Biochar)
+                </button>
+                <button class="kw-btn" onclick="applyTemplate('limestone powder CaCO3 fly ash geopolymer')" title="ค้นหาบทบาทของ CaCO3 ในการเติมเต็มรูพรุนและกระตุ้นการก่อผลึก">
+                    🧱 CaCO3 Limestone Micro-filler
+                </button>
+
+                <!-- Category 2: Rheology, Workability & Anti-Floating -->
+                <button class="kw-btn" onclick="applyTemplate('anti-floating lightweight aggregate geopolymer self-compacting segregation')" title="ค้นหาการป้องกันเม็ดหินมวลเบาลอยตัวแยกชั้นในคอนกรีตไหลเทตัวเอง">
+                    🛡️ Anti-Floating & LWA Segregation
+                </button>
+                <button class="kw-btn" onclick="applyTemplate('EFNARC slump flow T50 V-funnel geopolymer self-compacting')" title="ค้นหาการทดสอบวิทยากระแสตามเกณฑ์ EFNARC 2005">
+                    ⚡ EFNARC Rheology (Slump Flow & V-Funnel)
+                </button>
+
+                <!-- Category 3: Durability, Shrinkage & High Temp -->
+                <button class="kw-btn" onclick="applyTemplate('internal curing biochar autogenous shrinkage concrete')" title="ค้นหากลไกการบ่มตัวภายในและการลดการหดตัวแบบออโตจีเนียส">
+                    💧 Internal Curing & Autogenous Shrinkage
+                </button>
+                <button class="kw-btn" onclick="applyTemplate('fire resistance elevated temperature geopolymer lightweight')" title="ค้นหาความคงทนต่อไฟและความร้อนสูง 300-700 °C">
+                    🔥 Fire Resistance & High Temperature
+                </button>
+                <button class="kw-btn" onclick="applyTemplate('interfacial transition zone ITZ biochar geopolymer fly ash')" title="ค้นหาการปรับปรุงโครงสร้างรอยต่อประสาน (ITZ) ระหว่างมวลรวมกับเพสต์">
+                    🔬 ITZ Microstructure (C-A-S-H / N-A-S-H)
+                </button>
+
+                <!-- Category 4: Sustainability & Decarbonization -->
+                <button class="kw-btn" onclick="applyTemplate('carbon footprint LCA geopolymer biochar sequestration')" title="ค้นหาการประเมินวัฏจักรชีวิต (LCA) และการกักเก็บคาร์บอนชีวภาพ">
+                    🌍 LCA & Biogenic Carbon Sequestration
+                </button>
+                <button class="kw-btn" onclick="applyTemplate('eco strength efficiency carbon footprint geopolymer')" title="ค้นหาดัชนีประสิทธิผลกำลังต่อคาร์บอน (Eco-Strength Efficiency: ESE)">
+                    📊 Eco-Strength Efficiency (ESE)
+                </button>
+            </div>
+
+            <!-- Master Blueprint Benchmark Papers (One-Click Exact Retrieval & Pinned #1) -->
+            <div style="margin-top: 4px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                <span style="font-size: 11.5px; font-weight: 700; color: var(--text-muted);">📚 วารสาร Landmark ประจำ Master Blueprint (คลิกค้นหา & Pin #1 อัตโนมัติ):</span>
+                <span style="font-size: 11px; color: var(--text-faint);">ดึง Abstract + ข้อมูลเต็มทันที</span>
+            </div>
+            <div class="keyword-templates" style="margin-bottom: 16px;">
+                <button class="kw-btn" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3); font-size: 11.5px;" 
+                        onclick="applyTemplate('Development of Low-CO2 Aggregate with Biochar for Lightweight Concrete')" 
+                        title="Leang et al. (2024) KMUTT - ต้นแบบเม็ดหินสังเคราะห์มวลเบา Core-Shell">
+                    📌 Leang (2024) [KMUTT BBA]
+                </button>
+                <button class="kw-btn" style="background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.3); font-size: 11.5px;" 
+                        onclick="applyTemplate('Engineering properties and sustainability assessment of high-strength self-compacting geopolymer concrete')" 
+                        title="Karakaş et al. (2023) - คอนกรีตไหลเทตัวเองจีโอโพลิเมอร์ EFNARC Slump Flow 735 mm">
+                    📌 Karakaş (2023) [SCGC Rheology]
+                </button>
+                <button class="kw-btn" style="background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3); font-size: 11.5px;" 
+                        onclick="applyTemplate('Properties of fly ash-based lightweight geopolymer mortar incorporating expanded perlite subjected to high temperatures')" 
+                        title="Karakaş et al. (2023) - พฤติกรรมมวลเบาจีโอโพลิเมอร์ที่อุณหภูมิสูง 300-900 °C เกิด Sintering กำลังพุ่ง">
+                    📌 Karakaş (2023) [High Temp Sintering]
+                </button>
+                <button class="kw-btn" style="background: rgba(6, 182, 212, 0.08); border-color: rgba(6, 182, 212, 0.3); font-size: 11.5px;" 
+                        onclick="applyTemplate('Promoting internal curing in concrete by replacing sand with biochar')" 
+                        title="Wang et al. (2025) - พิสูจน์การลดการหดตัวรวม 65% ด้วย Prewetted Biochar Internal Curing">
+                    📌 Wang (2025) [Internal Curing]
+                </button>
+                <button class="kw-btn" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.3); font-size: 11.5px;" 
+                        onclick="applyTemplate('Valorization of limestone powder in alkali-activated slag fly ash pastes')" 
+                        title="Rashad et al. (2023) - ผงหินปูน CaCO3 5-10% เพิ่มกำลังอัดและลดช่องว่าง">
+                    📌 Rashad (2023) [CaCO3 Micro-filler]
+                </button>
+                <button class="kw-btn" style="background: rgba(236, 72, 153, 0.08); border-color: rgba(236, 72, 153, 0.3); font-size: 11.5px;" 
+                        onclick="applyTemplate('Sustainable lightweight geopolymer self-compacting concrete incorporating expanded clay aggregate')" 
+                        title="Kanagaraj et al. (2022) - คอนกรีตมวลเบาไหลเทตัวเองจีโอโพลิเมอร์ EFNARC SF2/VF1">
+                    📌 Kanagaraj (2022) [LWSCC ECA]
                 </button>
             </div>
 
@@ -3235,6 +3300,12 @@ const THESIS_CRITERIA = {
         name: '🔥 Strength & Durability',
         desc: '28d Compressive Strength, Shrinkage Mitigation, High Temp / Fire Resistance, SEM',
         regex: /\b(compressive strength|dry density|autogenous shrinkage|drying shrinkage|fire resistance|elevated temperature|high temperature|thermal conductiv|residual strength|water absorption|rapid chloride|microstructure|sem|xrd)\b/i
+    },
+    lca: {
+        id: 'lca',
+        name: '🌍 LCA & Carbon Sink',
+        desc: 'Life Cycle Assessment, Biogenic Carbon Sequestration, Cradle-to-Gate, Eco-Strength',
+        regex: /\b(lca|life cycle assessment|carbon footprint|carbon-negative|carbon negative|carbon sequestration|biogenic carbon|embodied carbon|cradle-to-gate|eco-strength|net zero|emission)\b/i
     }
 };
 
